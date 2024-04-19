@@ -22,6 +22,9 @@ fun AppBar(
     navController: NavHostController,
     currentRoute: MemoryExplorerRoute
 ) {
+    if(currentRoute.route == MemoryExplorerRoute.Login.route) {
+        return
+    }
     CenterAlignedTopAppBar(
         title = {
             Text(
@@ -30,12 +33,14 @@ fun AppBar(
             )
         },
         navigationIcon = {
-            if (navController.previousBackStackEntry != null) {
-                IconButton(onClick = { navController.navigateUp() }) {
-                    Icon(
-                        imageVector = Icons.Outlined.ArrowBack,
-                        contentDescription = "Back button"
-                    )
+            if(currentRoute.route != MemoryExplorerRoute.Login.route) {
+                if (navController.previousBackStackEntry != null) {
+                    IconButton(onClick = { navController.navigateUp() }) {
+                        Icon(
+                            imageVector = Icons.Outlined.ArrowBack,
+                            contentDescription = "Back button"
+                        )
+                    }
                 }
             }
         },
@@ -45,11 +50,12 @@ fun AppBar(
                     Icon(Icons.Outlined.SupervisedUserCircle, contentDescription = "User")
                 }
             }
-            if (/* TODO currentRoute.route != MemoryExplorerRoute.Settings.route &&*/ currentRoute.route != MemoryExplorerRoute.Home.route) {
-                IconButton(onClick = { /*TODO*/ }) {
+            /*
+            if ( TODO currentRoute.route != MemoryExplorerRoute.Profile.route) {
+                IconButton(onClick = { TODO }) {
                     Icon(Icons.Outlined.Settings, "Settings")
                 }
-            }
+            }*/
         },
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = MaterialTheme.colorScheme.primaryContainer

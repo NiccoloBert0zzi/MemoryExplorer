@@ -1,6 +1,5 @@
 package com.example.memoryexplorer.ui.screens.home
 
-import android.net.Uri
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -25,6 +24,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.memoryexplorer.data.database.Memory
+import com.example.memoryexplorer.ui.MemoryExplorerRoute
 
 @Composable
 fun HomeScreen(navController: NavHostController) {
@@ -32,7 +32,12 @@ fun HomeScreen(navController: NavHostController) {
         floatingActionButton = {
             FloatingActionButton(
                 containerColor = MaterialTheme.colorScheme.primary,
-                onClick = { /*TODO*/ }
+                onClick = {
+                    //TODO
+                    navController.navigate(MemoryExplorerRoute.Login.route) {
+                        popUpTo(MemoryExplorerRoute.Home.route) { inclusive = true }
+                    }
+                }
             ) {
                 Icon(Icons.Outlined.Add, "Add Memory")
             }
