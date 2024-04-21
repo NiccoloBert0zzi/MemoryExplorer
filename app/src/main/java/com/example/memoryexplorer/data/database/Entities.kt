@@ -5,7 +5,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "favourite")
-data class Favourite (
+data class Favourite(
     @PrimaryKey
     val email: String,
 

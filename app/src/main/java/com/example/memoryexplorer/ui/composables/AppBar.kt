@@ -23,7 +23,7 @@ fun AppBar(
     navController: NavHostController,
     currentRoute: MemoryExplorerRoute
 ) {
-    if(currentRoute.route == MemoryExplorerRoute.Login.route || currentRoute.route == MemoryExplorerRoute.Register.route) {
+    if (currentRoute.route == MemoryExplorerRoute.Login.route || currentRoute.route == MemoryExplorerRoute.Register.route) {
         return
     }
     CenterAlignedTopAppBar(
@@ -34,14 +34,14 @@ fun AppBar(
             )
         },
         navigationIcon = {
-                if (navController.previousBackStackEntry != null) {
-                    IconButton(onClick = { navController.navigateUp() }) {
-                        Icon(
-                            imageVector = Icons.Outlined.ArrowBack,
-                            contentDescription = "Back button"
-                        )
-                    }
+            if (navController.previousBackStackEntry != null) {
+                IconButton(onClick = { navController.navigateUp() }) {
+                    Icon(
+                        imageVector = Icons.Outlined.ArrowBack,
+                        contentDescription = "Back button"
+                    )
                 }
+            }
         },
         actions = {
             if (currentRoute.route == MemoryExplorerRoute.Home.route) {

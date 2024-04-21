@@ -10,7 +10,7 @@ data class RegisterState(
     val remember: Boolean
 )
 
-class RegisterViewModel (
+class RegisterViewModel(
     private val repository: LoginRepository
 ) : ViewModel() {
     fun onLogin(navController: NavHostController) {

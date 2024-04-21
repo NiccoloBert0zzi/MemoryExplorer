@@ -44,7 +44,7 @@ class MainActivity : ComponentActivity() {
                     ) { contentPadding ->
                         MemoryExplorerNavGraph(
                             navController,
-                            modifier =  Modifier.padding(contentPadding)
+                            modifier = Modifier.padding(contentPadding)
                         )
                     }
                 }

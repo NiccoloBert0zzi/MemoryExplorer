@@ -7,7 +7,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import kotlinx.coroutines.flow.map
 
-class LoginRepository (private val dataStore: DataStore<Preferences>){
+class LoginRepository(private val dataStore: DataStore<Preferences>) {
     companion object {
         private val EMAIL_KEY = stringPreferencesKey("email")
         private val REMEMBER_ME = booleanPreferencesKey("remember")

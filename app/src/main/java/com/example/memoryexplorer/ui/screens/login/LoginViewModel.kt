@@ -16,7 +16,7 @@ data class LoginState(
     val remember: Boolean
 )
 
-class LoginViewModel (
+class LoginViewModel(
     private val repository: LoginRepository
 ) : ViewModel() {
     var state by mutableStateOf(LoginState("", false))

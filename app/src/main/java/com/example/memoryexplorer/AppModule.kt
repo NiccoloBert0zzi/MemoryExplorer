@@ -27,7 +27,7 @@ val appModule = module {
 
     single { LoginRepository(get()) }
 
-    viewModel{ LoginViewModel(get()) }
-    viewModel{ RegisterViewModel(get()) }
+    viewModel { LoginViewModel(get()) }
+    viewModel { RegisterViewModel(get()) }
 
 }
