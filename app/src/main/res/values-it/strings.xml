@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Memory Explorer</string>
+    <string name="theme_light">Chiaro</string>
+    <string name="theme_dark">Scuro</string>
+    <string name="theme_system">Sistema</string>
+    <string name="remember_me">Ricordami</string>
+    <string name="login">Accedi</string>
+    <string name="register">Registrati</string>
+    <string name="option_register">Non hai un account? Registrati</string>
+    <string name="option_login">Hai già un account? Accedi</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+</resources>

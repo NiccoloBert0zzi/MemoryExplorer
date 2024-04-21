@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">Memory Explorer</string>
+    <string name="theme_light">Light</string>
+    <string name="theme_dark">Dark</string>
+    <string name="theme_system">System</string>
+    <string name="remember_me">Remember me</string>
+    <string name="login">Login</string>
+    <string name="register">Register</string>
+    <string name="option_register">Don\'t have an account yet? Sign Up</string>
+    <string name="option_login">Already have an account? Log In</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
 </resources>

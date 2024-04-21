@@ -1,7 +1,13 @@
 package com.example.memoryexplorer.ui.screens.login
 
-import android.util.Log
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
@@ -16,12 +22,13 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
+import com.example.memoryexplorer.R
 
 @Composable
 fun LoginScreen(
@@ -45,7 +52,7 @@ fun LoginScreen(
         ) {
             Spacer(Modifier.size(16.dp))
             Text(
-                "Memory Explorer",
+                stringResource(R.string.app_name),
                 color = MaterialTheme.colorScheme.onSecondaryContainer,
                 textAlign = TextAlign.Center
             )
@@ -53,7 +60,7 @@ fun LoginScreen(
             OutlinedTextField(
                 value = email,
                 onValueChange = { email = it },
-                label = { Text("Email") },
+                label = { Text(stringResource(R.string.email)) },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
                 modifier = Modifier.fillMaxWidth()
             )
@@ -61,7 +68,7 @@ fun LoginScreen(
             OutlinedTextField(
                 value = password,
                 onValueChange = { password = it },
-                label = { Text("Password") },
+                label = { Text(stringResource(R.string.password)) },
                 visualTransformation = PasswordVisualTransformation(),
                 modifier = Modifier.fillMaxWidth()
             )
@@ -72,7 +79,7 @@ fun LoginScreen(
                     onCheckedChange = { remember = it }
                 )
                 Spacer(Modifier.size(8.dp))
-                Text("Remember Me")
+                Text(stringResource(R.string.remember_me))
             }
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -82,13 +89,13 @@ fun LoginScreen(
                     onClick = { onRegister(navController) },
                     modifier = Modifier.fillMaxWidth(0.5f)
                 ) {
-                    Text("Register")
+                    Text(stringResource(R.string.option_register))
                 }
                 Button(
                     onClick = { onLogin(email, remember, navController) },
                     modifier = Modifier.fillMaxWidth(0.5f)
                 ) {
-                    Text("Login")
+                    Text(stringResource(R.string.login))
                 }
             }
         }
