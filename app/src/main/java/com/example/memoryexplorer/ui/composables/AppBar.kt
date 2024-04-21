@@ -45,16 +45,19 @@ fun AppBar(
         },
         actions = {
             if (currentRoute.route == MemoryExplorerRoute.Home.route) {
-                IconButton(onClick = { /*TODO*/ }) {
+                IconButton(onClick = {
+                    navController.navigate(MemoryExplorerRoute.Profile.route)
+                }) {
                     Icon(Icons.Outlined.SupervisedUserCircle, contentDescription = "User")
                 }
             }
-            /*
-            if ( TODO currentRoute.route != MemoryExplorerRoute.Profile.route) {
-                IconButton(onClick = { TODO }) {
+            if (currentRoute.route == MemoryExplorerRoute.Profile.route) {
+                IconButton(onClick = {
+                    navController.navigate(MemoryExplorerRoute.Settings.route)
+                }) {
                     Icon(Icons.Outlined.Settings, "Settings")
                 }
-            }*/
+            }
         },
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = MaterialTheme.colorScheme.primaryContainer

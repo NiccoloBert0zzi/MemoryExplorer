@@ -33,10 +33,7 @@ fun HomeScreen(navController: NavHostController) {
             FloatingActionButton(
                 containerColor = MaterialTheme.colorScheme.primary,
                 onClick = {
-                    //TODO
-                    navController.navigate(MemoryExplorerRoute.Login.route) {
-                        popUpTo(MemoryExplorerRoute.Home.route) { inclusive = true }
-                    }
+                    navController.navigate(MemoryExplorerRoute.AddMemory.route)
                 }
             ) {
                 Icon(Icons.Outlined.Add, "Add Memory")
