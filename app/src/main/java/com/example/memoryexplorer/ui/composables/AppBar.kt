@@ -1,5 +1,6 @@
 package com.example.memoryexplorer.ui.composables
 
+import android.util.Log
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.Settings
@@ -22,7 +23,7 @@ fun AppBar(
     navController: NavHostController,
     currentRoute: MemoryExplorerRoute
 ) {
-    if(currentRoute.route == MemoryExplorerRoute.Login.route) {
+    if(currentRoute.route == MemoryExplorerRoute.Login.route || currentRoute.route == MemoryExplorerRoute.Register.route) {
         return
     }
     CenterAlignedTopAppBar(
@@ -33,7 +34,6 @@ fun AppBar(
             )
         },
         navigationIcon = {
-            if(currentRoute.route != MemoryExplorerRoute.Login.route) {
                 if (navController.previousBackStackEntry != null) {
                     IconButton(onClick = { navController.navigateUp() }) {
                         Icon(
@@ -42,7 +42,6 @@ fun AppBar(
                         )
                     }
                 }
-            }
         },
         actions = {
             if (currentRoute.route == MemoryExplorerRoute.Home.route) {

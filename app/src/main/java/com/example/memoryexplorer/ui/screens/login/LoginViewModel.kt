@@ -1,13 +1,13 @@
 package com.example.memoryexplorer.ui.screens.login
 
-import android.os.Bundle
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavHostController
 import com.example.memoryexplorer.data.repositories.LoginRepository
+import com.example.memoryexplorer.ui.MemoryExplorerRoute
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
@@ -38,12 +38,15 @@ class LoginViewModel (
         }
     }
 
-    fun onLogin(email: String, remember: Boolean) {
+    fun onLogin(email: String, remember: Boolean, navController: NavHostController) {
         setEmail(email)
         setRemember(remember)
+        navController.navigate(MemoryExplorerRoute.Home.route) {
+            popUpTo(MemoryExplorerRoute.Login.route) { inclusive = true }
+        }
     }
 
-    fun onRegister() {
-        Log.d("LoginViewModel", "onRegister")
+    fun onRegister(navController: NavHostController) {
+        navController.navigate(MemoryExplorerRoute.Register.route)
     }
 }

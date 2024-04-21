@@ -5,8 +5,8 @@ import androidx.datastore.preferences.preferencesDataStore
 import androidx.room.Room
 import com.example.memoryexplorer.data.database.MemoryExplorerDatabase
 import com.example.memoryexplorer.data.repositories.LoginRepository
-import com.example.memoryexplorer.ui.screens.login.LoginScreen
 import com.example.memoryexplorer.ui.screens.login.LoginViewModel
+import com.example.memoryexplorer.ui.screens.register.RegisterViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
@@ -28,5 +28,6 @@ val appModule = module {
     single { LoginRepository(get()) }
 
     viewModel{ LoginViewModel(get()) }
+    viewModel{ RegisterViewModel(get()) }
 
 }

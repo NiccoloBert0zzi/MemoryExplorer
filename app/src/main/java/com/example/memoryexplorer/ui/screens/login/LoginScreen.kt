@@ -1,5 +1,6 @@
 package com.example.memoryexplorer.ui.screens.login
 
+import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
@@ -19,11 +20,14 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 
 @Composable
 fun LoginScreen(
-    onLogin: (String, Boolean) -> Unit,
-    onRegister: () -> Unit
+    navController: NavHostController,
+    onLogin: (String, Boolean, NavHostController) -> Unit,
+    onRegister: (NavHostController) -> Unit
 ) {
     var email by rememberSaveable { mutableStateOf("") }
     var password by rememberSaveable { mutableStateOf("") }
@@ -75,13 +79,13 @@ fun LoginScreen(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Button(
-                    onClick = onRegister,
+                    onClick = { onRegister(navController) },
                     modifier = Modifier.fillMaxWidth(0.5f)
                 ) {
                     Text("Register")
                 }
                 Button(
-                    onClick = { onLogin(email, remember) },
+                    onClick = { onLogin(email, remember, navController) },
                     modifier = Modifier.fillMaxWidth(0.5f)
                 ) {
                     Text("Login")
