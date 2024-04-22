@@ -18,4 +18,9 @@ class LoginRepository(private val dataStore: DataStore<Preferences>) {
 
     suspend fun setEmail(value: String) = dataStore.edit { it[EMAIL_KEY] = value }
     suspend fun setRemember(value: Boolean) = dataStore.edit { it[REMEMBER_ME] = value }
+
+    suspend fun logout() {
+        setEmail("")
+        setRemember(false)
+    }
 }
