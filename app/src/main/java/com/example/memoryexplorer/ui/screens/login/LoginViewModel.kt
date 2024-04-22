@@ -1,5 +1,6 @@
 package com.example.memoryexplorer.ui.screens.login
 
+import android.widget.Toast
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -8,6 +9,9 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
 import com.example.memoryexplorer.data.repositories.LoginRepository
 import com.example.memoryexplorer.ui.MemoryExplorerRoute
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
@@ -19,6 +23,9 @@ data class LoginState(
 class LoginViewModel(
     private val repository: LoginRepository
 ) : ViewModel() {
+
+    private lateinit var auth: FirebaseAuth
+
     var state by mutableStateOf(LoginState("", false))
         private set
 
@@ -38,12 +45,25 @@ class LoginViewModel(
         }
     }
 
-    fun onLogin(email: String, remember: Boolean, navController: NavHostController) {
+    fun onLogin(email: String, password:String, remember: Boolean, navController: NavHostController) {
         setEmail(email)
         setRemember(remember)
-        navController.navigate(MemoryExplorerRoute.Home.route) {
-            popUpTo(MemoryExplorerRoute.Login.route) { inclusive = true }
-        }
+
+        auth = Firebase.auth
+        auth.signInWithEmailAndPassword(email, password)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    navController.navigate(MemoryExplorerRoute.Home.route) {
+                        popUpTo(MemoryExplorerRoute.Login.route) { inclusive = true }
+                    }
+                } else {
+                    Toast.makeText(
+                        navController.context,
+                        "Authentication failed.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
     }
 
     fun onRegister(navController: NavHostController) {

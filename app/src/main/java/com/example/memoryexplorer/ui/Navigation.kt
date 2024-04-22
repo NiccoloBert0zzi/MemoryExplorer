@@ -1,6 +1,9 @@
 package com.example.memoryexplorer.ui
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -21,15 +24,15 @@ sealed class MemoryExplorerRoute(
     val route: String,
     val title: String,
 ) {
-    object Home : MemoryExplorerRoute("home", "Memory Explorer")
-    object Login : MemoryExplorerRoute("login", "Login")
-    object Register : MemoryExplorerRoute("register", "Register")
-    object AddMemory : MemoryExplorerRoute("addMemory", "Add Memory")
-    object Profile : MemoryExplorerRoute("profile", "Profile")
-    object Settings : MemoryExplorerRoute("settings", "Settings")
+    data object Home : MemoryExplorerRoute("home", "Memory Explorer")
+    data object Login : MemoryExplorerRoute("login", "Login")
+    data object Register : MemoryExplorerRoute("register", "Register")
+    data object AddMemory : MemoryExplorerRoute("addMemory", "Add Memory")
+    data object Profile : MemoryExplorerRoute("profile", "Profile")
+    data object Settings : MemoryExplorerRoute("settings", "Settings")
 
     companion object {
-        val routes = setOf(Home, Login, Register, AddMemory, Profile, Settings)
+        val routes = setOf(Login, Home, Register, AddMemory, Profile, Settings)
     }
 }
 
@@ -39,17 +42,12 @@ fun MemoryExplorerNavGraph(
     modifier: Modifier = Modifier
 )  {
     val loginRepository = get<LoginRepository>() // Get LoginRepository instance using Koin
-
+    val rememberMe by loginRepository.remember.collectAsState(initial = false) // Ottieni il valore corrente di REMEMBER_ME
     NavHost(
         navController = navController,
-        startDestination = MemoryExplorerRoute.Home.route,
+        startDestination = (if (rememberMe) MemoryExplorerRoute.Home else MemoryExplorerRoute.Login).route,
         modifier = modifier
     ) {
-        with(MemoryExplorerRoute.Home) {
-            composable(route) {
-                HomeScreen(navController)
-            }
-        }
         with(MemoryExplorerRoute.Login) {
             composable(route) {
                 val loginViewModel = koinViewModel<LoginViewModel>()
@@ -58,6 +56,11 @@ fun MemoryExplorerNavGraph(
                     loginViewModel::onLogin,
                     loginViewModel::onRegister
                 )
+            }
+        }
+        with(MemoryExplorerRoute.Home) {
+            composable(route) {
+                HomeScreen(navController)
             }
         }
         with(MemoryExplorerRoute.Register) {
@@ -82,7 +85,7 @@ fun MemoryExplorerNavGraph(
         }
         with(MemoryExplorerRoute.Settings) {
             composable(route) {
-                SettingsScreen(navController,loginRepository)
+                SettingsScreen(navController, loginRepository)
             }
         }
     }

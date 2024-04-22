@@ -8,20 +8,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.memoryexplorer.data.repositories.LoginRepository
 import com.example.memoryexplorer.ui.MemoryExplorerNavGraph
 import com.example.memoryexplorer.ui.MemoryExplorerRoute
 import com.example.memoryexplorer.ui.composables.AppBar
 import com.example.memoryexplorer.ui.theme.MemoryExplorerTheme
-import org.koin.android.ext.android.get
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,13 +35,9 @@ class MainActivity : ComponentActivity() {
                         derivedStateOf {
                             MemoryExplorerRoute.routes.find {
                                 it.route == backStackEntry?.destination?.route
-                            } ?: MemoryExplorerRoute.Home
+                            } ?: MemoryExplorerRoute.Login
                         }
                     }
-
-                    val loginRepository = get<LoginRepository>() // Ottieni un'istanza di LoginRepository
-                    val rememberMe by loginRepository.remember.collectAsState(initial = false) // Ottieni il valore corrente di REMEMBER_ME
-
                     Scaffold(
                         topBar = { AppBar(navController, currentRoute) }
                     ) { contentPadding ->
@@ -53,19 +45,6 @@ class MainActivity : ComponentActivity() {
                             navController,
                             modifier = Modifier.padding(contentPadding)
                         )
-
-                        // controlla se REMEMBER_ME è true
-                        LaunchedEffect(key1 = rememberMe) {
-                            if (rememberMe) {
-                                navController.navigate(MemoryExplorerRoute.Home.route) {
-                                    popUpTo(MemoryExplorerRoute.Login.route) { inclusive = true }
-                                }
-                            } else {
-                                navController.navigate(MemoryExplorerRoute.Login.route) {
-                                    popUpTo(MemoryExplorerRoute.Home.route) { inclusive = true }
-                                }
-                            }
-                        }
                     }
                 }
             }
