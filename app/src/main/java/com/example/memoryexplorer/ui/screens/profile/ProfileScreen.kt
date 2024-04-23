@@ -89,7 +89,6 @@ fun ProfileScreen(
                 Text(
                     // TODO add user name
                     stringResource(R.string.app_name),
-                    color = MaterialTheme.colorScheme.onSecondaryContainer,
                     textAlign = TextAlign.Left
                 )
             }

@@ -53,7 +53,6 @@ fun RegisterScreen(
             Spacer(Modifier.size(16.dp))
             Text(
                 stringResource(R.string.app_name),
-                color = MaterialTheme.colorScheme.onSecondaryContainer,
                 textAlign = TextAlign.Center
             )
             Spacer(Modifier.size(16.dp))

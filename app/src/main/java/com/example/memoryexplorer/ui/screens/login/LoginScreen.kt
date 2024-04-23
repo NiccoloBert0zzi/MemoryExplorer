@@ -53,7 +53,7 @@ fun LoginScreen(
             Spacer(Modifier.size(16.dp))
             Text(
                 stringResource(R.string.app_name),
-                color = MaterialTheme.colorScheme.onSecondaryContainer,
+                color = MaterialTheme.colorScheme.primary,
                 textAlign = TextAlign.Center
             )
             Spacer(Modifier.size(16.dp))
