@@ -13,4 +13,8 @@
     <string name="password">Password</string>
     <string name="logout">Esci</string>
     <string name="statistics">Statistiche</string>
+    <string name="select_theme">Seleziona tema:</string>
+    <string name="select_language">Seleziona lingua:</string>
+    <string name="language_english">ING</string>
+    <string name="language_italian">ITA</string>
 </resources>
