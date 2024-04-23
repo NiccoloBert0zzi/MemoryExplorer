@@ -43,7 +43,7 @@ import com.example.memoryexplorer.R
 fun RegisterScreen(
     navController: NavHostController,
     onLogin: (NavHostController) -> Unit,
-    onRegister: (String, String, Boolean, Int, NavHostController) -> Unit
+    onRegister: (String, String, String, Boolean, Int, NavHostController) -> Unit
 ) {
     var email by rememberSaveable { mutableStateOf("") }
     var username by rememberSaveable { mutableStateOf("") }
@@ -181,7 +181,7 @@ fun RegisterScreen(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Button(
-                    onClick = { onRegister(email, password, remember, image, navController) },
+                    onClick = { onRegister(email, username, password, remember, image, navController) },
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Text(stringResource(R.string.register))

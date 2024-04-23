@@ -48,12 +48,13 @@ class RegisterViewModel(
 
     fun onRegister(
         email: String,
+        username: String, // TODO: Save username in Firebase
         password: String,
         remember: Boolean,
         image: Int,
         navController: NavHostController
     ) {
-        if (email.isEmpty() || password.isEmpty()) {
+        if (email.isEmpty() || password.isEmpty() || username.isEmpty()) {
             Toast.makeText(
                 navController.context,
                 R.string.empty_fields,
