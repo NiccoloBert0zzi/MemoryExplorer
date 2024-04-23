@@ -17,6 +17,7 @@ import com.example.memoryexplorer.ui.screens.profile.ProfileScreen
 import com.example.memoryexplorer.ui.screens.register.RegisterScreen
 import com.example.memoryexplorer.ui.screens.register.RegisterViewModel
 import com.example.memoryexplorer.ui.screens.settings.SettingsScreen
+import com.example.memoryexplorer.ui.screens.settings.SettingsViewModel
 import com.example.memoryexplorer.ui.screens.statistics.StatisticsScreen
 import org.koin.androidx.compose.get
 import org.koin.androidx.compose.koinViewModel
@@ -42,9 +43,9 @@ sealed class MemoryExplorerRoute(
 fun MemoryExplorerNavGraph(
     navController: NavHostController,
     modifier: Modifier = Modifier
-)  {
-    val loginRepository = get<LoginRepository>() // Get LoginRepository instance using Koin
-    val rememberMe by loginRepository.remember.collectAsState(initial = false) // Ottieni il valore corrente di REMEMBER_ME
+) {
+    val loginRepository = get<LoginRepository>()
+    val rememberMe by loginRepository.remember.collectAsState(initial = false)
     NavHost(
         navController = navController,
         startDestination = (if (rememberMe) MemoryExplorerRoute.Home else MemoryExplorerRoute.Login).route,
@@ -87,7 +88,12 @@ fun MemoryExplorerNavGraph(
         }
         with(MemoryExplorerRoute.Settings) {
             composable(route) {
-                SettingsScreen(navController, loginRepository)
+                val settingsViewModel = koinViewModel<SettingsViewModel>()
+                SettingsScreen(
+                    navController,
+                    loginRepository,
+                    settingsViewModel::onLogout
+                )
             }
         }
         with(MemoryExplorerRoute.Statistics) {

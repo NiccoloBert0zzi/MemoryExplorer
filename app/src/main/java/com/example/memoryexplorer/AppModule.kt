@@ -7,6 +7,7 @@ import com.example.memoryexplorer.data.database.MemoryExplorerDatabase
 import com.example.memoryexplorer.data.repositories.LoginRepository
 import com.example.memoryexplorer.ui.screens.login.LoginViewModel
 import com.example.memoryexplorer.ui.screens.register.RegisterViewModel
+import com.example.memoryexplorer.ui.screens.settings.SettingsViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
@@ -29,5 +30,6 @@ val appModule = module {
 
     viewModel { LoginViewModel(get()) }
     viewModel { RegisterViewModel(get()) }
+    viewModel { SettingsViewModel() }
 
 }
