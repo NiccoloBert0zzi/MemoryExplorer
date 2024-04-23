@@ -1,6 +1,5 @@
 package com.example.memoryexplorer.ui.composables
 
-import android.util.Log
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.Settings

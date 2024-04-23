@@ -5,16 +5,24 @@
     <string name="theme_dark">Scuro</string>
     <string name="theme_system">Sistema</string>
     <string name="remember_me">Ricordami</string>
+    <string name="email_request">Inserisci email:</string>
+    <string name="username_request">Inserisci username:</string>
+    <string name="password_request">Inserisci password:</string>
+    <string name="email">Email</string>
+    <string name="username">Nome utente</string>
+    <string name="password">Password</string>
     <string name="login">Accedi</string>
     <string name="register">Registrati</string>
     <string name="option_register">Non hai un account? Registrati</string>
     <string name="option_login">Hai già un account? Accedi</string>
-    <string name="email">Email</string>
-    <string name="password">Password</string>
     <string name="logout">Esci</string>
     <string name="statistics">Statistiche</string>
     <string name="select_theme">Seleziona tema:</string>
     <string name="select_language">Seleziona lingua:</string>
+
     <string name="language_english">ING</string>
     <string name="language_italian">ITA</string>
+
+    <string name="empty_fields">I campi non possono essere vuoti</string>
+    <string name="password_length">La password deve essere lunga almeno 6 caratteri</string>
 </resources>

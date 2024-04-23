@@ -26,15 +26,14 @@ class LoginViewModel(
 
     private lateinit var auth: FirebaseAuth
 
-    var state by mutableStateOf(LoginState("", false))
-        private set
+    private var state by mutableStateOf(LoginState("", false))
 
-    fun setEmail(value: String) {
+    private fun setEmail(value: String) {
         state = LoginState(value, state.remember)
         viewModelScope.launch { repository.setEmail(value) }
     }
 
-    fun setRemember(value: Boolean) {
+    private fun setRemember(value: Boolean) {
         state = LoginState(state.email, value)
         viewModelScope.launch { repository.setRemember(value) }
     }
@@ -45,7 +44,12 @@ class LoginViewModel(
         }
     }
 
-    fun onLogin(email: String, password:String, remember: Boolean, navController: NavHostController) {
+    fun onLogin(
+        email: String,
+        password: String,
+        remember: Boolean,
+        navController: NavHostController
+    ) {
         auth = Firebase.auth
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->

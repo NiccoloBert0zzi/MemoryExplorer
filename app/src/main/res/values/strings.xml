@@ -4,16 +4,24 @@
     <string name="theme_dark">Dark</string>
     <string name="theme_system">System</string>
     <string name="remember_me">Remember me</string>
+    <string name="email_request">Insert email:</string>
+    <string name="username_request">Insert username:</string>
+    <string name="password_request">Insert password:</string>
+    <string name="email">Email</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
     <string name="login">Login</string>
     <string name="register">Register</string>
     <string name="option_register">Don\'t have an account yet? Sign Up</string>
     <string name="option_login">Already have an account? Log In</string>
-    <string name="email">Email</string>
-    <string name="password">Password</string>
     <string name="logout">Logout</string>
     <string name="statistics">Statistics</string>
     <string name="select_theme">Select theme:</string>
     <string name="select_language">Select language:</string>
+
     <string name="language_english">ENG</string>
     <string name="language_italian">ITA</string>
+
+    <string name="empty_fields">Fields cannot be empty</string>
+    <string name="password_length">Password must be at least 6 characters long</string>
 </resources>
