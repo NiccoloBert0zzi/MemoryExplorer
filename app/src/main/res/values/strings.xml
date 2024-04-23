@@ -10,4 +10,6 @@
     <string name="option_login">Already have an account? Log In</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
+    <string name="logout">Logout</string>
+    <string name="statistics">Statistics</string>
 </resources>

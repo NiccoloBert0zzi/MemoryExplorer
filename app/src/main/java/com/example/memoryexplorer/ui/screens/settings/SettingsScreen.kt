@@ -10,11 +10,13 @@ import com.example.memoryexplorer.ui.MemoryExplorerRoute
 
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.memoryexplorer.R
 import kotlinx.coroutines.launch
 
 @Composable
@@ -25,7 +27,7 @@ fun SettingsScreen(
     val coroutineScope = rememberCoroutineScope()
 
     ClickableText(
-        text = AnnotatedString("Logout", SpanStyle(color = Color.Red, fontWeight = FontWeight.Bold, fontSize = 20.sp)),
+        text = AnnotatedString(stringResource(R.string.logout), SpanStyle(color = Color.Red, fontWeight = FontWeight.Bold, fontSize = 20.sp)),
         onClick = {
             coroutineScope.launch {
                 // Clear user data

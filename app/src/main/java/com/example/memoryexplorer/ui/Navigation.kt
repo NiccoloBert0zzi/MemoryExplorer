@@ -17,6 +17,7 @@ import com.example.memoryexplorer.ui.screens.profile.ProfileScreen
 import com.example.memoryexplorer.ui.screens.register.RegisterScreen
 import com.example.memoryexplorer.ui.screens.register.RegisterViewModel
 import com.example.memoryexplorer.ui.screens.settings.SettingsScreen
+import com.example.memoryexplorer.ui.screens.statistics.StatisticsScreen
 import org.koin.androidx.compose.get
 import org.koin.androidx.compose.koinViewModel
 
@@ -30,9 +31,10 @@ sealed class MemoryExplorerRoute(
     data object AddMemory : MemoryExplorerRoute("addMemory", "Add Memory")
     data object Profile : MemoryExplorerRoute("profile", "Profile")
     data object Settings : MemoryExplorerRoute("settings", "Settings")
+    data object Statistics : MemoryExplorerRoute("statistics", "Statistics")
 
     companion object {
-        val routes = setOf(Login, Home, Register, AddMemory, Profile, Settings)
+        val routes = setOf(Login, Home, Register, AddMemory, Profile, Settings, Statistics)
     }
 }
 
@@ -86,6 +88,11 @@ fun MemoryExplorerNavGraph(
         with(MemoryExplorerRoute.Settings) {
             composable(route) {
                 SettingsScreen(navController, loginRepository)
+            }
+        }
+        with(MemoryExplorerRoute.Statistics) {
+            composable(route) {
+                StatisticsScreen(navController)
             }
         }
     }

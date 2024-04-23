@@ -46,13 +46,12 @@ class LoginViewModel(
     }
 
     fun onLogin(email: String, password:String, remember: Boolean, navController: NavHostController) {
-        setEmail(email)
-        setRemember(remember)
-
         auth = Firebase.auth
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
+                    setEmail(email)
+                    setRemember(remember)
                     navController.navigate(MemoryExplorerRoute.Home.route) {
                         popUpTo(MemoryExplorerRoute.Login.route) { inclusive = true }
                     }
