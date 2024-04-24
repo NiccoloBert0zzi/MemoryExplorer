@@ -195,7 +195,7 @@ fun NoMemoriesPlaceholder() {
             modifier = Modifier.padding(bottom = 8.dp)
         )
         Text(
-            stringResource(R.string.add_memory),
+            stringResource(R.string.add_new_memory),
             style = MaterialTheme.typography.bodyLarge
         )
     }

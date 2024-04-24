@@ -27,5 +27,16 @@
     <string name="password_length">La password deve essere lunga almeno 6 caratteri</string>
 
     <string name="no_memories">Nessun ricordo ancora</string>
-    <string name="add_memory">"Tocca il pulsante + per aggiungere un nuovo ricordo."</string>
+    <string name="add_new_memory">"Tocca il pulsante + per aggiungere un nuovo ricordo."</string>
+
+    <string name="add_memory_title">Aggiungi titolo:</string>
+    <string name="memory_title">Titolo</string>
+    <string name="add_memory_image">Aggiungi immagine:</string>
+    <string name="add_memory_description">Aggiungi descrizione:</string>
+    <string name="memory_description">Descrizione</string>
+    <string name="add_memory_date">Aggiungi data:</string>
+    <string name="memory_date">Data</string>
+    <string name="memory_public">Pubblico</string>
+    <string name="add_memory_position">Aggiungi posizione:</string>
+    <string name="add_memory">Aggiungi</string>
 </resources>

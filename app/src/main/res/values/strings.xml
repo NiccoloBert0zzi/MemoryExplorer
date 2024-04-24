@@ -26,5 +26,16 @@
     <string name="password_length">Password must be at least 6 characters long</string>
 
     <string name="no_memories">No memories yet</string>
-    <string name="add_memory">"Tap the + button to add a new memory."</string>
+    <string name="add_new_memory">"Tap the + button to add a new memory."</string>
+
+    <string name="add_memory_title">Add title:</string>
+    <string name="memory_title">Title</string>
+    <string name="add_memory_image">Add image:</string>
+    <string name="add_memory_description">Add description:</string>
+    <string name="memory_description">Description</string>
+    <string name="add_memory_date">Add date:</string>
+    <string name="memory_date">Date</string>
+    <string name="memory_public">Public</string>
+    <string name="add_memory_position">Add position:</string>
+    <string name="add_memory">Add</string>
 </resources>
