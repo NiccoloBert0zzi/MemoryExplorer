@@ -13,6 +13,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.navigation.NavHostController
 import com.example.memoryexplorer.ui.MemoryExplorerRoute
 
@@ -29,8 +30,10 @@ fun AppBar(
         title = {
             Text(
                 currentRoute.title,
-                fontWeight = FontWeight.Medium,
-            )
+                fontWeight = FontWeight.Light,
+                textAlign = TextAlign.Start,
+                color = MaterialTheme.colorScheme.primary,
+                )
         },
         navigationIcon = {
             if (navController.previousBackStackEntry != null) {
@@ -65,7 +68,7 @@ fun AppBar(
             }
         },
         colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = MaterialTheme.colorScheme.secondary
+            containerColor = MaterialTheme.colorScheme.background,
         )
     )
 }

@@ -7,13 +7,7 @@ import com.example.memoryexplorer.data.repositories.LoginRepository
 import com.example.memoryexplorer.ui.MemoryExplorerRoute
 import kotlinx.coroutines.launch
 
-data class SettingsState(
-    val email: String,
-    val remember: Boolean
-)
-
-class SettingsViewModel(
-) : ViewModel() {
+class SettingsViewModel : ViewModel() {
     fun onLogout(navController: NavHostController, loginRepository: LoginRepository) {
         viewModelScope.launch {
             loginRepository.logout()
@@ -21,5 +15,9 @@ class SettingsViewModel(
                 popUpTo(MemoryExplorerRoute.Home.route) { inclusive = true }
             }
         }
+    }
+    fun onThemeChange(selectedTheme : String) {
+        //TODO theme app
+
     }
 }

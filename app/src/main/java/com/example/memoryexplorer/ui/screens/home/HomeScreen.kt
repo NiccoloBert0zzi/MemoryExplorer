@@ -43,6 +43,7 @@ import coil.compose.rememberAsyncImagePainter
 import com.example.memoryexplorer.R
 import com.example.memoryexplorer.data.database.Favourite
 import com.example.memoryexplorer.data.database.Memory
+import com.example.memoryexplorer.data.repositories.LoginRepository
 import com.example.memoryexplorer.ui.MemoryExplorerRoute
 
 @Composable

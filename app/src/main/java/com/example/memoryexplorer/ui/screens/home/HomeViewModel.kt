@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.memoryexplorer.data.database.Memory
 import com.example.memoryexplorer.data.database.Favourite
 import com.example.memoryexplorer.data.repositories.FavouriteRepository
+import com.example.memoryexplorer.data.repositories.LoginRepository
 import com.google.firebase.Firebase
 import com.google.firebase.database.database
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,7 +18,8 @@ import kotlinx.coroutines.launch
 data class FavoritesState(val favourites: List<Favourite>)
 
 class HomeViewModel (
-    private val favouriteRepository: FavouriteRepository
+    private val favouriteRepository: FavouriteRepository,
+    loginRepository: LoginRepository
 ) : ViewModel() {
     private val _memories = MutableStateFlow<List<Memory>>(emptyList())
     val memories: StateFlow<List<Memory>> = _memories
@@ -27,6 +29,12 @@ class HomeViewModel (
 
     private val _error = MutableStateFlow<String?>(null)
     val error: StateFlow<String?> = _error
+
+    private val email: StateFlow<String> = loginRepository.email.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(),
+        initialValue = ""
+    )
 
     val state = favouriteRepository.favourites.map { FavoritesState(favourites = it) }.stateIn(
         scope = viewModelScope,
@@ -61,9 +69,9 @@ class HomeViewModel (
                 val memories = mutableListOf<Memory>()
                 for (snapshot in dataSnapshot.children) {
                     val memory = snapshot.getValue(Memory::class.java)
-                    // TODO: se la mail creator è uguale a quella dell'utente loggato, non aggiungere il memory alla lista
-                    // TODO: controllo se il memory è pubblico o privato
-                    memories.add(memory!!)
+                    if(memory?.isPublic == true && memory.creator != email.value) {
+                        memories.add(memory)
+                    }
                 }
                 _memories.value = memories
             }.addOnFailureListener { exception ->
@@ -77,6 +85,4 @@ class HomeViewModel (
     fun clearError() {
         _error.value = null
     }
-
-
 }

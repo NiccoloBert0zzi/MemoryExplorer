@@ -39,7 +39,8 @@ import com.example.memoryexplorer.R
 fun SettingsScreen(
     navController: NavHostController,
     loginRepository: LoginRepository,
-    onLogout: (NavHostController, LoginRepository) -> Unit
+    onLogout: (NavHostController, LoginRepository) -> Unit,
+    onThemeChange: (String) -> Unit
 ) {
     val context = LocalContext.current
     val theme = arrayOf(R.string.theme_system, R.string.theme_light, R.string.theme_dark)
@@ -88,7 +89,7 @@ fun SettingsScreen(
                     ) {
                         TextField(
                             value = selectedText,
-                            onValueChange = {},
+                            onValueChange = {onThemeChange(selectedText)},
                             readOnly = true,
                             trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
                             modifier = Modifier
