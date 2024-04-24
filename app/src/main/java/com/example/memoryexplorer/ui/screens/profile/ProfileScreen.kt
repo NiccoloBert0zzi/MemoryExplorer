@@ -86,12 +86,14 @@ fun ProfileScreen(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 ClickableText(
+                    //TODO add strings
                     text = AnnotatedString("My memories"),
                     onClick = {
                         Log.d("ProfileScreen", "My memories")
                     }
                 )
                 ClickableText(
+                    //TODO add strings
                     text = AnnotatedString("My favourite"),
                     onClick = {
                         Log.d("ProfileScreen", "My favourite")

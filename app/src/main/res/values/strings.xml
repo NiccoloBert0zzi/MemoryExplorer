@@ -24,4 +24,7 @@
 
     <string name="empty_fields">Fields cannot be empty</string>
     <string name="password_length">Password must be at least 6 characters long</string>
+
+    <string name="no_memories">No memories yet</string>
+    <string name="add_memory">"Tap the + button to add a new memory."</string>
 </resources>

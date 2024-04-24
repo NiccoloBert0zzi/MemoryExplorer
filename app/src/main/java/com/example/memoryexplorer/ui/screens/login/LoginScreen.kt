@@ -76,7 +76,7 @@ fun LoginScreen(
             ) {
                 Image(
                     painter = painterResource(R.drawable.logo),
-                    contentDescription = null,
+                    contentDescription = "Logo image",
                     modifier = Modifier
                         .size(128.dp)
                         .clip(CircleShape)

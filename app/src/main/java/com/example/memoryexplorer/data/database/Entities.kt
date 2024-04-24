@@ -1,16 +1,12 @@
 package com.example.memoryexplorer.data.database
 
-import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "favourite")
-data class Favourite(
+@Entity
+data class Favourite (
     @PrimaryKey
-    val email: String,
-
-    @ColumnInfo
-    val memoryId: String,
+    val memoryId: String
 )
 
 class Memory {

@@ -8,14 +8,8 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface FavouriteDAO {
-    @Query("SELECT * FROM Favourite")
+    @Query("SELECT * FROM favourite")
     fun getAll(): Flow<List<Favourite>>
-
-    @Query("SELECT * FROM Favourite WHERE email = :email")
-    fun getUserMemories(email: String?): Flow<List<Favourite>>?
-
-    @Query("SELECT * FROM Favourite WHERE email = :email AND memoryId = :memoryId")
-    fun checkMemories(email: String?, memoryId: String?): Favourite?
 
     @Upsert
     suspend fun upsert(favourite: Favourite)

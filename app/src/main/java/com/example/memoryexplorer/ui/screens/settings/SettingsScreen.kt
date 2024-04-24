@@ -133,7 +133,10 @@ fun SettingsScreen(
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         // TODO add icon flag
-                        Icon(Icons.Filled.Image, contentDescription = null)
+                        Icon(
+                            Icons.Filled.Image,
+                            contentDescription = "Flag icon"
+                        )
                         Text(text = item)
                     }
                 }

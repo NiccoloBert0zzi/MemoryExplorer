@@ -47,14 +47,20 @@ fun AppBar(
                 IconButton(onClick = {
                     navController.navigate(MemoryExplorerRoute.Profile.route)
                 }) {
-                    Icon(Icons.Outlined.SupervisedUserCircle, contentDescription = "User")
+                    Icon(
+                        Icons.Outlined.SupervisedUserCircle,
+                        contentDescription = "User account"
+                    )
                 }
             }
             if (currentRoute.route == MemoryExplorerRoute.Profile.route) {
                 IconButton(onClick = {
                     navController.navigate(MemoryExplorerRoute.Settings.route)
                 }) {
-                    Icon(Icons.Outlined.Settings, "Settings")
+                    Icon(
+                        Icons.Outlined.Settings,
+                        contentDescription = "Settings icon"
+                    )
                 }
             }
         },

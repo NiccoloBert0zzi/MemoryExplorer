@@ -80,7 +80,7 @@ fun RegisterScreen(
             ) {
                 Image(
                     painter = painterResource(R.drawable.empty_user),
-                    contentDescription = null,
+                    contentDescription = "User image",
                     modifier = Modifier
                         .size(128.dp)
                         .clip(CircleShape)

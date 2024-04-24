@@ -25,4 +25,7 @@
 
     <string name="empty_fields">I campi non possono essere vuoti</string>
     <string name="password_length">La password deve essere lunga almeno 6 caratteri</string>
+
+    <string name="no_memories">Nessun ricordo ancora</string>
+    <string name="add_memory">"Tocca il pulsante + per aggiungere un nuovo ricordo."</string>
 </resources>
