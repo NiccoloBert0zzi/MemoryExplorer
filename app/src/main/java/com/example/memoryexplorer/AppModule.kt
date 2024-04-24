@@ -6,6 +6,7 @@ import androidx.room.Room
 import com.example.memoryexplorer.data.database.MemoryExplorerDatabase
 import com.example.memoryexplorer.data.repositories.FavouriteRepository
 import com.example.memoryexplorer.data.repositories.LoginRepository
+import com.example.memoryexplorer.ui.screens.addmemory.AddMemoryViewModel
 import com.example.memoryexplorer.ui.screens.home.HomeViewModel
 import com.example.memoryexplorer.ui.screens.login.LoginViewModel
 import com.example.memoryexplorer.ui.screens.register.RegisterViewModel
@@ -37,6 +38,7 @@ val appModule = module {
     viewModel { HomeViewModel(get()) }
     viewModel { LoginViewModel(get()) }
     viewModel { RegisterViewModel(get()) }
+    viewModel { AddMemoryViewModel(get()) }
     viewModel { SettingsViewModel() }
 
 }

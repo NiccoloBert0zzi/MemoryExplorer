@@ -5,8 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.memoryexplorer.data.database.Memory
 import com.example.memoryexplorer.data.database.Favourite
 import com.example.memoryexplorer.data.repositories.FavouriteRepository
-import com.google.firebase.Firebase
-import com.google.firebase.database.database
+import com.google.firebase.database.FirebaseDatabase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -54,10 +53,9 @@ class HomeViewModel (
         viewModelScope.launch {
             _isLoading.value = true
 
-            val database = Firebase.database
-            val myRef = database.getReference("memories")
+            val database = FirebaseDatabase.getInstance().getReference("memories")
 
-            myRef.get().addOnSuccessListener { dataSnapshot ->
+            database.get().addOnSuccessListener { dataSnapshot ->
                 val memories = mutableListOf<Memory>()
                 for (snapshot in dataSnapshot.children) {
                     val memory = snapshot.getValue(Memory::class.java)
@@ -77,6 +75,5 @@ class HomeViewModel (
     fun clearError() {
         _error.value = null
     }
-
 
 }
