@@ -11,6 +11,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.memoryexplorer.data.repositories.LoginRepository
 import com.example.memoryexplorer.ui.screens.addmemory.AddMemoryScreen
+import com.example.memoryexplorer.ui.screens.addmemory.AddMemoryViewModel
 import com.example.memoryexplorer.ui.screens.home.HomeScreen
 import com.example.memoryexplorer.ui.screens.home.HomeViewModel
 import com.example.memoryexplorer.ui.screens.login.LoginScreen
@@ -84,7 +85,12 @@ fun MemoryExplorerNavGraph(
         }
         with(MemoryExplorerRoute.AddMemory) {
             composable(route) {
-                AddMemoryScreen(navController)
+                val addMemoryViewModel = koinViewModel<AddMemoryViewModel>()
+                AddMemoryScreen(
+                    navController,
+                    addMemoryViewModel,
+                    addMemoryViewModel::onAddMemory
+                )
             }
         }
         with(MemoryExplorerRoute.Profile) {
