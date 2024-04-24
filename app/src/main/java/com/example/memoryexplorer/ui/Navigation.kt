@@ -104,7 +104,8 @@ fun MemoryExplorerNavGraph(
                 SettingsScreen(
                     navController,
                     loginRepository,
-                    settingsViewModel::onLogout
+                    settingsViewModel::onLogout,
+                    settingsViewModel::onThemeChange
                 )
             }
         }
