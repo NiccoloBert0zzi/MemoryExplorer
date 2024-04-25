@@ -26,23 +26,18 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavHostController
-import com.example.memoryexplorer.data.repositories.LoginRepository
 
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.memoryexplorer.R
-import com.example.memoryexplorer.data.repositories.FavouriteRepository
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(
     navController: NavHostController,
-    loginRepository: LoginRepository,
-    favouriteRepository: FavouriteRepository,
-    onLogout: (NavHostController, LoginRepository, FavouriteRepository) -> Unit,
-    onThemeChange: (String) -> Unit
+    settingsViewModel: SettingsViewModel,
 ) {
     val context = LocalContext.current
     val theme = arrayOf(R.string.theme_system, R.string.theme_light, R.string.theme_dark)
@@ -91,7 +86,7 @@ fun SettingsScreen(
                     ) {
                         TextField(
                             value = selectedText,
-                            onValueChange = {onThemeChange(selectedText)},
+                            onValueChange = { settingsViewModel.onThemeChange(selectedText) },
                             readOnly = true,
                             trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
                             modifier = Modifier
@@ -151,7 +146,7 @@ fun SettingsScreen(
                     .padding(top = 16.dp)
             ) {
                 Button(
-                    onClick = { onLogout(navController, loginRepository, favouriteRepository) },
+                    onClick = { settingsViewModel.onLogout(navController) },
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Text(text = stringResource(R.string.logout))

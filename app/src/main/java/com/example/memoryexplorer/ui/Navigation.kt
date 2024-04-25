@@ -10,7 +10,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.memoryexplorer.R
-import com.example.memoryexplorer.data.repositories.FavouriteRepository
 import com.example.memoryexplorer.data.repositories.LoginRepository
 import com.example.memoryexplorer.ui.screens.addmemory.AddMemoryScreen
 import com.example.memoryexplorer.ui.screens.addmemory.AddMemoryViewModel
@@ -54,7 +53,6 @@ fun MemoryExplorerNavGraph(
     navController: NavHostController,
     modifier: Modifier = Modifier
 ) {
-    val favoriteRepository = get<FavouriteRepository>()
     val loginRepository = get<LoginRepository>()
     val rememberMe by loginRepository.remember.collectAsState(initial = false)
     NavHost(
@@ -67,8 +65,7 @@ fun MemoryExplorerNavGraph(
                 val loginViewModel = koinViewModel<LoginViewModel>()
                 LoginScreen(
                     navController,
-                    loginViewModel::onLogin,
-                    loginViewModel::onRegister
+                    loginViewModel
                 )
             }
         }
@@ -86,8 +83,7 @@ fun MemoryExplorerNavGraph(
                 val registerViewModel = koinViewModel<RegisterViewModel>()
                 RegisterScreen(
                     navController,
-                    registerViewModel::onLogin,
-                    registerViewModel::onRegister
+                    registerViewModel
                 )
             }
         }
@@ -95,9 +91,9 @@ fun MemoryExplorerNavGraph(
             composable("$route/{memoryId}") { backStackEntry ->
                 val memoryDetailsViewModel = koinViewModel<MemoryDetailsViewModel>()
                 MemoryDetailsScreen(
+                    navController,
                     backStackEntry.arguments?.getString("memoryId"),
-                    memoryDetailsViewModel,
-                    navController
+                    memoryDetailsViewModel
                 )
             }
         }
@@ -106,8 +102,7 @@ fun MemoryExplorerNavGraph(
                 val addMemoryViewModel = koinViewModel<AddMemoryViewModel>()
                 AddMemoryScreen(
                     navController,
-                    addMemoryViewModel,
-                    addMemoryViewModel::onAddMemory
+                    addMemoryViewModel
                 )
             }
         }
@@ -125,10 +120,7 @@ fun MemoryExplorerNavGraph(
                 val settingsViewModel = koinViewModel<SettingsViewModel>()
                 SettingsScreen(
                     navController,
-                    loginRepository,
-                    favoriteRepository,
-                    settingsViewModel::onLogout,
-                    settingsViewModel::onThemeChange
+                    settingsViewModel
                 )
             }
         }

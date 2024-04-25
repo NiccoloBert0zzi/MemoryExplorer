@@ -36,9 +36,9 @@ import com.example.memoryexplorer.ui.composables.AppBar
 
 @Composable
 fun MemoryDetailsScreen(
+    navController: NavHostController,
     memoryId: String?,
     memoryDetailsViewModel: MemoryDetailsViewModel,
-    navController: NavHostController
 ) {
     if (memoryId != null) {
         memoryDetailsViewModel.run { getMemoryById(memoryId) }

@@ -40,8 +40,7 @@ import com.example.memoryexplorer.R
 @Composable
 fun LoginScreen(
     navController: NavHostController,
-    onLogin: (String, String, Boolean, NavHostController) -> Unit,
-    onRegister: (NavHostController) -> Unit
+    loginViewModel: LoginViewModel
 ) {
     var email by rememberSaveable { mutableStateOf("") }
     var password by rememberSaveable { mutableStateOf("") }
@@ -145,7 +144,7 @@ fun LoginScreen(
                         fontWeight = Bold
                     ),
                     onClick = {
-                        onRegister(navController)
+                        loginViewModel.onRegister(navController)
                     }
                 )
             }
@@ -154,7 +153,7 @@ fun LoginScreen(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Button(
-                    onClick = { onLogin(email, password, remember, navController) },
+                    onClick = { loginViewModel.onLogin(email, password, remember, navController) },
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Text(stringResource(R.string.login))

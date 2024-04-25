@@ -41,8 +41,7 @@ import java.time.format.DateTimeFormatter
 @Composable
 fun AddMemoryScreen(
     navController: NavHostController,
-    addMemoryViewModel: AddMemoryViewModel,
-    onAddMemory: (String, String, String, Boolean, Int, NavHostController) -> Unit
+    addMemoryViewModel: AddMemoryViewModel
 ) {
     val isLoading by addMemoryViewModel.isLoading.collectAsState()
     val error by addMemoryViewModel.error.collectAsState()
@@ -198,7 +197,7 @@ fun AddMemoryScreen(
             modifier = Modifier.fillMaxWidth(),
         ) {
             Button(
-                onClick = { onAddMemory(title, description, date, public, image, navController) },
+                onClick = { addMemoryViewModel.onAddMemory(title, description, date, public, image, navController) },
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(stringResource(R.string.add_memory))

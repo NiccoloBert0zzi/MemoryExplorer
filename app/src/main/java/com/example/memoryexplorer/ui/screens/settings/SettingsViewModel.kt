@@ -8,12 +8,11 @@ import com.example.memoryexplorer.data.repositories.LoginRepository
 import com.example.memoryexplorer.ui.MemoryExplorerRoute
 import kotlinx.coroutines.launch
 
-class SettingsViewModel : ViewModel() {
-    fun onLogout(
-        navController: NavHostController,
-        loginRepository: LoginRepository,
-        favouriteRepository: FavouriteRepository
-    ) {
+class SettingsViewModel(
+    private val loginRepository: LoginRepository,
+    private val favouriteRepository: FavouriteRepository
+) : ViewModel() {
+    fun onLogout(navController: NavHostController) {
         viewModelScope.launch {
             loginRepository.logout()
             favouriteRepository.logout()

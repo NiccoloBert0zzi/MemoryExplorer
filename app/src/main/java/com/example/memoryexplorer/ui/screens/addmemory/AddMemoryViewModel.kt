@@ -15,7 +15,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
-@Suppress("NAME_SHADOWING")
 class AddMemoryViewModel(
     private val loginRepository: LoginRepository
 ) : ViewModel() {
@@ -53,9 +52,9 @@ class AddMemoryViewModel(
             storageRef.putFile(imageUri.toUri())
                 .addOnSuccessListener { taskSnapshot ->
                     taskSnapshot.storage.downloadUrl.addOnSuccessListener { downloadUri ->
-                        val imageUri = downloadUri.toString()
+                        val downloadedImageUri = downloadUri.toString()
                         // TODO: Add dynamic location picker
-                        val memory = Memory(id, email, title, description, date, "latitude", "longitude", imageUri, public)
+                        val memory = Memory(id, email, title, description, date, "latitude", "longitude", downloadedImageUri, public)
                         database.child(id).setValue(memory)
                             .addOnSuccessListener {
                                 navController.navigateUp()

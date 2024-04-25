@@ -6,8 +6,6 @@ import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.first
-
 
 class LoginRepository(private val dataStore: DataStore<Preferences>) {
     companion object {
@@ -17,9 +15,6 @@ class LoginRepository(private val dataStore: DataStore<Preferences>) {
 
     val email = dataStore.data.map { it[EMAIL_KEY] ?: "" }
     val remember = dataStore.data.map { it[REMEMBER_ME] ?: false }
-
-    suspend fun getEmail(): String = email.first()
-    suspend fun getRemember(): Boolean = remember.first()
 
     suspend fun setEmail(value: String) = dataStore.edit { it[EMAIL_KEY] = value }
     suspend fun setRemember(value: Boolean) = dataStore.edit { it[REMEMBER_ME] = value }

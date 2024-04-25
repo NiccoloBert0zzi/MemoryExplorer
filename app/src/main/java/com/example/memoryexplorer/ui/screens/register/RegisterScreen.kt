@@ -42,8 +42,7 @@ import com.example.memoryexplorer.R
 @Composable
 fun RegisterScreen(
     navController: NavHostController,
-    onLogin: (NavHostController) -> Unit,
-    onRegister: (String, String, String, Boolean, Int, NavHostController) -> Unit
+    registerViewModel: RegisterViewModel
 ) {
     var email by rememberSaveable { mutableStateOf("") }
     var username by rememberSaveable { mutableStateOf("") }
@@ -172,7 +171,7 @@ fun RegisterScreen(
                         fontWeight = FontWeight.Bold
                     ),
                     onClick = {
-                        onLogin(navController)
+                        registerViewModel.onLogin(navController)
                     }
                 )
             }
@@ -181,7 +180,7 @@ fun RegisterScreen(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Button(
-                    onClick = { onRegister(email, username, password, remember, image, navController) },
+                    onClick = { registerViewModel.onRegister(email, username, password, remember, image, navController) },
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Text(stringResource(R.string.register))
