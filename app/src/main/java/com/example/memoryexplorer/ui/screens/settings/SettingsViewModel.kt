@@ -18,6 +18,5 @@ class SettingsViewModel : ViewModel() {
     }
     fun onThemeChange(selectedTheme : String) {
         //TODO theme app
-
     }
 }

@@ -6,8 +6,6 @@ import com.example.memoryexplorer.data.database.Memory
 import com.example.memoryexplorer.data.database.Favourite
 import com.example.memoryexplorer.data.repositories.FavouriteRepository
 import com.example.memoryexplorer.data.repositories.LoginRepository
-import com.google.firebase.Firebase
-import com.google.firebase.database.database
 import com.google.firebase.database.FirebaseDatabase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted

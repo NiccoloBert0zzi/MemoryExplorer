@@ -17,6 +17,7 @@ import com.example.memoryexplorer.ui.screens.home.HomeViewModel
 import com.example.memoryexplorer.ui.screens.login.LoginScreen
 import com.example.memoryexplorer.ui.screens.login.LoginViewModel
 import com.example.memoryexplorer.ui.screens.profile.ProfileScreen
+import com.example.memoryexplorer.ui.screens.profile.ProfileViewModel
 import com.example.memoryexplorer.ui.screens.register.RegisterScreen
 import com.example.memoryexplorer.ui.screens.register.RegisterViewModel
 import com.example.memoryexplorer.ui.screens.settings.SettingsScreen
@@ -95,7 +96,11 @@ fun MemoryExplorerNavGraph(
         }
         with(MemoryExplorerRoute.Profile) {
             composable(route) {
-                ProfileScreen(navController)
+                val profileViewModel = koinViewModel<ProfileViewModel>()
+                ProfileScreen(
+                    navController,
+                    profileViewModel
+                )
             }
         }
         with(MemoryExplorerRoute.Settings) {
