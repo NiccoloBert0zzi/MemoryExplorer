@@ -21,7 +21,8 @@ import com.example.memoryexplorer.ui.MemoryExplorerRoute
 @Composable
 fun AppBar(
     navController: NavHostController,
-    currentRoute: MemoryExplorerRoute
+    currentRoute: MemoryExplorerRoute,
+    title: String?
 ) {
     if (currentRoute.route == MemoryExplorerRoute.Login.route || currentRoute.route == MemoryExplorerRoute.Register.route) {
         return
@@ -29,11 +30,11 @@ fun AppBar(
     CenterAlignedTopAppBar(
         title = {
             Text(
-                currentRoute.title,
+                title ?: currentRoute.title,
                 fontWeight = FontWeight.Light,
                 textAlign = TextAlign.Start,
                 color = MaterialTheme.colorScheme.primary,
-                )
+            )
         },
         navigationIcon = {
             if (navController.previousBackStackEntry != null) {
