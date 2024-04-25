@@ -10,6 +10,8 @@ import com.example.memoryexplorer.ui.screens.addmemory.AddMemoryViewModel
 import com.example.memoryexplorer.ui.screens.home.HomeViewModel
 import com.example.memoryexplorer.ui.screens.login.LoginViewModel
 import com.example.memoryexplorer.ui.screens.profile.ProfileViewModel
+import com.example.memoryexplorer.ui.screens.memorydetails.MemoryDetailsScreen
+import com.example.memoryexplorer.ui.screens.memorydetails.MemoryDetailsViewModel
 import com.example.memoryexplorer.ui.screens.register.RegisterViewModel
 import com.example.memoryexplorer.ui.screens.settings.SettingsViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -40,6 +42,7 @@ val appModule = module {
     viewModel { ProfileViewModel() }
     viewModel { LoginViewModel(get()) }
     viewModel { RegisterViewModel(get()) }
+    viewModel { MemoryDetailsViewModel(get()) }
     viewModel { AddMemoryViewModel(get()) }
     viewModel { SettingsViewModel() }
 

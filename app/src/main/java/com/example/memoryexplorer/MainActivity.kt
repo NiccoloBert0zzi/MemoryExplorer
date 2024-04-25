@@ -40,7 +40,7 @@ class MainActivity : ComponentActivity() {
                         }
                     }
                     Scaffold(
-                        topBar = { AppBar(navController, currentRoute) }
+                        topBar = { AppBar(navController, currentRoute, null) }
                     ) { contentPadding ->
                         MemoryExplorerNavGraph(
                             navController,
