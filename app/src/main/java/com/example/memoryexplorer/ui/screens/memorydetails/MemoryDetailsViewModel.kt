@@ -1,11 +1,10 @@
-package com.example.memoryexplorer.ui.screens.home
+package com.example.memoryexplorer.ui.screens.memorydetails
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.memoryexplorer.data.database.Memory
 import com.example.memoryexplorer.data.database.Favourite
+import com.example.memoryexplorer.data.database.Memory
 import com.example.memoryexplorer.data.repositories.FavouriteRepository
-import com.example.memoryexplorer.data.repositories.LoginRepository
 import com.google.firebase.database.FirebaseDatabase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -16,12 +15,11 @@ import kotlinx.coroutines.launch
 
 data class FavouritesState(val favourites: List<Favourite>)
 
-class HomeViewModel (
-    private val favouriteRepository: FavouriteRepository,
-    loginRepository: LoginRepository
+class MemoryDetailsViewModel(
+    private val favouriteRepository: FavouriteRepository
 ) : ViewModel() {
-    private val _memories = MutableStateFlow<List<Memory>>(emptyList())
-    val memories: StateFlow<List<Memory>> = _memories
+    private val _memory = MutableStateFlow<Memory?>(null)
+    val memory: StateFlow<Memory?> = _memory
 
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading
@@ -29,21 +27,11 @@ class HomeViewModel (
     private val _error = MutableStateFlow<String?>(null)
     val error: StateFlow<String?> = _error
 
-    private val email: StateFlow<String> = loginRepository.email.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(),
-        initialValue = ""
-    )
-
     val state = favouriteRepository.favourites.map { FavouritesState(favourites = it) }.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(),
         initialValue = FavouritesState(emptyList())
     )
-
-    init {
-        getMemories()
-    }
 
     fun addFavourite(memoryId: String) {
         viewModelScope.launch {
@@ -57,21 +45,13 @@ class HomeViewModel (
         }
     }
 
-    private fun getMemories() {
+    fun getMemoryById(id: String) {
         viewModelScope.launch {
             _isLoading.value = true
-
             val database = FirebaseDatabase.getInstance().getReference("memories")
-
-            database.get().addOnSuccessListener { dataSnapshot ->
-                val memories = mutableListOf<Memory>()
-                for (snapshot in dataSnapshot.children) {
-                    val memory = snapshot.getValue(Memory::class.java)
-                    if(memory?.isPublic == true && memory.creator != email.value) {
-                        memories.add(memory)
-                    }
-                }
-                _memories.value = memories
+            database.child(id).get().addOnSuccessListener { dataSnapshot ->
+                val memory = dataSnapshot.getValue(Memory::class.java)
+                _memory.value = memory
             }.addOnFailureListener { exception ->
                 _error.value = exception.localizedMessage
             }.addOnCompleteListener {

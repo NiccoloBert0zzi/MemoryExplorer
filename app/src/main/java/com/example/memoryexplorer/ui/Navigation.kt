@@ -16,6 +16,8 @@ import com.example.memoryexplorer.ui.screens.home.HomeScreen
 import com.example.memoryexplorer.ui.screens.home.HomeViewModel
 import com.example.memoryexplorer.ui.screens.login.LoginScreen
 import com.example.memoryexplorer.ui.screens.login.LoginViewModel
+import com.example.memoryexplorer.ui.screens.memorydetails.MemoryDetailsScreen
+import com.example.memoryexplorer.ui.screens.memorydetails.MemoryDetailsViewModel
 import com.example.memoryexplorer.ui.screens.profile.ProfileScreen
 import com.example.memoryexplorer.ui.screens.register.RegisterScreen
 import com.example.memoryexplorer.ui.screens.register.RegisterViewModel
@@ -32,13 +34,15 @@ sealed class MemoryExplorerRoute(
     data object Home : MemoryExplorerRoute("home", "Memory Explorer")
     data object Login : MemoryExplorerRoute("login", "Login")
     data object Register : MemoryExplorerRoute("register", "Register")
+    data object MemoryDetails : MemoryExplorerRoute("memoryDetails", "Memory Details")
     data object AddMemory : MemoryExplorerRoute("addMemory", "Add Memory")
     data object Profile : MemoryExplorerRoute("profile", "Profile")
     data object Settings : MemoryExplorerRoute("settings", "Settings")
     data object Statistics : MemoryExplorerRoute("statistics", "Statistics")
 
     companion object {
-        val routes = setOf(Login, Home, Register, AddMemory, Profile, Settings, Statistics)
+        val routes =
+            setOf(Login, Home, Register, MemoryDetails, AddMemory, Profile, Settings, Statistics)
     }
 }
 
@@ -80,6 +84,16 @@ fun MemoryExplorerNavGraph(
                     navController,
                     registerViewModel::onLogin,
                     registerViewModel::onRegister
+                )
+            }
+        }
+        with(MemoryExplorerRoute.MemoryDetails) {
+            composable("$route/{memoryId}") { backStackEntry ->
+                val memoryDetailsViewModel = koinViewModel<MemoryDetailsViewModel>()
+                MemoryDetailsScreen(
+                    backStackEntry.arguments?.getString("memoryId"),
+                    memoryDetailsViewModel,
+                    navController
                 )
             }
         }

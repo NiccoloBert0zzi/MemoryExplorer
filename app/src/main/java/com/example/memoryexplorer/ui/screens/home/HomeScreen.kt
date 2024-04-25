@@ -1,6 +1,5 @@
 package com.example.memoryexplorer.ui.screens.home
 
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -43,7 +42,6 @@ import coil.compose.rememberAsyncImagePainter
 import com.example.memoryexplorer.R
 import com.example.memoryexplorer.data.database.Favourite
 import com.example.memoryexplorer.data.database.Memory
-import com.example.memoryexplorer.data.repositories.LoginRepository
 import com.example.memoryexplorer.ui.MemoryExplorerRoute
 
 @Composable
@@ -97,7 +95,7 @@ fun HomeScreen(
                             MemoryItem(
                                 memory,
                                 onClick = {
-                                    Log.d("HomeScreen", "Item clicked: $memory")
+                                    navController.navigate("${MemoryExplorerRoute.MemoryDetails.route}/${memory.id}")
                                 },
                                 homeViewModel = homeViewModel,
                                 favourites = favourites.favourites
