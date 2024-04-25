@@ -15,7 +15,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
@@ -48,9 +47,7 @@ fun ProfileScreen(
     var isMemory = true
 
     Scaffold(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
+        modifier = Modifier.fillMaxSize()
     ) { contentPadding ->
         Column(
             modifier = Modifier
@@ -58,7 +55,9 @@ fun ProfileScreen(
                 .fillMaxSize(),
         ) {
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(end = 16.dp, start = 16.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
@@ -82,7 +81,9 @@ fun ProfileScreen(
             }
             Spacer(Modifier.size(16.dp))
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(end = 16.dp, start = 16.dp),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
@@ -93,42 +94,45 @@ fun ProfileScreen(
             }
             Spacer(Modifier.size(16.dp))
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(end = 16.dp, start = 16.dp),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 ClickableText(
                     text = AnnotatedString(
-                        text ="My memories",
-                        spanStyles = if(isMemory) listOf(
+                        text = stringResource(R.string.memories),
+                        spanStyles = if (isMemory) listOf(
                             AnnotatedString.Range(
                                 item = SpanStyle(textDecoration = TextDecoration.Underline),
                                 start = 0,
-                                end = "My memories".length
+                                end = stringResource(R.string.memories).length
                             )
                         ) else listOf()
                     ),
-
                     onClick = {
                         isMemory = true
                         profileViewModel.getMemories()
-                        Log.d("ProfileScreen", "My memories")
+                        Log.d("ProfileScreen", "My memories: $isMemory")
                     }
                 )
                 ClickableText(
                     text = AnnotatedString(
-                        text ="My favourite",
-                        spanStyles = if(!isMemory) listOf(
+                        text = stringResource(R.string.favorite),
+                        spanStyles = if (!isMemory) listOf(
                             AnnotatedString.Range(
                                 item = SpanStyle(textDecoration = TextDecoration.Underline),
                                 start = 0,
-                                end = "My favourite".length
+                                end = stringResource(R.string.favorite).length
                             )
                         ) else listOf()
                     ),
                     onClick = {
                         isMemory = false
                         profileViewModel.getFavourites()
-                        Log.d("ProfileScreen", "My favourite")
+                        // TODO se non ci sono favoriti non entra nemmeno nella pagina, rimane in "My memories"
+                        // TODO se apro una memory nella schermata preferiti, quando torno indietro mi ritrovo in "My memories"
+                        Log.d("ProfileScreen", "My favourite: $isMemory")
                     }
                 )
             }
@@ -156,14 +160,14 @@ fun ProfileScreen(
                                     MemoryItem(
                                         memory,
                                         onClick = {
-                                            Log.d("ProfileScreen", "Memory Item clicked: $memory")
+                                            navController.navigate("${MemoryExplorerRoute.MemoryDetails.route}/${memory.id}")
                                         }
                                     )
                                 }
                             }
                         }
                     } else {
-                        if(favourites.isEmpty()) {
+                        if (favourites.isEmpty()) {
                             NoMemoriesPlaceholder()
                         } else {
                             LazyVerticalGrid(
@@ -177,7 +181,7 @@ fun ProfileScreen(
                                     MemoryItem(
                                         fav,
                                         onClick = {
-                                            Log.d("ProfileScreen", "Favourite Item clicked: $fav")
+                                            navController.navigate("${MemoryExplorerRoute.MemoryDetails.route}/${fav.id}")
                                         }
                                     )
                                 }
@@ -261,10 +265,6 @@ fun NoMemoriesPlaceholder() {
             fontWeight = FontWeight.Bold,
             color = MaterialTheme.colorScheme.primary,
             modifier = Modifier.padding(bottom = 8.dp)
-        )
-        Text(
-            stringResource(R.string.add_new_memory),
-            style = MaterialTheme.typography.bodyLarge
         )
     }
 }
