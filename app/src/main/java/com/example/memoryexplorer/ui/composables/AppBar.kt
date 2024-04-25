@@ -12,6 +12,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.navigation.NavHostController
@@ -27,10 +28,12 @@ fun AppBar(
     if (currentRoute.route == MemoryExplorerRoute.Login.route || currentRoute.route == MemoryExplorerRoute.Register.route) {
         return
     }
+    val context = LocalContext.current
+    val routeTitle = context.getString(currentRoute.titleId)
     CenterAlignedTopAppBar(
         title = {
             Text(
-                title ?: currentRoute.title,
+                title ?: routeTitle,
                 fontWeight = FontWeight.Light,
                 textAlign = TextAlign.Start,
                 color = MaterialTheme.colorScheme.primary,

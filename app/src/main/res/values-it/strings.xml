@@ -1,9 +1,15 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- General -->
     <string name="app_name">Memory Explorer</string>
-    <string name="theme_light">Chiaro</string>
-    <string name="theme_dark">Scuro</string>
-    <string name="theme_system">Sistema</string>
+    <string name="login_page">Accedi</string>
+    <string name="register_page">Registrati</string>
+    <string name="memory_details_page">Dettagli ricordo</string>
+    <string name="add_memory_page">Aggiungi ricordo</string>
+    <string name="profile_page">Profilo</string>
+    <string name="settings_page">Impostazioni</string>
+    <string name="statistics_page">Statistiche</string>
+
+    <!-- Login/Register -->
     <string name="remember_me">Ricordami</string>
     <string name="email_request">Inserisci email:</string>
     <string name="username_request">Inserisci username:</string>
@@ -15,20 +21,24 @@
     <string name="register">Registrati</string>
     <string name="option_register">Non hai un account? Registrati</string>
     <string name="option_login">Hai già un account? Accedi</string>
-    <string name="logout">Esci</string>
-    <string name="statistics">Statistiche</string>
-    <string name="select_theme">Seleziona tema:</string>
-    <string name="select_language">Seleziona lingua:</string>
-
-    <string name="language_english">ING</string>
-    <string name="language_italian">ITA</string>
-
     <string name="empty_fields">I campi non possono essere vuoti</string>
     <string name="password_length">La password deve essere lunga almeno 6 caratteri</string>
 
+    <!-- Settings -->
+    <string name="logout">Esci</string>
+    <string name="select_theme">Seleziona tema:</string>
+    <string name="theme_light">Chiaro</string>
+    <string name="theme_dark">Scuro</string>
+    <string name="theme_system">Sistema</string>
+    <string name="select_language">Seleziona lingua:</string>
+    <string name="language_english">ING</string>
+    <string name="language_italian">ITA</string>
+
+    <!-- Home -->
     <string name="no_memories">Nessun ricordo ancora</string>
     <string name="add_new_memory">"Tocca il pulsante + per aggiungere un nuovo ricordo."</string>
 
+    <!-- Add memory -->
     <string name="add_memory_title">Aggiungi titolo:</string>
     <string name="memory_title">Titolo</string>
     <string name="add_memory_image">Aggiungi immagine:</string>
@@ -39,4 +49,10 @@
     <string name="memory_public">Pubblico</string>
     <string name="add_memory_position">Aggiungi posizione:</string>
     <string name="add_memory">Aggiungi</string>
+
+    <!-- Profile -->
+    <string name="statistics">Statistiche</string>
+    <string name="memories">I miei ricordi</string>
+    <string name="favorite">I miei preferiti</string>
+
 </resources>

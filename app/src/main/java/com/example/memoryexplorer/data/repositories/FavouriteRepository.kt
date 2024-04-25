@@ -20,4 +20,8 @@ class FavouriteRepository(
     suspend fun delete(favourite: Favourite) {
         favouriteDao.delete(favourite)
     }
+
+    suspend fun logout() {
+        favouriteDao.deleteAll()
+    }
 }

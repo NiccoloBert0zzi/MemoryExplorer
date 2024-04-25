@@ -36,6 +36,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
@@ -69,18 +70,26 @@ fun HomeScreen(
             }
         },
     ) { contentPadding ->
-        Column(
-            modifier = Modifier
-                .padding(contentPadding)
-                .fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            if (isLoading) {
+        if (isLoading) {
+            Column(
+                modifier = Modifier
+                    .padding(contentPadding)
+                    .fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
                 CircularProgressIndicator(
                     modifier = Modifier.align(Alignment.CenterHorizontally)
                 )
-            } else {
+            }
+        } else {
+            Column(
+                modifier = Modifier
+                    .padding(contentPadding)
+                    .fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Top
+            ) {
                 if (memories.isEmpty()) {
                     NoMemoriesPlaceholder()
                 } else {
@@ -195,7 +204,9 @@ fun NoMemoriesPlaceholder() {
         )
         Text(
             stringResource(R.string.add_new_memory),
-            style = MaterialTheme.typography.bodyLarge
+            style = MaterialTheme.typography.bodyLarge,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.padding(16.dp)
         )
     }
 }

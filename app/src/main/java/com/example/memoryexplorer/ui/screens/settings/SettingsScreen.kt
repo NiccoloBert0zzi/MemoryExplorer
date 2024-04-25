@@ -33,13 +33,15 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.memoryexplorer.R
+import com.example.memoryexplorer.data.repositories.FavouriteRepository
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(
     navController: NavHostController,
     loginRepository: LoginRepository,
-    onLogout: (NavHostController, LoginRepository) -> Unit,
+    favouriteRepository: FavouriteRepository,
+    onLogout: (NavHostController, LoginRepository, FavouriteRepository) -> Unit,
     onThemeChange: (String) -> Unit
 ) {
     val context = LocalContext.current
@@ -149,7 +151,7 @@ fun SettingsScreen(
                     .padding(top = 16.dp)
             ) {
                 Button(
-                    onClick = { onLogout(navController, loginRepository) },
+                    onClick = { onLogout(navController, loginRepository, favouriteRepository) },
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Text(text = stringResource(R.string.logout))

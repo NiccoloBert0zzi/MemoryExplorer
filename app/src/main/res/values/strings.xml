@@ -1,8 +1,15 @@
 <resources>
+    <!-- General -->
     <string name="app_name">Memory Explorer</string>
-    <string name="theme_light">Light</string>
-    <string name="theme_dark">Dark</string>
-    <string name="theme_system">System</string>
+    <string name="login_page">Login</string>
+    <string name="register_page">Register</string>
+    <string name="memory_details_page">Memory details</string>
+    <string name="add_memory_page">Add memory</string>
+    <string name="profile_page">Profile</string>
+    <string name="settings_page">Settings</string>
+    <string name="statistics_page">Statistics</string>
+
+    <!-- Login/Register -->
     <string name="remember_me">Remember me</string>
     <string name="email_request">Insert email:</string>
     <string name="username_request">Insert username:</string>
@@ -14,20 +21,24 @@
     <string name="register">Register</string>
     <string name="option_register">Don\'t have an account yet? Sign Up</string>
     <string name="option_login">Already have an account? Log In</string>
-    <string name="logout">Logout</string>
-    <string name="statistics">Statistics</string>
-    <string name="select_theme">Select theme:</string>
-    <string name="select_language">Select language:</string>
-
-    <string name="language_english">ENG</string>
-    <string name="language_italian">ITA</string>
-
     <string name="empty_fields">Fields cannot be empty</string>
     <string name="password_length">Password must be at least 6 characters long</string>
 
+    <!-- Settings -->
+    <string name="logout">Logout</string>
+    <string name="select_theme">Select theme:</string>
+    <string name="theme_light">Light</string>
+    <string name="theme_dark">Dark</string>
+    <string name="theme_system">System</string>
+    <string name="select_language">Select language:</string>
+    <string name="language_english">ENG</string>
+    <string name="language_italian">ITA</string>
+
+    <!-- Home -->
     <string name="no_memories">No memories yet</string>
     <string name="add_new_memory">"Tap the + button to add a new memory."</string>
 
+    <!-- Add memory -->
     <string name="add_memory_title">Add title:</string>
     <string name="memory_title">Title</string>
     <string name="add_memory_image">Add image:</string>
@@ -38,4 +49,10 @@
     <string name="memory_public">Public</string>
     <string name="add_memory_position">Add position:</string>
     <string name="add_memory">Add</string>
+
+    <!-- Profile -->
+    <string name="statistics">Statistics</string>
+    <string name="memories">My memories</string>
+    <string name="favorite">My favorite</string>
+
 </resources>

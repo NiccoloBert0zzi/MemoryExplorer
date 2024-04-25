@@ -9,6 +9,8 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.memoryexplorer.R
+import com.example.memoryexplorer.data.repositories.FavouriteRepository
 import com.example.memoryexplorer.data.repositories.LoginRepository
 import com.example.memoryexplorer.ui.screens.addmemory.AddMemoryScreen
 import com.example.memoryexplorer.ui.screens.addmemory.AddMemoryViewModel
@@ -30,16 +32,16 @@ import org.koin.androidx.compose.koinViewModel
 
 sealed class MemoryExplorerRoute(
     val route: String,
-    val title: String,
+    val titleId: Int,
 ) {
-    data object Home : MemoryExplorerRoute("home", "Memory Explorer")
-    data object Login : MemoryExplorerRoute("login", "Login")
-    data object Register : MemoryExplorerRoute("register", "Register")
-    data object MemoryDetails : MemoryExplorerRoute("memoryDetails", "Memory Details")
-    data object AddMemory : MemoryExplorerRoute("addMemory", "Add Memory")
-    data object Profile : MemoryExplorerRoute("profile", "Profile")
-    data object Settings : MemoryExplorerRoute("settings", "Settings")
-    data object Statistics : MemoryExplorerRoute("statistics", "Statistics")
+    data object Home : MemoryExplorerRoute("home", R.string.app_name)
+    data object Login : MemoryExplorerRoute("login", R.string.login_page)
+    data object Register : MemoryExplorerRoute("register", R.string.register_page)
+    data object MemoryDetails : MemoryExplorerRoute("memoryDetails", R.string.memory_details_page)
+    data object AddMemory : MemoryExplorerRoute("addMemory", R.string.add_memory_page)
+    data object Profile : MemoryExplorerRoute("profile", R.string.profile_page)
+    data object Settings : MemoryExplorerRoute("settings", R.string.settings_page)
+    data object Statistics : MemoryExplorerRoute("statistics", R.string.statistics_page)
 
     companion object {
         val routes =
@@ -52,6 +54,7 @@ fun MemoryExplorerNavGraph(
     navController: NavHostController,
     modifier: Modifier = Modifier
 ) {
+    val favoriteRepository = get<FavouriteRepository>()
     val loginRepository = get<LoginRepository>()
     val rememberMe by loginRepository.remember.collectAsState(initial = false)
     NavHost(
@@ -123,6 +126,7 @@ fun MemoryExplorerNavGraph(
                 SettingsScreen(
                     navController,
                     loginRepository,
+                    favoriteRepository,
                     settingsViewModel::onLogout,
                     settingsViewModel::onThemeChange
                 )

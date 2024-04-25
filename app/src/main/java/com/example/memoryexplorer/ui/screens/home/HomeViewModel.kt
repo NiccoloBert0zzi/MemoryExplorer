@@ -10,13 +10,14 @@ import com.google.firebase.database.FirebaseDatabase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 data class FavouritesState(val favourites: List<Favourite>)
 
-class HomeViewModel (
+class HomeViewModel(
     private val favouriteRepository: FavouriteRepository,
     loginRepository: LoginRepository
 ) : ViewModel() {
@@ -29,11 +30,7 @@ class HomeViewModel (
     private val _error = MutableStateFlow<String?>(null)
     val error: StateFlow<String?> = _error
 
-    private val email: StateFlow<String> = loginRepository.email.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(),
-        initialValue = ""
-    )
+    private var email: String? = null
 
     val state = favouriteRepository.favourites.map { FavouritesState(favourites = it) }.stateIn(
         scope = viewModelScope,
@@ -42,7 +39,10 @@ class HomeViewModel (
     )
 
     init {
-        getMemories()
+        viewModelScope.launch {
+            email = loginRepository.email.first()
+            getMemories()
+        }
     }
 
     fun addFavourite(memoryId: String) {
@@ -58,25 +58,22 @@ class HomeViewModel (
     }
 
     private fun getMemories() {
-        viewModelScope.launch {
-            _isLoading.value = true
+        _isLoading.value = true
 
-            val database = FirebaseDatabase.getInstance().getReference("memories")
-
-            database.get().addOnSuccessListener { dataSnapshot ->
-                val memories = mutableListOf<Memory>()
-                for (snapshot in dataSnapshot.children) {
-                    val memory = snapshot.getValue(Memory::class.java)
-                    if(memory?.isPublic == true && memory.creator != email.value) {
-                        memories.add(memory)
-                    }
+        val database = FirebaseDatabase.getInstance().getReference("memories")
+        database.get().addOnSuccessListener { dataSnapshot ->
+            val memories = mutableListOf<Memory>()
+            for (snapshot in dataSnapshot.children) {
+                val memory = snapshot.getValue(Memory::class.java)
+                if (memory?.isPublic == true && memory.creator != email) {
+                    memories.add(memory)
                 }
-                _memories.value = memories
-            }.addOnFailureListener { exception ->
-                _error.value = exception.localizedMessage
-            }.addOnCompleteListener {
-                _isLoading.value = false
             }
+            _memories.value = memories
+        }.addOnFailureListener { exception ->
+            _error.value = exception.localizedMessage
+        }.addOnCompleteListener {
+            _isLoading.value = false
         }
     }
 
