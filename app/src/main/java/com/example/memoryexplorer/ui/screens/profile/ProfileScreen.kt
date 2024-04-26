@@ -153,7 +153,7 @@ fun ProfileScreen(
                                 columns = GridCells.Fixed(2),
                                 verticalArrangement = Arrangement.spacedBy(8.dp),
                                 horizontalArrangement = Arrangement.spacedBy(8.dp),
-                                contentPadding = PaddingValues(8.dp, 8.dp, 8.dp, 80.dp),
+                                contentPadding = PaddingValues(8.dp, 8.dp, 8.dp, 0.dp),
                                 modifier = Modifier.padding(contentPadding)
                             ) {
                                 items(memories) { memory ->
@@ -174,7 +174,7 @@ fun ProfileScreen(
                                 columns = GridCells.Fixed(2),
                                 verticalArrangement = Arrangement.spacedBy(8.dp),
                                 horizontalArrangement = Arrangement.spacedBy(8.dp),
-                                contentPadding = PaddingValues(8.dp, 8.dp, 8.dp, 80.dp),
+                                contentPadding = PaddingValues(8.dp, 8.dp, 8.dp, 0.dp),
                                 modifier = Modifier.padding(contentPadding)
                             ) {
                                 items(favourites) { fav ->

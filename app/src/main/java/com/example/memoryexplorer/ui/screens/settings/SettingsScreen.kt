@@ -39,14 +39,13 @@ fun SettingsScreen(
     navController: NavHostController,
     settingsViewModel: SettingsViewModel,
 ) {
-    val context = LocalContext.current
     val theme = arrayOf(R.string.theme_system, R.string.theme_light, R.string.theme_dark)
         .map { stringResource(it) }
         .toTypedArray()
     val language = R.string::class.java.fields
         .filter { it.name.startsWith("language_") }
         .mapNotNull { it.getInt(it) }
-        .map { context.getString(it) }
+        .map { navController.context.getString(it) }
         .toTypedArray()
     var expanded by remember { mutableStateOf(false) }
     var selectedText by remember { mutableStateOf(theme[0]) }
@@ -93,7 +92,6 @@ fun SettingsScreen(
                                 .menuAnchor()
                                 .fillMaxWidth()
                         )
-
                         ExposedDropdownMenu(
                             expanded = expanded,
                             onDismissRequest = { expanded = false }
@@ -104,7 +102,7 @@ fun SettingsScreen(
                                     onClick = {
                                         selectedText = item
                                         expanded = false
-                                        Toast.makeText(context, item, Toast.LENGTH_SHORT).show()
+                                        Toast.makeText(navController.context, item, Toast.LENGTH_SHORT).show()
                                     }
                                 )
                             }
@@ -127,7 +125,7 @@ fun SettingsScreen(
                         .padding(bottom = 16.dp),
                 ) {
                     Button(
-                        onClick = { Toast.makeText(context, item, Toast.LENGTH_SHORT).show() },
+                        onClick = { Toast.makeText(navController.context, item, Toast.LENGTH_SHORT).show() },
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         // TODO add icon flag

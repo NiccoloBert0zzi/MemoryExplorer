@@ -28,8 +28,7 @@ fun AppBar(
     if (currentRoute.route == MemoryExplorerRoute.Login.route || currentRoute.route == MemoryExplorerRoute.Register.route) {
         return
     }
-    val context = LocalContext.current
-    val routeTitle = context.getString(currentRoute.titleId)
+    val routeTitle = navController.context.getString(currentRoute.titleId)
     CenterAlignedTopAppBar(
         title = {
             Text(
