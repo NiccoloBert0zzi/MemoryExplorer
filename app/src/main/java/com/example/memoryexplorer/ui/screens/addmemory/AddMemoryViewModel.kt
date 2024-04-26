@@ -68,7 +68,7 @@ class AddMemoryViewModel(
                     Toast.makeText(
                         navController.context,
                         exception.message.toString(),
-                        Toast.LENGTH_SHORT
+                        Toast.LENGTH_LONG
                     ).show()
                 }.addOnCompleteListener {
                     _isLoading.value = false

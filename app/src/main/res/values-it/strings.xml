@@ -37,6 +37,7 @@
     <!-- Home -->
     <string name="no_memories">Nessun ricordo ancora</string>
     <string name="add_new_memory">"Tocca il pulsante + per aggiungere un nuovo ricordo."</string>
+    <string name="world">Mondo</string>
 
     <!-- Add memory -->
     <string name="add_memory_title">Aggiungi titolo:</string>

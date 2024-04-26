@@ -58,7 +58,7 @@ class RegisterViewModel(
             Toast.makeText(
                 navController.context,
                 R.string.empty_fields,
-                Toast.LENGTH_SHORT
+                Toast.LENGTH_LONG
             ).show()
             return
         }
@@ -66,7 +66,7 @@ class RegisterViewModel(
             Toast.makeText(
                 navController.context,
                 R.string.password_length,
-                Toast.LENGTH_SHORT
+                Toast.LENGTH_LONG
             ).show()
             return
         }
@@ -82,7 +82,7 @@ class RegisterViewModel(
                             Toast.makeText(
                                 navController.context,
                                 e.message.toString(),
-                                Toast.LENGTH_SHORT
+                                Toast.LENGTH_LONG
                             ).show()
                         }
                         .addOnCompleteListener {
@@ -96,7 +96,7 @@ class RegisterViewModel(
                     Toast.makeText(
                         navController.context,
                         task.exception?.message.toString(),
-                        Toast.LENGTH_SHORT
+                        Toast.LENGTH_LONG
                     ).show()
                 }
             }

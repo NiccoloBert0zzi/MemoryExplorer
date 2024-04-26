@@ -37,6 +37,7 @@
     <!-- Home -->
     <string name="no_memories">No memories yet</string>
     <string name="add_new_memory">"Tap the + button to add a new memory."</string>
+    <string name="world">World</string>
 
     <!-- Add memory -->
     <string name="add_memory_title">Add title:</string>

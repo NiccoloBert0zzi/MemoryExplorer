@@ -16,9 +16,11 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -28,7 +30,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavHostController
 
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.memoryexplorer.R
@@ -84,6 +85,10 @@ fun SettingsScreen(
                         }
                     ) {
                         TextField(
+                            colors = TextFieldDefaults.colors(
+                                focusedContainerColor = MaterialTheme.colorScheme.secondary,
+                                unfocusedContainerColor = MaterialTheme.colorScheme.secondary,
+                            ),
                             value = selectedText,
                             onValueChange = { settingsViewModel.onThemeChange(selectedText) },
                             readOnly = true,
@@ -102,7 +107,7 @@ fun SettingsScreen(
                                     onClick = {
                                         selectedText = item
                                         expanded = false
-                                        Toast.makeText(navController.context, item, Toast.LENGTH_SHORT).show()
+                                        Toast.makeText(navController.context, item, Toast.LENGTH_LONG).show()
                                     }
                                 )
                             }
@@ -125,7 +130,7 @@ fun SettingsScreen(
                         .padding(bottom = 16.dp),
                 ) {
                     Button(
-                        onClick = { Toast.makeText(navController.context, item, Toast.LENGTH_SHORT).show() },
+                        onClick = { Toast.makeText(navController.context, item, Toast.LENGTH_LONG).show() },
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         // TODO add icon flag

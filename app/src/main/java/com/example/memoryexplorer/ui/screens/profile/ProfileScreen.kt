@@ -209,6 +209,9 @@ fun MemoryItem(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Card(
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.secondary,
+            ),
             onClick = onClick,
             modifier = Modifier
                 .fillMaxWidth()

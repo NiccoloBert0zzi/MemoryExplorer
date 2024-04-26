@@ -63,7 +63,7 @@ class LoginViewModel(
                     Toast.makeText(
                         navController.context,
                         "Authentication failed.",
-                        Toast.LENGTH_SHORT
+                        Toast.LENGTH_LONG
                     ).show()
                 }
             }
