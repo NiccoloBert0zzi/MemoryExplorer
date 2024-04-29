@@ -26,6 +26,7 @@ import com.example.memoryexplorer.ui.screens.register.RegisterViewModel
 import com.example.memoryexplorer.ui.screens.settings.SettingsScreen
 import com.example.memoryexplorer.ui.screens.settings.SettingsViewModel
 import com.example.memoryexplorer.ui.screens.statistics.StatisticsScreen
+import com.example.memoryexplorer.ui.screens.statistics.StatisticsViewModel
 import org.koin.androidx.compose.get
 import org.koin.androidx.compose.koinViewModel
 
@@ -126,7 +127,11 @@ fun MemoryExplorerNavGraph(
         }
         with(MemoryExplorerRoute.Statistics) {
             composable(route) {
-                StatisticsScreen(navController)
+                val statisticsViewModel = koinViewModel<StatisticsViewModel>()
+                StatisticsScreen(
+                    navController,
+                    statisticsViewModel
+                )
             }
         }
     }
