@@ -31,7 +31,7 @@ import org.koin.androidx.compose.get
 import org.koin.androidx.compose.koinViewModel
 
 sealed class MemoryExplorerRoute(
-    val route: String,
+    var route: String,
     val titleId: Int,
 ) {
     data object Home : MemoryExplorerRoute("home", R.string.app_name)
