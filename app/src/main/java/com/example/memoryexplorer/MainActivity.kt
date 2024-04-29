@@ -1,10 +1,10 @@
 package com.example.memoryexplorer
 
 import android.Manifest
-//noinspection SuspiciousImport
 import android.R
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
@@ -27,37 +27,44 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.memoryexplorer.data.database.Memory
-import com.example.memoryexplorer.data.repositories.LoginRepository
 import com.example.memoryexplorer.ui.MemoryExplorerNavGraph
 import com.example.memoryexplorer.ui.MemoryExplorerRoute
 import com.example.memoryexplorer.ui.composables.AppBar
 import com.example.memoryexplorer.ui.theme.MemoryExplorerTheme
 import com.google.android.gms.location.LocationCallback
-import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.google.firebase.database.FirebaseDatabase
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
+import android.util.Log
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.Priority
+
 
 class MainActivity : ComponentActivity() {
+
+    private lateinit var navController: NavController
+
+
     //lateinit var loginRepository: LoginRepository
     var email: String = ""
     private val memories = mutableListOf<Memory>()
 
+    //notification variables
     private var runnable: Runnable? = null
     var latitude: Double = 0.0
     var longitude: Double = 0.0
-    private val locationRequest = LocationRequest.create().apply {
-        priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-        interval = 100
-        fastestInterval = 3000
-        maxWaitTime = 100
-    }
-    private val cacheNotifications: List<String> = ArrayList()
+    private val  locationRequest = LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 100)
+    .setWaitForAccurateLocation(false)
+    .setMinUpdateIntervalMillis(3000)
+    .setMaxUpdateDelayMillis(100)
+    .build()
+    private var cacheNotifications: MutableList<String> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,57 +77,55 @@ class MainActivity : ComponentActivity() {
         }
 
         setContent {
+            navController = rememberNavController()
             MemoryExplorerTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    val navController = rememberNavController()
                     val backStackEntry by navController.currentBackStackEntryAsState()
                     val currentRoute by remember {
                         derivedStateOf {
-                            MemoryExplorerRoute.routes.find {
-                                it.route == backStackEntry?.destination?.route
-                            } ?: MemoryExplorerRoute.Login
+                            val memoryId = intent?.getStringExtra("memoryId")
+                            if (memoryId != null) {
+                                MemoryExplorerRoute.routes.find {
+                                    it.route == MemoryExplorerRoute.MemoryDetails.route + "/$memoryId"
+                                } ?: MemoryExplorerRoute.Login
+                            } else {
+                                MemoryExplorerRoute.routes.find {
+                                    it.route == backStackEntry?.destination?.route
+                                } ?: MemoryExplorerRoute.Login
+                            }
                         }
                     }
+                    Log.d("MainActivity", "currentRoute: $currentRoute")
                     Scaffold(
-                        topBar = { AppBar(navController, currentRoute, null) }
+                        topBar = { AppBar(navController as NavHostController, currentRoute, null) }
                     ) { contentPadding ->
                         MemoryExplorerNavGraph(
-                            navController,
+                            navController as NavHostController,
                             modifier = Modifier.padding(contentPadding)
                         )
                     }
                 }
             }
         }
-
     }
 
     fun sendNotification(title: String, id: String) {
+        val intent = Intent(this, MainActivity::class.java).apply {
+            putExtra("memoryId", id)
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+        val pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+
         val builder: NotificationCompat.Builder = NotificationCompat.Builder(this, "notification")
             .setSmallIcon(R.drawable.ic_dialog_info)
             .setContentTitle("Sei vicino a $title")
             .setContentText("Torna a visitarlo!")
             .setAutoCancel(true)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-
-        //TODO: implementare apertura memoria
-//        val singleMemory = Intent(this, SingleMemory::class.java)
-//        val b = Bundle()
-//        b.putString("id", id) //Your id
-//
-//        singleMemory.putExtras(b)
-//
-//        val pendingIntent = PendingIntent.getActivity(
-//            this,
-//            REQUEST_CODE_POSITION,
-//            singleMemory,
-//            PendingIntent.FLAG_MUTABLE
-//        )
-//        builder.setContentIntent(pendingIntent)
-
+            .setContentIntent(pendingIntent)
 
         val notificationManager =
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -136,14 +141,13 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun getCurrentLocation() {
-        if (ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+            != PackageManager.PERMISSION_GRANTED &&
+            ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+            != PackageManager.PERMISSION_GRANTED) {
+            //not have permission
+            return
+        } else {
             LocationServices.getFusedLocationProviderClient(this@MainActivity)
                 .requestLocationUpdates(locationRequest, object : LocationCallback() {
                     override fun onLocationResult(locationResult: LocationResult) {
@@ -157,12 +161,11 @@ class MainActivity : ComponentActivity() {
                         }
                     }
                 }, Looper.getMainLooper())
-            return
         }
     }
 
     private fun checkNotification() {
-        val handler = Handler()
+        val handler = Handler(Looper.getMainLooper())
         runnable = object : Runnable {
             override fun run() {
                 //get position every 5 seconds
@@ -207,11 +210,4 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    override fun onPause() {
-        super.onPause()
-    }
-
-    override fun onResume() {
-        super.onResume()
-    }
 }
