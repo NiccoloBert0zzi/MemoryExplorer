@@ -4,7 +4,6 @@ import android.Manifest
 import android.R
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.app.PendingIntent
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
@@ -37,19 +36,14 @@ import com.google.android.gms.location.LocationServices
 import com.google.firebase.database.FirebaseDatabase
 import kotlinx.coroutines.launch
 import android.content.Context
-import android.content.Intent
 import android.graphics.Color
 import android.util.Log
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.Priority
 
 
 class MainActivity : ComponentActivity() {
-
-    private lateinit var navController: NavController
-
 
     //lateinit var loginRepository: LoginRepository
     var email: String = ""
@@ -59,12 +53,12 @@ class MainActivity : ComponentActivity() {
     private var runnable: Runnable? = null
     var latitude: Double = 0.0
     var longitude: Double = 0.0
-    private val  locationRequest = LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 100)
-    .setWaitForAccurateLocation(false)
-    .setMinUpdateIntervalMillis(3000)
-    .setMaxUpdateDelayMillis(100)
-    .build()
-    private var cacheNotifications: MutableList<String> = ArrayList()
+    private val locationRequest = LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 100)
+        .setWaitForAccurateLocation(false)
+        .setMinUpdateIntervalMillis(3000)
+        .setMaxUpdateDelayMillis(100)
+        .build()
+    var cacheNotifications: MutableList<String> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -77,7 +71,7 @@ class MainActivity : ComponentActivity() {
         }
 
         setContent {
-            navController = rememberNavController()
+            val navController = rememberNavController()
             MemoryExplorerTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
@@ -86,16 +80,9 @@ class MainActivity : ComponentActivity() {
                     val backStackEntry by navController.currentBackStackEntryAsState()
                     val currentRoute by remember {
                         derivedStateOf {
-                            val memoryId = intent?.getStringExtra("memoryId")
-                            if (memoryId != null) {
-                                MemoryExplorerRoute.routes.find {
-                                    it.route == MemoryExplorerRoute.MemoryDetails.route + "/$memoryId"
-                                } ?: MemoryExplorerRoute.Login
-                            } else {
-                                MemoryExplorerRoute.routes.find {
-                                    it.route == backStackEntry?.destination?.route
-                                } ?: MemoryExplorerRoute.Login
-                            }
+                            MemoryExplorerRoute.routes.find {
+                                it.route == backStackEntry?.destination?.route
+                            } ?: MemoryExplorerRoute.Login
                         }
                     }
                     Log.d("MainActivity", "currentRoute: $currentRoute")
@@ -113,11 +100,12 @@ class MainActivity : ComponentActivity() {
     }
 
     fun sendNotification(title: String, id: String) {
-        val intent = Intent(this, MainActivity::class.java).apply {
-            putExtra("memoryId", id)
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        }
-        val pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+        //CLICK NOTIFICATION
+//        val intent = Intent(this, MainActivity::class.java).apply {
+//            putExtra("memoryId", id)
+//            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+//        }
+//        val pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
 
         val builder: NotificationCompat.Builder = NotificationCompat.Builder(this, "notification")
             .setSmallIcon(R.drawable.ic_dialog_info)
@@ -125,7 +113,7 @@ class MainActivity : ComponentActivity() {
             .setContentText("Torna a visitarlo!")
             .setAutoCancel(true)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-            .setContentIntent(pendingIntent)
+        //.setContentIntent(pendingIntent)
 
         val notificationManager =
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -144,7 +132,8 @@ class MainActivity : ComponentActivity() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
             != PackageManager.PERMISSION_GRANTED &&
             ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
-            != PackageManager.PERMISSION_GRANTED) {
+            != PackageManager.PERMISSION_GRANTED
+        ) {
             //not have permission
             return
         } else {
@@ -185,7 +174,7 @@ class MainActivity : ComponentActivity() {
                         if (results[0] < 5000) {
                             println("Sei a " + results[0] + " da " + m.title)
                             if (!cacheNotifications.contains(m.id)) {
-                                cacheNotifications.plus(m.id!!)
+                                cacheNotifications.add(m.id!!)
                                 sendNotification(m.title!!, m.id!!)
                             }
                         }
