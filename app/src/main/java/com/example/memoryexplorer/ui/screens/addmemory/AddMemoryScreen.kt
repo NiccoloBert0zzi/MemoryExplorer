@@ -58,7 +58,6 @@ fun AddMemoryScreen(
     var date by rememberSaveable { mutableStateOf("") }
     date = LocalDate.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"))
     var public by rememberSaveable { mutableStateOf(false) }
-    val image by rememberSaveable { mutableIntStateOf(R.drawable.default_memory) }
 
     if (error != null) {
         Toast.makeText(navController.context, error, Toast.LENGTH_LONG).show()
