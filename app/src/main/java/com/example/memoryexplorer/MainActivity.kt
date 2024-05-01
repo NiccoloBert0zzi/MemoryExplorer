@@ -1,7 +1,6 @@
 package com.example.memoryexplorer
 
 import android.Manifest
-import android.R
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.pm.PackageManager
@@ -38,14 +37,13 @@ import kotlinx.coroutines.launch
 import android.content.Context
 import android.graphics.Color
 import android.util.Log
-import androidx.navigation.NavHostController
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.Priority
 
 
 class MainActivity : ComponentActivity() {
 
-    //lateinit var loginRepository: LoginRepository
+    //var loginRepository: LoginRepository
     var email: String = ""
     private val memories = mutableListOf<Memory>()
 
@@ -87,10 +85,10 @@ class MainActivity : ComponentActivity() {
                     }
                     Log.d("MainActivity", "currentRoute: $currentRoute")
                     Scaffold(
-                        topBar = { AppBar(navController as NavHostController, currentRoute, null) }
+                        topBar = { AppBar(navController, currentRoute, null) }
                     ) { contentPadding ->
                         MemoryExplorerNavGraph(
-                            navController as NavHostController,
+                            navController,
                             modifier = Modifier.padding(contentPadding)
                         )
                     }
@@ -108,9 +106,9 @@ class MainActivity : ComponentActivity() {
 //        val pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
 
         val builder: NotificationCompat.Builder = NotificationCompat.Builder(this, "notification")
-            .setSmallIcon(R.drawable.ic_dialog_info)
-            .setContentTitle("Sei vicino a $title")
-            .setContentText("Torna a visitarlo!")
+            .setSmallIcon(R.drawable.logo)
+            .setContentTitle(getString(R.string.near_at, title))
+            .setContentText(getString(R.string.come_back_to_visit))
             .setAutoCancel(true)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
         //.setContentIntent(pendingIntent)
@@ -120,7 +118,7 @@ class MainActivity : ComponentActivity() {
         var channel = notificationManager.getNotificationChannel("notification")
         if (channel == null) {
             val importance = NotificationManager.IMPORTANCE_HIGH
-            channel = NotificationChannel("notification", "DESCRIZIONE", importance)
+            channel = NotificationChannel("notification", "notification_channel", importance)
             channel.lightColor = Color.GREEN
             channel.enableVibration(true)
             notificationManager.createNotificationChannel(channel)
@@ -170,9 +168,12 @@ class MainActivity : ComponentActivity() {
                             m.longitude!!.toDouble(),
                             results
                         )
-                        //distanza minore di 5km
+                        //distance < 5000m
                         if (results[0] < 5000) {
-                            println("Sei a " + results[0] + " da " + m.title)
+                            println(getString(R.string.you_are)
+                                    + results[0]
+                                    + getString(R.string.from_the)
+                                    + m.title)
                             if (!cacheNotifications.contains(m.id)) {
                                 cacheNotifications.add(m.id!!)
                                 sendNotification(m.title!!, m.id!!)

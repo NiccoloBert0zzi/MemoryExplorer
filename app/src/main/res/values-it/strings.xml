@@ -56,4 +56,10 @@
     <string name="memories">I miei ricordi</string>
     <string name="favorite">I miei preferiti</string>
 
+    <!--Notifications-->
+    <string name="near_at">Sei vicino a %1$s</string>
+    <string name="come_back_to_visit">Torna a visitarlo!</string>
+    <string name="you_are">Sei a</string>
+    <string name="from_the">" da "</string>
+
 </resources>
