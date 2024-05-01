@@ -1,7 +1,8 @@
 package com.example.memoryexplorer.ui.screens.addmemory
 
+import android.graphics.Bitmap
+import android.net.Uri
 import android.widget.Toast
-import androidx.core.net.toUri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
@@ -14,6 +15,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import java.io.File
+import java.io.FileOutputStream
 
 class AddMemoryViewModel(
     private val loginRepository: LoginRepository
@@ -37,7 +40,7 @@ class AddMemoryViewModel(
         description: String,
         date: String,
         public: Boolean,
-        image: Int,
+        image: Bitmap?,
         navController: NavController
     ) {
         _isLoading.value = true
@@ -46,10 +49,11 @@ class AddMemoryViewModel(
 
         if (id != null) {
             val storageRef = Firebase.storage.getReference("Images/$email/memoriesImage/$id")
-            // TODO: Add dynamic image picker
-            val imageUri = "android.resource://com.example.memoryexplorer/drawable/$image"
 
-            storageRef.putFile(imageUri.toUri())
+            // Convert the Bitmap to a Uri
+            val imageUri = bitmapToUri(image, navController)
+
+            storageRef.putFile(imageUri!!)
                 .addOnSuccessListener { taskSnapshot ->
                     taskSnapshot.storage.downloadUrl.addOnSuccessListener { downloadUri ->
                         val downloadedImageUri = downloadUri.toString()
@@ -74,6 +78,24 @@ class AddMemoryViewModel(
                     _isLoading.value = false
                 }
         }
+    }
+    private fun bitmapToUri(bitmap: Bitmap?, navController: NavController): Uri? {
+        // Check if the bitmap is null
+        if (bitmap == null) {
+            return null
+        }
+
+        // Create a file in the cache directory
+        val file = File(navController.context.cacheDir, "${System.currentTimeMillis()}.jpg")
+
+        // Write the bitmap to the file
+        val fileOutputStream = FileOutputStream(file as File)
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream)
+        fileOutputStream.flush()
+        fileOutputStream.close()
+
+        // Get the Uri of the file
+        return Uri.fromFile(file)
     }
 
     fun clearError() {

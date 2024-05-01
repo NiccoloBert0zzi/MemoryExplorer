@@ -1,7 +1,12 @@
 package com.example.memoryexplorer.ui.screens.addmemory
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -29,6 +34,8 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
@@ -56,6 +63,13 @@ fun AddMemoryScreen(
     if (error != null) {
         Toast.makeText(navController.context, error, Toast.LENGTH_LONG).show()
         addMemoryViewModel.clearError()
+    }
+
+    var bitmapState by rememberSaveable { mutableStateOf<Bitmap?>(null) }
+    val takePictureLauncher = rememberLauncherForActivityResult(ActivityResultContracts.TakePicturePreview()) { bitmap ->
+        if (bitmap != null) {
+            bitmapState = bitmap
+        }
     }
 
     Scaffold(
@@ -115,8 +129,12 @@ fun AddMemoryScreen(
                     horizontalArrangement = Arrangement.Center
                 ) {
                     Image(
-                        painter = painterResource(R.drawable.default_memory),
-                        contentDescription = "Memory image"
+                        painter = bitmapState?.let { BitmapPainter(it.asImageBitmap()) } ?: painterResource(R.drawable.default_memory),
+                        contentDescription = "Memory image",
+                        modifier = Modifier.clickable {
+                            takePictureLauncher.launch(null)
+                        }
+                        .size(200.dp)
                     )
                 }
                 Spacer(Modifier.size(20.dp))
@@ -197,7 +215,10 @@ fun AddMemoryScreen(
             modifier = Modifier.fillMaxWidth(),
         ) {
             Button(
-                onClick = { addMemoryViewModel.onAddMemory(title, description, date, public, image, navController) },
+                onClick = {
+                    val imageToUse = bitmapState ?: BitmapFactory.decodeResource(navController.context.resources, R.drawable.default_memory)
+                    addMemoryViewModel.onAddMemory(title, description, date, public, imageToUse, navController)
+                },
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(stringResource(R.string.add_memory))
