@@ -18,8 +18,10 @@ class ProfileViewModel(
     private val favouriteRepository: FavouriteRepository,
     loginRepository: LoginRepository
 ) : ViewModel() {
-    private var email: String? = null
     private var fav: List<Favourite>? = null
+
+    private val _email = MutableStateFlow<String?>(null)
+    val email: StateFlow<String?> = _email
 
     private val _memories = MutableStateFlow<List<Memory>>(emptyList())
     val memories: StateFlow<List<Memory>> = _memories
@@ -38,7 +40,7 @@ class ProfileViewModel(
 
     init {
         viewModelScope.launch {
-            email = loginRepository.email.first()
+            _email.value = loginRepository.email.first()
             fav = favouriteRepository.getAllFavourites()
             getProfile()
             getMemories()
@@ -47,7 +49,7 @@ class ProfileViewModel(
 
     private fun getProfile() {
         val storage = FirebaseStorage.getInstance()
-        val ref: StorageReference = storage.getReference("Images/${email}/profileImage")
+        val ref: StorageReference = storage.getReference("Images/${_email.value}/profileImage")
         ref.downloadUrl.addOnSuccessListener {
             _profileImage.value = it.toString()
         }.addOnFailureListener {
@@ -63,7 +65,7 @@ class ProfileViewModel(
                 val memories = mutableListOf<Memory>()
                 for (snapshot in dataSnapshot.children) {
                     val memory = snapshot.getValue(Memory::class.java)
-                    if (memory?.creator == email) {
+                    if (memory?.creator == _email.value) {
                         memories.add(memory!!)
                     }
                 }

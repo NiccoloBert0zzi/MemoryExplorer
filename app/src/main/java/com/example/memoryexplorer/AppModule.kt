@@ -17,8 +17,7 @@ import com.example.memoryexplorer.ui.screens.statistics.StatisticsViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
-// TODO perchè settings?
-val Context.dataStore by preferencesDataStore("settings")
+val Context.dataStore by preferencesDataStore("memory-explorer")
 
 val appModule = module {
     single { get<Context>().dataStore }

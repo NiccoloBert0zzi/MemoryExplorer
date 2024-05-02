@@ -128,6 +128,7 @@ fun AddMemoryScreen(
                     horizontalArrangement = Arrangement.Center
                 ) {
                     Image(
+                        // TODO crash here
                         painter = bitmapState?.let { BitmapPainter(it.asImageBitmap()) } ?: painterResource(R.drawable.default_memory),
                         contentDescription = "Memory image",
                         modifier = Modifier.clickable {

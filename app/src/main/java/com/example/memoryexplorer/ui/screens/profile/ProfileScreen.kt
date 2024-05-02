@@ -38,6 +38,7 @@ fun ProfileScreen(
     navController: NavHostController,
     profileViewModel: ProfileViewModel
 ) {
+    val email by profileViewModel.email.collectAsState()
     val memories by profileViewModel.memories.collectAsState()
     val favourites by profileViewModel.favourites.collectAsState()
     val isLoading by profileViewModel.isLoading.collectAsState()
@@ -62,9 +63,8 @@ fun ProfileScreen(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Image(
-                    // TODO add profile image
                     painter = rememberAsyncImagePainter(model = profileImage),
-                    "Profile picture",
+                    contentDescription = "Profile picture",
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
                         .size(100.dp)
@@ -87,8 +87,7 @@ fun ProfileScreen(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
-                    // TODO add user name
-                    stringResource(R.string.app_name),
+                    text = email?.split("@")?.get(0) ?: stringResource(R.string.username),
                     textAlign = TextAlign.Left
                 )
             }

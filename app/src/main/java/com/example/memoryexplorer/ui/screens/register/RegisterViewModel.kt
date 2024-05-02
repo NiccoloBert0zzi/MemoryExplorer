@@ -6,7 +6,6 @@ import android.widget.Toast
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.core.net.toUri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
@@ -24,7 +23,6 @@ import java.io.FileOutputStream
 
 data class RegisterState(
     val email: String,
-    val username: String,
     val password: String,
     val remember: Boolean
 )
@@ -35,15 +33,15 @@ class RegisterViewModel(
 
     private lateinit var auth: FirebaseAuth
 
-    private var state by mutableStateOf(RegisterState("", "", "", false))
+    private var state by mutableStateOf(RegisterState("", "", false))
 
     private fun setEmail(value: String) {
-        state = RegisterState(value, state.username, state.password, state.remember)
+        state = RegisterState(value, state.password, state.remember)
         viewModelScope.launch { repository.setEmail(value) }
     }
 
     private fun setRemember(value: Boolean) {
-        state = RegisterState(state.email, state.username, state.password, value)
+        state = RegisterState(state.email, state.password, value)
         viewModelScope.launch { repository.setRemember(value) }
     }
 
@@ -53,13 +51,12 @@ class RegisterViewModel(
 
     fun onRegister(
         email: String,
-        username: String, // TODO: Save username in Firebase
         password: String,
         remember: Boolean,
         image: Bitmap?,
         navController: NavHostController
     ) {
-        if (email.isEmpty() || password.isEmpty() || username.isEmpty()) {
+        if (email.isEmpty() || password.isEmpty()) {
             Toast.makeText(
                 navController.context,
                 R.string.empty_fields,
@@ -105,6 +102,7 @@ class RegisterViewModel(
                 }
             }
     }
+
     private fun bitmapToUri(bitmap: Bitmap?, navController: NavController): Uri? {
         // Check if the bitmap is null
         if (bitmap == null) {
@@ -115,7 +113,7 @@ class RegisterViewModel(
         val file = File(navController.context.cacheDir, "${System.currentTimeMillis()}.jpg")
 
         // Write the bitmap to the file
-        val fileOutputStream = FileOutputStream(file as File)
+        val fileOutputStream = FileOutputStream(file)
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream)
         fileOutputStream.flush()
         fileOutputStream.close()

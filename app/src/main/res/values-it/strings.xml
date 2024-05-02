@@ -12,7 +12,6 @@
     <!-- Login/Register -->
     <string name="remember_me">Ricordami</string>
     <string name="email_request">Inserisci email:</string>
-    <string name="username_request">Inserisci username:</string>
     <string name="password_request">Inserisci password:</string>
     <string name="email">Email</string>
     <string name="username">Nome utente</string>
