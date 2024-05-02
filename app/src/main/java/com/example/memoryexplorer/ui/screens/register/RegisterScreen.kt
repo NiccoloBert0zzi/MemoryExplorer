@@ -14,9 +14,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.ClickableText
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.MaterialTheme
@@ -26,18 +29,23 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.painter.BitmapPainter
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
@@ -50,29 +58,31 @@ fun RegisterScreen(
     registerViewModel: RegisterViewModel
 ) {
     var email by rememberSaveable { mutableStateOf("") }
-    var username by rememberSaveable { mutableStateOf("") }
     var password by rememberSaveable { mutableStateOf("") }
     var remember by rememberSaveable { mutableStateOf(false) }
 
+    val passwordFocusRequester = remember { FocusRequester() }
+
     var bitmapState by rememberSaveable { mutableStateOf<Bitmap?>(null) }
-    // Create a launcher for the activity result
-    val imagePickerLauncher = rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()) { uri ->
-        bitmapState = BitmapFactory.decodeStream(uri?.let {
-            navController.context.contentResolver.openInputStream(
-                it
-            )
-        })
-    }
+
+    val imagePickerLauncher =
+        rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()) { uri ->
+            bitmapState = BitmapFactory.decodeStream(uri?.let {
+                navController.context.contentResolver.openInputStream(
+                    it
+                )
+            })
+        }
 
     Scaffold(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(24.dp),
+        modifier = Modifier.fillMaxSize()
     ) { contentPadding ->
         Column(
             modifier = Modifier
                 .padding(contentPadding)
-                .fillMaxSize(),
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+                .padding(24.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Spacer(Modifier.size(16.dp))
@@ -92,13 +102,14 @@ fun RegisterScreen(
                 horizontalArrangement = Arrangement.Center
             ) {
                 Image(
-                    painter = bitmapState?.let { BitmapPainter(it.asImageBitmap()) } ?: painterResource(R.drawable.default_memory),
-                    contentDescription = "User image",
+                    painter = bitmapState?.let { BitmapPainter(it.asImageBitmap()) }
+                        ?: painterResource(R.drawable.empty_user),
+                    contentDescription = "Profile picture",
+                    contentScale = ContentScale.Crop,
                     modifier = Modifier
                         .size(128.dp)
                         .clip(CircleShape)
                         .clickable {
-                            // Launch the image picker when the image is clicked
                             imagePickerLauncher.launch("image/*")
                         }
                 )
@@ -119,27 +130,12 @@ fun RegisterScreen(
                     value = email,
                     onValueChange = { email = it },
                     label = { Text(stringResource(R.string.email)) },
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-                    modifier = Modifier.fillMaxWidth()
-                )
-            }
-            Spacer(Modifier.size(20.dp))
-            Row(
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text(
-                    stringResource(R.string.username_request),
-                    color = MaterialTheme.colorScheme.primary
-                )
-            }
-            Row(
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                OutlinedTextField(
-                    value = username,
-                    onValueChange = { username = it },
-                    label = { Text(stringResource(R.string.username)) },
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Email,
+                        imeAction = ImeAction.Next
+                    ),
+                    keyboardActions = KeyboardActions(onNext = { passwordFocusRequester.requestFocus() }),
                     modifier = Modifier.fillMaxWidth()
                 )
             }
@@ -159,8 +155,11 @@ fun RegisterScreen(
                     value = password,
                     onValueChange = { password = it },
                     label = { Text(stringResource(R.string.password)) },
+                    singleLine = true,
                     visualTransformation = PasswordVisualTransformation(),
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .focusRequester(passwordFocusRequester)
                 )
             }
             Spacer(Modifier.size(20.dp))
@@ -196,8 +195,17 @@ fun RegisterScreen(
             ) {
                 Button(
                     onClick = {
-                        val imageToUse = bitmapState ?: BitmapFactory.decodeResource(navController.context.resources, R.drawable.empty_user)
-                        registerViewModel.onRegister(email, username, password, remember, imageToUse, navController)
+                        val imageToUse = bitmapState ?: BitmapFactory.decodeResource(
+                            navController.context.resources,
+                            R.drawable.empty_user
+                        )
+                        registerViewModel.onRegister(
+                            email,
+                            password,
+                            remember,
+                            imageToUse,
+                            navController
+                        )
                     },
                     modifier = Modifier.fillMaxWidth()
                 ) {
