@@ -84,9 +84,11 @@ class StatisticsViewModel(
             selectedState == application.getString(R.string.world) -> {
                 locationsName.value
             }
+
             locationsName.value.any { it.second.first == selectedState } -> {
                 locationsName.value.filter { it.second.first == selectedState }
             }
+
             else -> {
                 locationsName.value.filter { it.first == selectedState }
             }
@@ -99,12 +101,14 @@ class StatisticsViewModel(
                     .eachCount()
                     .map { PieEntry(it.value.toFloat(), it.key) }
             }
+
             locationsName.value.any { it.second.first == selectedState } -> {
                 filteredLocations
                     .groupingBy { it.second.second }
                     .eachCount()
                     .map { PieEntry(it.value.toFloat(), it.key) }
             }
+
             else -> {
                 filteredLocations
                     .groupingBy { it.second.first }
@@ -115,6 +119,7 @@ class StatisticsViewModel(
 
         val dataSet = PieDataSet(entries, selectedState)
         dataSet.colors = ColorTemplate.JOYFUL_COLORS.toList()
+        dataSet.valueTextSize = 12f
 
         _isLoading.value = false
         return PieData(dataSet).apply { }

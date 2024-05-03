@@ -1,6 +1,5 @@
 package com.example.memoryexplorer.ui.screens.statistics
 
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -31,17 +30,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavHostController
 import com.example.memoryexplorer.R
 import com.github.mikephil.charting.charts.PieChart
 import com.github.mikephil.charting.data.PieData
-import com.github.mikephil.charting.data.PieDataSet
-import com.github.mikephil.charting.data.PieEntry
-import com.github.mikephil.charting.utils.ColorTemplate
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -58,7 +54,6 @@ fun StatisticsScreen(
     var selectedState = navController.context.getString(R.string.world)
     var state = true
 
-    // TODO: controllare perchè a volte stampa prima di scaricare
     statisticsViewModel.pieData.value = statisticsViewModel.generatePieData(selectedState)
 
     Scaffold(
@@ -107,9 +102,7 @@ fun StatisticsScreen(
                                 onValueChange = { },
                                 readOnly = true,
                                 trailingIcon = {
-                                    ExposedDropdownMenuDefaults.TrailingIcon(
-                                        expanded = expanded
-                                    )
+                                    ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
                                 },
                                 modifier = Modifier
                                     .menuAnchor()
@@ -209,20 +202,27 @@ fun NoMemoriesPlaceholder() {
 
 @Composable
 fun PieChartComposable(pieData: PieData) {
-    androidx.compose.ui.viewinterop.AndroidView(
+    var oldPieData by remember { mutableStateOf<PieData?>(null) }
+    AndroidView(
         factory = { context ->
             PieChart(context).apply {
                 data = pieData
                 description.isEnabled = false
                 isRotationEnabled = false
-                setUsePercentValues(true)
+                legend.isEnabled = false
                 animateY(1400)
             }
         },
         update = { pieChart ->
+            if (oldPieData != pieData) {
+                pieChart.animateY(1400)
+                oldPieData = pieData
+            }
             pieChart.data = pieData
             pieChart.invalidate()
         },
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
     )
 }
