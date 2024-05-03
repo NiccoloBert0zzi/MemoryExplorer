@@ -1,5 +1,6 @@
 package com.example.memoryexplorer.ui.screens.profile
 
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.memoryexplorer.data.database.Favourite
@@ -19,6 +20,9 @@ class ProfileViewModel(
     loginRepository: LoginRepository
 ) : ViewModel() {
     private var fav: List<Favourite>? = null
+
+    private val _isMemory = MutableStateFlow(true)
+    val isMemory: StateFlow<Boolean> = _isMemory
 
     private val _email = MutableStateFlow<String?>(null)
     val email: StateFlow<String?> = _email
@@ -55,6 +59,10 @@ class ProfileViewModel(
         }.addOnFailureListener {
             _error.value = it.localizedMessage
         }
+    }
+
+    fun setIsMemory(value: Boolean) {
+        _isMemory.value = value
     }
 
     fun getMemories() {

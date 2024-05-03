@@ -26,7 +26,6 @@ import coil.compose.rememberAsyncImagePainter
 import com.example.memoryexplorer.R
 import com.example.memoryexplorer.data.database.Memory
 import com.example.memoryexplorer.ui.MemoryExplorerRoute
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Image
@@ -44,8 +43,7 @@ fun ProfileScreen(
     val isLoading by profileViewModel.isLoading.collectAsState()
     val error by profileViewModel.error.collectAsState()
     val profileImage by profileViewModel.profileImage.collectAsState()
-
-    var isMemory = true
+    val isMemory by profileViewModel.isMemory.collectAsState()
 
     Scaffold(
         modifier = Modifier.fillMaxSize()
@@ -110,9 +108,8 @@ fun ProfileScreen(
                         ) else listOf()
                     ),
                     onClick = {
-                        isMemory = true
+                        profileViewModel.setIsMemory(true)
                         profileViewModel.getMemories()
-                        Log.d("ProfileScreen", "My memories: $isMemory")
                     }
                 )
                 ClickableText(
@@ -127,11 +124,8 @@ fun ProfileScreen(
                         ) else listOf()
                     ),
                     onClick = {
-                        isMemory = false
+                        profileViewModel.setIsMemory(false)
                         profileViewModel.getFavourites()
-                        // TODO se non ci sono favoriti non entra nemmeno nella pagina, rimane in "My memories"
-                        // TODO se apro una memory nella schermata preferiti, quando torno indietro mi ritrovo in "My memories"
-                        Log.d("ProfileScreen", "My favourite: $isMemory")
                     }
                 )
             }

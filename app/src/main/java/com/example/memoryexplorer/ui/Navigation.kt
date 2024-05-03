@@ -2,10 +2,19 @@
 
 package com.example.memoryexplorer.ui
 
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -55,83 +64,101 @@ fun MemoryExplorerNavGraph(
     modifier: Modifier = Modifier
 ) {
     val loginRepository = get<LoginRepository>()
-    val rememberMe by loginRepository.remember.collectAsState(initial = false)
-    NavHost(
-        navController = navController,
-        startDestination = (if (rememberMe) MemoryExplorerRoute.Home else MemoryExplorerRoute.Login).route,
-        modifier = modifier
-    ) {
-        with(MemoryExplorerRoute.Login) {
-            composable(route) {
-                val loginViewModel = koinViewModel<LoginViewModel>()
-                LoginScreen(
-                    navController,
-                    loginViewModel
-                )
-            }
+    val rememberMe by loginRepository.remember.collectAsState(null)
+    val startDestination = when (rememberMe) {
+        true -> MemoryExplorerRoute.Home.route
+        false -> MemoryExplorerRoute.Login.route
+        else -> null
+    }
+
+    if (startDestination == null) {
+        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            Image(
+                painter = painterResource(id = R.drawable.logo),
+                contentDescription = "Logo",
+                modifier = Modifier
+                    .size(256.dp)
+                    .clip(CircleShape)
+            )
         }
-        with(MemoryExplorerRoute.Home) {
-            composable(route) {
-                val homeViewModel = koinViewModel<HomeViewModel>()
-                HomeScreen(
-                    navController,
-                    homeViewModel
-                )
+    } else {
+        NavHost(
+            navController = navController,
+            startDestination = startDestination,
+            modifier = modifier
+        ) {
+            with(MemoryExplorerRoute.Login) {
+                composable(route) {
+                    val loginViewModel = koinViewModel<LoginViewModel>()
+                    LoginScreen(
+                        navController,
+                        loginViewModel
+                    )
+                }
             }
-        }
-        with(MemoryExplorerRoute.Register) {
-            composable(route) {
-                val registerViewModel = koinViewModel<RegisterViewModel>()
-                RegisterScreen(
-                    navController,
-                    registerViewModel
-                )
+            with(MemoryExplorerRoute.Home) {
+                composable(route) {
+                    val homeViewModel = koinViewModel<HomeViewModel>()
+                    HomeScreen(
+                        navController,
+                        homeViewModel
+                    )
+                }
             }
-        }
-        with(MemoryExplorerRoute.MemoryDetails) {
-            composable("$route/{memoryId}") { backStackEntry ->
-                val memoryDetailsViewModel = koinViewModel<MemoryDetailsViewModel>()
-                MemoryDetailsScreen(
-                    navController,
-                    backStackEntry.arguments?.getString("memoryId"),
-                    memoryDetailsViewModel
-                )
+            with(MemoryExplorerRoute.Register) {
+                composable(route) {
+                    val registerViewModel = koinViewModel<RegisterViewModel>()
+                    RegisterScreen(
+                        navController,
+                        registerViewModel
+                    )
+                }
             }
-        }
-        with(MemoryExplorerRoute.AddMemory) {
-            composable(route) {
-                val addMemoryViewModel = koinViewModel<AddMemoryViewModel>()
-                AddMemoryScreen(
-                    navController,
-                    addMemoryViewModel
-                )
+            with(MemoryExplorerRoute.MemoryDetails) {
+                composable("$route/{memoryId}") { backStackEntry ->
+                    val memoryDetailsViewModel = koinViewModel<MemoryDetailsViewModel>()
+                    MemoryDetailsScreen(
+                        navController,
+                        backStackEntry.arguments?.getString("memoryId"),
+                        memoryDetailsViewModel
+                    )
+                }
             }
-        }
-        with(MemoryExplorerRoute.Profile) {
-            composable(route) {
-                val profileViewModel = koinViewModel<ProfileViewModel>()
-                ProfileScreen(
-                    navController,
-                    profileViewModel
-                )
+            with(MemoryExplorerRoute.AddMemory) {
+                composable(route) {
+                    val addMemoryViewModel = koinViewModel<AddMemoryViewModel>()
+                    AddMemoryScreen(
+                        navController,
+                        addMemoryViewModel
+                    )
+                }
             }
-        }
-        with(MemoryExplorerRoute.Settings) {
-            composable(route) {
-                val settingsViewModel = koinViewModel<SettingsViewModel>()
-                SettingsScreen(
-                    navController,
-                    settingsViewModel
-                )
+            with(MemoryExplorerRoute.Profile) {
+                composable(route) {
+                    val profileViewModel = koinViewModel<ProfileViewModel>()
+                    ProfileScreen(
+                        navController,
+                        profileViewModel
+                    )
+                }
             }
-        }
-        with(MemoryExplorerRoute.Statistics) {
-            composable(route) {
-                val statisticsViewModel = koinViewModel<StatisticsViewModel>()
-                StatisticsScreen(
-                    navController,
-                    statisticsViewModel
-                )
+            with(MemoryExplorerRoute.Settings) {
+                composable(route) {
+                    val settingsViewModel = koinViewModel<SettingsViewModel>()
+                    SettingsScreen(
+                        navController,
+                        settingsViewModel
+                    )
+                }
+            }
+            with(MemoryExplorerRoute.Statistics) {
+                composable(route) {
+                    val statisticsViewModel = koinViewModel<StatisticsViewModel>()
+                    StatisticsScreen(
+                        navController,
+                        statisticsViewModel
+                    )
+                }
             }
         }
     }
