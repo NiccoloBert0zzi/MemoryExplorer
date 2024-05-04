@@ -49,8 +49,10 @@ class MainActivity : ComponentActivity() {
 
     //notification variables
     private var runnable: Runnable? = null
-    var latitude: Double = 0.0
-    var longitude: Double = 0.0
+    companion object {
+        var latitude: Double = 0.0
+        var longitude: Double = 0.0
+    }
     private val locationRequest = LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 100)
         .setWaitForAccurateLocation(false)
         .setMinUpdateIntervalMillis(3000)

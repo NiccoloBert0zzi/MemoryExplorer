@@ -1,5 +1,9 @@
 package com.example.memoryexplorer.ui.screens.memorydetails
 
+import android.content.Context
+import android.graphics.drawable.BitmapDrawable
+import android.location.Address
+import android.location.Geocoder
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.memoryexplorer.data.database.Favourite
@@ -12,6 +16,14 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import org.osmdroid.api.IMapController
+import org.osmdroid.config.Configuration
+import org.osmdroid.tileprovider.tilesource.TileSourceFactory
+import org.osmdroid.util.GeoPoint
+import org.osmdroid.views.CustomZoomButtonsController
+import org.osmdroid.views.MapView
+import org.osmdroid.views.overlay.Marker
+import java.util.Locale
 
 data class FavouritesState(val favourites: List<Favourite>)
 
@@ -63,4 +75,40 @@ class MemoryDetailsViewModel(
     fun clearError() {
         _error.value = null
     }
+    fun openMap(latitude: String, longitude: String, mapView: MapView, context: Context) {
+        Configuration.getInstance().load(
+            context,
+            context.getSharedPreferences("osmdroid", Context.MODE_PRIVATE)
+        )
+        mapView.setTileSource(TileSourceFactory.MAPNIK)
+        mapView.isClickable = true
+        mapView.setMultiTouchControls(true)
+        mapView.zoomController.setVisibility(CustomZoomButtonsController.Visibility.SHOW_AND_FADEOUT)
+
+        val lat = latitude.toDouble()
+        val lon = longitude.toDouble()
+        val currentLocation = GeoPoint(lat, lon)
+        val mapController: IMapController = mapView.controller
+        mapController.setZoom(7.0)
+        mapController.setCenter(currentLocation)
+        val startMarker = Marker(mapView)
+        startMarker.icon = BitmapDrawable(context.resources, MyMarker(context).getSmallMarker())
+        if (setLocation(lat, lon, context) != null) {
+            startMarker.title = setLocation(lat, lon, context)!!.countryName
+            startMarker.snippet = setLocation(lat, lon, context)!!.locality
+        }
+        startMarker.setPosition(currentLocation)
+        startMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
+        mapView.overlays.add(startMarker)
+    }
+
+    private fun setLocation(lat: Double, lon: Double, context: Context): Address? {
+        val gcd = Geocoder(context, Locale.getDefault())
+        val addresses: List<Address>? = gcd.getFromLocation(lat, lon, 1)
+        assert(addresses != null)
+        return if (addresses!!.isNotEmpty()) {
+            addresses[0]
+        } else null
+    }
+
 }

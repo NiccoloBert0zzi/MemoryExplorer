@@ -89,4 +89,6 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
+    //mappa
+    implementation ("org.osmdroid:osmdroid-android:6.1.14")
 }

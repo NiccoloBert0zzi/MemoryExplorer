@@ -1,6 +1,10 @@
 package com.example.memoryexplorer.ui.screens.addmemory
 
+import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
+import android.location.Address
+import android.location.Geocoder
 import android.net.Uri
 import android.widget.Toast
 import androidx.lifecycle.ViewModel
@@ -8,6 +12,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.example.memoryexplorer.data.database.Memory
 import com.example.memoryexplorer.data.repositories.LoginRepository
+import com.example.memoryexplorer.ui.screens.memorydetails.MyMarker
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
@@ -15,8 +20,17 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import org.osmdroid.api.IMapController
+import org.osmdroid.config.Configuration
+import org.osmdroid.tileprovider.tilesource.TileSourceFactory
+import org.osmdroid.util.GeoPoint
+import org.osmdroid.views.CustomZoomButtonsController
+import org.osmdroid.views.MapView
+import org.osmdroid.views.overlay.Marker
 import java.io.File
 import java.io.FileOutputStream
+import java.io.IOException
+import java.util.Locale
 
 class AddMemoryViewModel(
     private val loginRepository: LoginRepository
@@ -28,6 +42,13 @@ class AddMemoryViewModel(
     val error: StateFlow<String?> = _error
 
     private var email: String? = null
+
+    private val _latitude = MutableStateFlow(0.0)
+    var latitude: StateFlow<Double> = _latitude
+    private val _longitude = MutableStateFlow(0.0)
+    var longitude: StateFlow<Double> = _longitude
+
+    private var marker: Marker? = null
 
     init {
         viewModelScope.launch {
@@ -41,6 +62,8 @@ class AddMemoryViewModel(
         date: String,
         public: Boolean,
         image: Bitmap?,
+        latitude: String,
+        longitude: String,
         navController: NavController
     ) {
         _isLoading.value = true
@@ -58,7 +81,17 @@ class AddMemoryViewModel(
                     taskSnapshot.storage.downloadUrl.addOnSuccessListener { downloadUri ->
                         val downloadedImageUri = downloadUri.toString()
                         // TODO: Add dynamic location picker
-                        val memory = Memory(id, email, title, description, date, "latitude", "longitude", downloadedImageUri, public)
+                        val memory = Memory(
+                            id,
+                            email,
+                            title,
+                            description,
+                            date,
+                            latitude,
+                            longitude,
+                            downloadedImageUri,
+                            public
+                        )
                         database.child(id).setValue(memory)
                             .addOnSuccessListener {
                                 navController.navigateUp()
@@ -79,6 +112,7 @@ class AddMemoryViewModel(
                 }
         }
     }
+
     private fun bitmapToUri(bitmap: Bitmap?, navController: NavController): Uri? {
         // Check if the bitmap is null
         if (bitmap == null) {
@@ -89,7 +123,7 @@ class AddMemoryViewModel(
         val file = File(navController.context.cacheDir, "${System.currentTimeMillis()}.jpg")
 
         // Write the bitmap to the file
-        val fileOutputStream = FileOutputStream(file as File)
+        val fileOutputStream = FileOutputStream(file)
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream)
         fileOutputStream.flush()
         fileOutputStream.close()
@@ -102,4 +136,47 @@ class AddMemoryViewModel(
         _error.value = null
     }
 
+    fun loadMap(mapView: MapView, currentLocation: GeoPoint, context: Context) {
+        Configuration.getInstance().load(
+            context,
+            context.getSharedPreferences("osmdroid", Context.MODE_PRIVATE)
+        )
+        mapView.setTileSource(TileSourceFactory.MAPNIK)
+        mapView.isClickable = true
+        mapView.setMultiTouchControls(true)
+        mapView.zoomController.setVisibility(CustomZoomButtonsController.Visibility.SHOW_AND_FADEOUT)
+        setMarker(mapView, currentLocation, context)
+        val mapController: IMapController = mapView.controller
+        mapController.setZoom(7.0)
+        mapController.setCenter(currentLocation)
+    }
+
+    @Throws(IOException::class)
+    fun setMarker(mapView: MapView, currentLocation: GeoPoint, context: Context) {
+        mapView.overlays.remove(marker)
+        marker = Marker(mapView)
+        marker!!.icon = BitmapDrawable(context.resources, MyMarker(context).getSmallMarker())
+        setLocation(
+            currentLocation.latitude,
+            currentLocation.longitude,
+            context
+        )?.let { location ->
+            marker!!.title = location.countryName
+            marker!!.snippet = location.locality
+        }
+        marker!!.position = currentLocation
+        marker!!.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
+        mapView.overlays.add(marker)
+        _latitude.value = currentLocation.latitude
+        _longitude.value = currentLocation.longitude
+    }
+
+    private fun setLocation(lat: Double, lon: Double, context: Context): Address? {
+        val gcd = Geocoder(context, Locale.getDefault())
+        val addresses: List<Address>? = gcd.getFromLocation(lat, lon, 1)
+        assert(addresses != null)
+        return if (addresses!!.isNotEmpty()) {
+            addresses[0]
+        } else null
+    }
 }

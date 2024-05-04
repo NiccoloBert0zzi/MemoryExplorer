@@ -1,5 +1,6 @@
 package com.example.memoryexplorer.ui.screens.addmemory
 
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.widget.Toast
@@ -8,11 +9,13 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
@@ -28,7 +31,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -36,12 +38,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.painter.BitmapPainter
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavHostController
+import com.example.memoryexplorer.MainActivity
 import com.example.memoryexplorer.R
+import org.osmdroid.events.MapEventsReceiver
+import org.osmdroid.util.GeoPoint
+import org.osmdroid.views.MapView
+import org.osmdroid.views.overlay.MapEventsOverlay
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -58,7 +67,8 @@ fun AddMemoryScreen(
     var date by rememberSaveable { mutableStateOf("") }
     date = LocalDate.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"))
     var public by rememberSaveable { mutableStateOf(false) }
-
+    val latitude by addMemoryViewModel.latitude.collectAsState()
+    val longitude by addMemoryViewModel.longitude.collectAsState()
     if (error != null) {
         Toast.makeText(navController.context, error, Toast.LENGTH_LONG).show()
         addMemoryViewModel.clearError()
@@ -73,6 +83,17 @@ fun AddMemoryScreen(
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
+        bottomBar = {
+            Button(
+                onClick = {
+                    val imageToUse = bitmapState ?: BitmapFactory.decodeResource(navController.context.resources, R.drawable.default_memory)
+                    addMemoryViewModel.onAddMemory(title, description, date, public, imageToUse, latitude.toString(), longitude.toString(), navController)
+                },
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(stringResource(R.string.add_memory))
+            }
+        }
     ) { contentPadding ->
         if (isLoading) {
             Column(
@@ -131,10 +152,11 @@ fun AddMemoryScreen(
                         // TODO crash here
                         painter = bitmapState?.let { BitmapPainter(it.asImageBitmap()) } ?: painterResource(R.drawable.default_memory),
                         contentDescription = "Memory image",
-                        modifier = Modifier.clickable {
-                            takePictureLauncher.launch(null)
-                        }
-                        .size(200.dp)
+                        modifier = Modifier
+                            .clickable {
+                                takePictureLauncher.launch(null)
+                            }
+                            .size(200.dp)
                     )
                 }
                 Spacer(Modifier.size(20.dp))
@@ -197,32 +219,52 @@ fun AddMemoryScreen(
                         color = MaterialTheme.colorScheme.primary
                     )
                 }
-                Row(
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    // TODO add map picker here
-                }
+                Spacer(Modifier.size(50.dp))
+                OsmMapView(
+                    addMemoryViewModel,
+                    latitude,
+                    longitude,
+                    LocalContext.current
+                )
             }
         }
     }
-    Column(
+}
+@Composable
+fun OsmMapView(addMemoryViewModel: AddMemoryViewModel, latitude: Double, longitude: Double, context: Context) {
+    //set center to current location
+    var lat = latitude
+    var lon = longitude
+    if(lat == 0.0 && lon == 0.0) {
+        lat = MainActivity.latitude
+        lon = MainActivity.longitude
+    }
+    val currentLocation = GeoPoint(lat, lon)
+    Box(
         modifier = Modifier
-            .fillMaxSize()
-            .padding(24.dp),
-        verticalArrangement = Arrangement.Bottom
+            .fillMaxWidth()
+            .height(200.dp)
     ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-        ) {
-            Button(
-                onClick = {
-                    val imageToUse = bitmapState ?: BitmapFactory.decodeResource(navController.context.resources, R.drawable.default_memory)
-                    addMemoryViewModel.onAddMemory(title, description, date, public, imageToUse, navController)
-                },
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text(stringResource(R.string.add_memory))
+        AndroidView(
+            factory = { context ->
+                MapView(context).apply {
+                    addMemoryViewModel.loadMap(this, currentLocation, context)
+                    this.overlayManager.add(MapEventsOverlay(object : MapEventsReceiver {
+                        override fun singleTapConfirmedHelper(p: GeoPoint?): Boolean {
+                            if (p != null) {
+                                lat = p.latitude
+                                lon = p.longitude
+                                addMemoryViewModel.setMarker(this@apply, GeoPoint(lat, lon), context)
+                            }
+                            return true
+                        }
+
+                        override fun longPressHelper(p: GeoPoint?): Boolean {
+                            return false
+                        }
+                    }))
+                }
             }
-        }
+        )
     }
 }
