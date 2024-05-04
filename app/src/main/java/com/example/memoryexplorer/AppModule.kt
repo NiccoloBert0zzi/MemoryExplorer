@@ -6,6 +6,7 @@ import androidx.room.Room
 import com.example.memoryexplorer.data.database.MemoryExplorerDatabase
 import com.example.memoryexplorer.data.repositories.FavouriteRepository
 import com.example.memoryexplorer.data.repositories.LoginRepository
+import com.example.memoryexplorer.data.repositories.ThemeRepository
 import com.example.memoryexplorer.ui.screens.addmemory.AddMemoryViewModel
 import com.example.memoryexplorer.ui.screens.home.HomeViewModel
 import com.example.memoryexplorer.ui.screens.login.LoginViewModel
@@ -31,6 +32,7 @@ val appModule = module {
     }
 
     single { LoginRepository(get()) }
+    single { ThemeRepository(get()) }
     single {
         FavouriteRepository(
             get<MemoryExplorerDatabase>().favouriteDAO()
@@ -43,7 +45,7 @@ val appModule = module {
     viewModel { RegisterViewModel(get()) }
     viewModel { MemoryDetailsViewModel(get()) }
     viewModel { AddMemoryViewModel(get()) }
-    viewModel { SettingsViewModel(get(), get()) }
+    viewModel { SettingsViewModel(get(), get(), get()) }
     viewModel { StatisticsViewModel(get(), get()) }
 
 }

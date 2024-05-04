@@ -1,57 +1,53 @@
 package com.example.memoryexplorer.ui.screens.settings
 
+import android.annotation.SuppressLint
 import android.widget.Toast
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.selection.selectable
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Image
 import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
-import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExposedDropdownMenuBox
-import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
-import androidx.navigation.NavHostController
-
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.example.memoryexplorer.R
+import com.example.memoryexplorer.data.models.Theme
 
-@OptIn(ExperimentalMaterial3Api::class)
+@SuppressLint("StateFlowValueCalledInComposition")
 @Composable
 fun SettingsScreen(
     navController: NavHostController,
-    settingsViewModel: SettingsViewModel,
+    settingsViewModel: SettingsViewModel
 ) {
-    val theme = arrayOf(R.string.theme_system, R.string.theme_light, R.string.theme_dark)
-        .map { stringResource(it) }
-        .toTypedArray()
+    val themeState by settingsViewModel.state.collectAsState()
+
     val language = R.string::class.java.fields
         .filter { it.name.startsWith("language_") }
         .mapNotNull { it.getInt(it) }
         .map { navController.context.getString(it) }
         .toTypedArray()
-    var expanded by remember { mutableStateOf(false) }
-    var selectedText by remember { mutableStateOf(theme[0]) }
 
     Scaffold(
         modifier = Modifier
@@ -72,51 +68,34 @@ fun SettingsScreen(
                     text = stringResource(R.string.select_theme)
                 )
             }
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 16.dp),
-            ) {
-                Box(
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    ExposedDropdownMenuBox(
-                        expanded = expanded,
-                        onExpandedChange = {
-                            expanded = !expanded
-                        }
-                    ) {
-                        TextField(
-                            colors = TextFieldDefaults.colors(
-                                focusedContainerColor = MaterialTheme.colorScheme.secondary,
-                                unfocusedContainerColor = MaterialTheme.colorScheme.secondary,
-                            ),
-                            value = selectedText,
-                            onValueChange = { settingsViewModel.onThemeChange(selectedText) },
-                            readOnly = true,
-                            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
-                            modifier = Modifier
-                                .menuAnchor()
-                                .fillMaxWidth()
+            Theme.entries.forEach { theme ->
+                Row(
+                    Modifier
+                        .fillMaxWidth()
+                        .height(56.dp)
+                        .selectable(
+                            selected = (theme == themeState.theme),
+                            onClick = { settingsViewModel.changeTheme(theme) },
+                            role = Role.RadioButton
                         )
-                        ExposedDropdownMenu(
-                            expanded = expanded,
-                            onDismissRequest = { expanded = false }
-                        ) {
-                            theme.forEach { item ->
-                                DropdownMenuItem(
-                                    text = { Text(text = item) },
-                                    onClick = {
-                                        selectedText = item
-                                        expanded = false
-                                        Toast.makeText(navController.context, item, Toast.LENGTH_LONG).show()
-                                    }
-                                )
+                        .padding(horizontal = 16.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    RadioButton(selected = (theme == themeState.theme), onClick = null)
+                    Text(
+                        text = stringResource(
+                            when (theme) {
+                                Theme.System -> R.string.theme_system
+                                Theme.Light -> R.string.theme_light
+                                Theme.Dark -> R.string.theme_dark
                             }
-                        }
-                    }
+                        ),
+                        style = MaterialTheme.typography.bodyLarge,
+                        modifier = Modifier.padding(start = 16.dp)
+                    )
                 }
             }
+            Spacer(modifier = Modifier.height(16.dp))
             Divider(color = Color.Gray, thickness = 1.dp)
             Row(
                 modifier = Modifier
@@ -132,7 +111,9 @@ fun SettingsScreen(
                         .padding(bottom = 16.dp),
                 ) {
                     Button(
-                        onClick = { Toast.makeText(navController.context, item, Toast.LENGTH_LONG).show() },
+                        onClick = {
+                            Toast.makeText(navController.context, item, Toast.LENGTH_LONG).show()
+                        },
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         Icon(
