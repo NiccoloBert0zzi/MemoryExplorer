@@ -121,7 +121,8 @@ fun SettingsScreen(
                             contentDescription = "Flag icon",
                             modifier = Modifier
                                 .width(75.dp)
-                                .height(38.dp)
+                                .height(38.dp),
+                            tint = Color.Unspecified // Add this line
                         )
                         Text(text = item)
                     }

@@ -1,7 +1,6 @@
 package com.example.memoryexplorer.ui.screens.addmemory
 
 import android.Manifest
-import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -233,15 +232,14 @@ fun AddMemoryScreen(
                 OsmMapView(
                     addMemoryViewModel,
                     latitude,
-                    longitude,
-                    LocalContext.current
+                    longitude
                 )
             }
         }
     }
 }
 @Composable
-fun OsmMapView(addMemoryViewModel: AddMemoryViewModel, latitude: Double, longitude: Double, context: Context) {
+fun OsmMapView(addMemoryViewModel: AddMemoryViewModel, latitude: Double, longitude: Double) {
     //set center to current location
     var lat = latitude
     var lon = longitude
