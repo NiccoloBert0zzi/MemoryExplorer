@@ -37,8 +37,13 @@ import kotlinx.coroutines.launch
 import android.content.Context
 import android.graphics.Color
 import android.util.Log
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.memoryexplorer.data.models.Theme
+import com.example.memoryexplorer.ui.screens.settings.SettingsViewModel
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.Priority
+import org.koin.androidx.compose.koinViewModel
 
 
 class MainActivity : ComponentActivity() {
@@ -70,7 +75,16 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             val navController = rememberNavController()
-            MemoryExplorerTheme {
+            val settingsViewModel = koinViewModel<SettingsViewModel>()
+            val themeState by settingsViewModel.state.collectAsStateWithLifecycle()
+
+            MemoryExplorerTheme(
+                darkTheme = when (themeState.theme) {
+                    Theme.System -> isSystemInDarkTheme()
+                    Theme.Light -> false
+                    Theme.Dark -> true
+                }
+            ) {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
