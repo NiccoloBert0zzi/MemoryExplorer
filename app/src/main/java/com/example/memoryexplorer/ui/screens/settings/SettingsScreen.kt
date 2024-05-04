@@ -6,9 +6,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Image
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
 import androidx.compose.material3.DropdownMenuItem
@@ -30,6 +31,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavHostController
 
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.memoryexplorer.R
@@ -133,10 +135,12 @@ fun SettingsScreen(
                         onClick = { Toast.makeText(navController.context, item, Toast.LENGTH_LONG).show() },
                         modifier = Modifier.fillMaxWidth()
                     ) {
-                        // TODO add icon flag
                         Icon(
-                            Icons.Filled.Image,
-                            contentDescription = "Flag icon"
+                            painter = painterResource(id = navController.context.resources.getIdentifier("flag_${item.lowercase()}", "drawable", navController.context.packageName)),
+                            contentDescription = "Flag icon",
+                            modifier = Modifier
+                                .width(75.dp)
+                                .height(38.dp)
                         )
                         Text(text = item)
                     }

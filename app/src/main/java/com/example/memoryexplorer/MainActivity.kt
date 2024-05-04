@@ -65,6 +65,7 @@ class MainActivity : ComponentActivity() {
         getCurrentLocation()
         checkNotification()
         lifecycleScope.launch {
+            //TODO email = loginRepository.email.first()
             email = "p@p.com"
             downloadMemories(email)
             runnable!!.run()

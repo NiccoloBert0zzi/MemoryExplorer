@@ -80,7 +80,6 @@ class AddMemoryViewModel(
                 .addOnSuccessListener { taskSnapshot ->
                     taskSnapshot.storage.downloadUrl.addOnSuccessListener { downloadUri ->
                         val downloadedImageUri = downloadUri.toString()
-                        // TODO: Add dynamic location picker
                         val memory = Memory(
                             id,
                             email,

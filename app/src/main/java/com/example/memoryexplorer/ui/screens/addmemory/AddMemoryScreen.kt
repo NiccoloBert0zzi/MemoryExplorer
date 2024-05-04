@@ -1,6 +1,8 @@
 package com.example.memoryexplorer.ui.screens.addmemory
 
+import android.Manifest
 import android.content.Context
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.widget.Toast
@@ -44,6 +46,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.content.ContextCompat
 import androidx.navigation.NavHostController
 import com.example.memoryexplorer.MainActivity
 import com.example.memoryexplorer.R
@@ -75,12 +78,13 @@ fun AddMemoryScreen(
     }
 
     var bitmapState by rememberSaveable { mutableStateOf<Bitmap?>(null) }
+    val context = LocalContext.current
+    val cameraPermission = Manifest.permission.CAMERA
     val takePictureLauncher = rememberLauncherForActivityResult(ActivityResultContracts.TakePicturePreview()) { bitmap ->
         if (bitmap != null) {
             bitmapState = bitmap
         }
     }
-
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         bottomBar = {
@@ -149,12 +153,18 @@ fun AddMemoryScreen(
                     horizontalArrangement = Arrangement.Center
                 ) {
                     Image(
-                        // TODO crash here
                         painter = bitmapState?.let { BitmapPainter(it.asImageBitmap()) } ?: painterResource(R.drawable.default_memory),
                         contentDescription = "Memory image",
                         modifier = Modifier
                             .clickable {
-                                takePictureLauncher.launch(null)
+                                when {
+                                    ContextCompat.checkSelfPermission(context, cameraPermission) == PackageManager.PERMISSION_GRANTED -> {
+                                        takePictureLauncher.launch(null)
+                                    }
+                                    else -> {
+                                        Toast.makeText(context, "Camera permission is required to take pictures.", Toast.LENGTH_SHORT).show()
+                                    }
+                                }
                             }
                             .size(200.dp)
                     )
