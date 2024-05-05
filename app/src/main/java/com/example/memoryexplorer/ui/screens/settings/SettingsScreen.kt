@@ -1,7 +1,9 @@
+@file:Suppress("DEPRECATION")
+
 package com.example.memoryexplorer.ui.screens.settings
 
 import android.annotation.SuppressLint
-import android.widget.Toast
+import android.content.Intent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -9,11 +11,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.selection.selectable
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Image
 import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
@@ -27,15 +26,18 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.example.memoryexplorer.MainActivity
 import com.example.memoryexplorer.R
 import com.example.memoryexplorer.data.models.Theme
+import java.util.Locale
 
-@SuppressLint("StateFlowValueCalledInComposition")
+@SuppressLint("StateFlowValueCalledInComposition", "DiscouragedApi")
 @Composable
 fun SettingsScreen(
     navController: NavHostController,
@@ -48,6 +50,9 @@ fun SettingsScreen(
         .mapNotNull { it.getInt(it) }
         .map { navController.context.getString(it) }
         .toTypedArray()
+
+    val context = LocalContext.current
+    val resources = context.resources
 
     Scaffold(
         modifier = Modifier
@@ -112,17 +117,34 @@ fun SettingsScreen(
                 ) {
                     Button(
                         onClick = {
-                            Toast.makeText(navController.context, item, Toast.LENGTH_LONG).show()
+                            // Change the locale of your app to English
+                            val locale = Locale("en")
+                            Locale.setDefault(locale)
+                            val config = resources.configuration
+                            config.setLocale(locale)
+                            resources.updateConfiguration(config, resources.displayMetrics)
+
+                            // Restart the app
+                            val intent = Intent(context, MainActivity::class.java)
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                            context.startActivity(intent)
                         },
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         Icon(
-                            painter = painterResource(id = navController.context.resources.getIdentifier("flag_${item.lowercase()}", "drawable", navController.context.packageName)),
+                            painter = painterResource(
+                                id = navController.context.resources.getIdentifier(
+                                    "flag_${item.lowercase()}",
+                                    "drawable",
+                                    navController.context.packageName
+                                )
+                            ),
                             contentDescription = "Flag icon",
                             modifier = Modifier
                                 .width(75.dp)
                                 .height(38.dp),
-                            tint = Color.Unspecified // Add this line
+                            tint = Color.Unspecified
                         )
                         Text(text = item)
                     }
