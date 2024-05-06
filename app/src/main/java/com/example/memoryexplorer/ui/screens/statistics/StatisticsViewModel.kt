@@ -28,7 +28,7 @@ class StatisticsViewModel(
         MutableStateFlow<List<Pair<String, Pair<String, String>>>>(emptyList())
     val locationsName: StateFlow<List<Pair<String, Pair<String, String>>>> = _locationsName
 
-    private val _isLoading = MutableStateFlow(false)
+    private val _isLoading = MutableStateFlow(true)
     val isLoading: StateFlow<Boolean> = _isLoading
 
     private val _error = MutableStateFlow<String?>(null)

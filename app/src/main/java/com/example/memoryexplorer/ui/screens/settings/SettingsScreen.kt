@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.material3.Button
@@ -55,23 +56,20 @@ fun SettingsScreen(
     val resources = context.resources
 
     Scaffold(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(32.dp)
+        modifier = Modifier.fillMaxSize()
     ) { contentPadding ->
         Column(
             modifier = Modifier
                 .padding(contentPadding)
+                .padding(horizontal = 32.dp, vertical = 16.dp)
                 .fillMaxSize(),
         ) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 16.dp),
+                    .padding(vertical = 16.dp),
             ) {
-                Text(
-                    text = stringResource(R.string.select_theme)
-                )
+                Text(stringResource(R.string.select_theme))
             }
             Theme.entries.forEach { theme ->
                 Row(
@@ -88,7 +86,7 @@ fun SettingsScreen(
                 ) {
                     RadioButton(selected = (theme == themeState.theme), onClick = null)
                     Text(
-                        text = stringResource(
+                        stringResource(
                             when (theme) {
                                 Theme.System -> R.string.theme_system
                                 Theme.Light -> R.string.theme_light
@@ -105,9 +103,9 @@ fun SettingsScreen(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 16.dp, bottom = 16.dp)
+                    .padding(vertical = 16.dp)
             ) {
-                Text(text = stringResource(R.string.select_language))
+                Text(stringResource(R.string.select_language))
             }
             language.forEach { item ->
                 Row(
@@ -146,7 +144,7 @@ fun SettingsScreen(
                                 .height(38.dp),
                             tint = Color.Unspecified
                         )
-                        Text(text = item)
+                        Text(item)
                     }
                 }
             }
@@ -154,13 +152,13 @@ fun SettingsScreen(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 16.dp)
+                    .padding(vertical = 16.dp)
             ) {
                 Button(
                     onClick = { settingsViewModel.onLogout(navController) },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth().height(56.dp)
                 ) {
-                    Text(text = stringResource(R.string.logout))
+                    Text(stringResource(R.string.logout))
                 }
             }
         }

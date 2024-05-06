@@ -155,7 +155,7 @@ fun LoginScreen(
                 horizontalArrangement = Arrangement.Center
             ) {
                 ClickableText(
-                    text = AnnotatedString(stringResource(R.string.option_register)),
+                    AnnotatedString(stringResource(R.string.option_register)),
                     style = TextStyle(
                         color = MaterialTheme.colorScheme.tertiary,
                         fontWeight = Bold

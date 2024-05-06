@@ -85,7 +85,7 @@ fun ProfileScreen(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
-                    text = email?.split("@")?.get(0) ?: stringResource(R.string.username),
+                    email?.split("@")?.get(0) ?: stringResource(R.string.username),
                     textAlign = TextAlign.Left
                 )
             }
@@ -97,8 +97,8 @@ fun ProfileScreen(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 ClickableText(
-                    text = AnnotatedString(
-                        text = stringResource(R.string.memories),
+                    AnnotatedString(
+                        stringResource(R.string.memories),
                         spanStyles = if (isMemory) listOf(
                             AnnotatedString.Range(
                                 item = SpanStyle(textDecoration = TextDecoration.Underline),
@@ -113,8 +113,8 @@ fun ProfileScreen(
                     }
                 )
                 ClickableText(
-                    text = AnnotatedString(
-                        text = stringResource(R.string.favorite),
+                    AnnotatedString(
+                        stringResource(R.string.favorite),
                         spanStyles = if (!isMemory) listOf(
                             AnnotatedString.Range(
                                 item = SpanStyle(textDecoration = TextDecoration.Underline),

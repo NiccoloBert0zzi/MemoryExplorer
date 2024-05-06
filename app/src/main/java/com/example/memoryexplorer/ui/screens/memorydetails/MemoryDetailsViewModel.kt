@@ -34,7 +34,7 @@ class MemoryDetailsViewModel(
     private val _memory = MutableStateFlow<Memory?>(null)
     val memory: StateFlow<Memory?> = _memory
 
-    private val _isLoading = MutableStateFlow(false)
+    private val _isLoading = MutableStateFlow(true)
     val isLoading: StateFlow<Boolean> = _isLoading
 
     private val _error = MutableStateFlow<String?>(null)
@@ -45,18 +45,6 @@ class MemoryDetailsViewModel(
         started = SharingStarted.WhileSubscribed(),
         initialValue = FavouritesState(emptyList())
     )
-
-    fun addFavourite(memoryId: String) {
-        viewModelScope.launch {
-            favouriteRepository.upsert(Favourite(memoryId))
-        }
-    }
-
-    fun removeFavourite(memoryId: String) {
-        viewModelScope.launch {
-            favouriteRepository.delete(Favourite(memoryId))
-        }
-    }
 
     fun getMemoryById(id: String) {
         viewModelScope.launch {
@@ -73,9 +61,22 @@ class MemoryDetailsViewModel(
         }
     }
 
+    fun addFavourite(memoryId: String) {
+        viewModelScope.launch {
+            favouriteRepository.upsert(Favourite(memoryId))
+        }
+    }
+
+    fun removeFavourite(memoryId: String) {
+        viewModelScope.launch {
+            favouriteRepository.delete(Favourite(memoryId))
+        }
+    }
+
     fun clearError() {
         _error.value = null
     }
+
     fun openMap(latitude: String, longitude: String, mapView: MapView, context: Context) {
         Configuration.getInstance().load(
             context,

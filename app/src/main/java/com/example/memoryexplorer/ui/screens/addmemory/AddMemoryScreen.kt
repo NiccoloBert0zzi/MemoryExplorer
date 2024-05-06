@@ -71,32 +71,19 @@ fun AddMemoryScreen(
     var public by rememberSaveable { mutableStateOf(false) }
     val latitude by addMemoryViewModel.latitude.collectAsState()
     val longitude by addMemoryViewModel.longitude.collectAsState()
-    if (error != null) {
-        Toast.makeText(navController.context, error, Toast.LENGTH_LONG).show()
-        addMemoryViewModel.clearError()
-    }
 
     var bitmapState by rememberSaveable { mutableStateOf<Bitmap?>(null) }
     val context = LocalContext.current
     val cameraPermission = Manifest.permission.CAMERA
-    val takePictureLauncher = rememberLauncherForActivityResult(ActivityResultContracts.TakePicturePreview()) { bitmap ->
-        if (bitmap != null) {
-            bitmapState = bitmap
-        }
-    }
-    Scaffold(
-        modifier = Modifier.fillMaxSize(),
-        bottomBar = {
-            Button(
-                onClick = {
-                    val imageToUse = bitmapState ?: BitmapFactory.decodeResource(navController.context.resources, R.drawable.default_memory)
-                    addMemoryViewModel.onAddMemory(title, description, date, public, imageToUse, latitude.toString(), longitude.toString(), navController)
-                },
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text(stringResource(R.string.add_memory))
+    val takePictureLauncher =
+        rememberLauncherForActivityResult(ActivityResultContracts.TakePicturePreview()) { bitmap ->
+            if (bitmap != null) {
+                bitmapState = bitmap
             }
         }
+
+    Scaffold(
+        modifier = Modifier.fillMaxSize(),
     ) { contentPadding ->
         if (isLoading) {
             Column(
@@ -152,20 +139,28 @@ fun AddMemoryScreen(
                     horizontalArrangement = Arrangement.Center
                 ) {
                     Image(
-                        painter = bitmapState?.let { BitmapPainter(it.asImageBitmap()) } ?: painterResource(R.drawable.default_memory),
+                        painter = bitmapState?.let { BitmapPainter(it.asImageBitmap()) }
+                            ?: painterResource(R.drawable.default_memory),
                         contentDescription = "Memory image",
                         modifier = Modifier
                             .clickable {
-                                when {
-                                    ContextCompat.checkSelfPermission(context, cameraPermission) == PackageManager.PERMISSION_GRANTED -> {
+                                when (PackageManager.PERMISSION_GRANTED) {
+                                    ContextCompat.checkSelfPermission(
+                                        context,
+                                        cameraPermission
+                                    ) -> {
                                         takePictureLauncher.launch(null)
                                     }
+
                                     else -> {
-                                        Toast.makeText(context, "Camera permission is required to take pictures.", Toast.LENGTH_SHORT).show()
+                                        Toast.makeText(
+                                            context,
+                                            "Camera permission is required to take pictures.",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
                                     }
                                 }
                             }
-                            .size(200.dp)
                     )
                 }
                 Spacer(Modifier.size(20.dp))
@@ -228,22 +223,67 @@ fun AddMemoryScreen(
                         color = MaterialTheme.colorScheme.primary
                     )
                 }
-                Spacer(Modifier.size(50.dp))
-                OsmMapView(
-                    addMemoryViewModel,
-                    latitude,
-                    longitude
-                )
+                Spacer(Modifier.size(20.dp))
+                Row(
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    OsmMapView(
+                        addMemoryViewModel,
+                        latitude,
+                        longitude
+                    )
+                }
+                Spacer(Modifier.size(100.dp))
             }
         }
     }
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 24.dp, vertical = 16.dp),
+        verticalArrangement = Arrangement.Bottom
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+        ) {
+            Button(
+                onClick = {
+                    val imageToUse = bitmapState ?: BitmapFactory.decodeResource(
+                        navController.context.resources,
+                        R.drawable.default_memory
+                    )
+                    addMemoryViewModel.onAddMemory(
+                        title,
+                        description,
+                        date,
+                        public,
+                        imageToUse,
+                        latitude.toString(),
+                        longitude.toString(),
+                        navController
+                    )
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(50.dp),
+                enabled = !isLoading
+            ) {
+                Text(stringResource(R.string.add_memory))
+            }
+        }
+    }
+    if (error != null) {
+        Toast.makeText(navController.context, error, Toast.LENGTH_LONG).show()
+        addMemoryViewModel.clearError()
+    }
 }
+
 @Composable
 fun OsmMapView(addMemoryViewModel: AddMemoryViewModel, latitude: Double, longitude: Double) {
     //set center to current location
     var lat = latitude
     var lon = longitude
-    if(lat == 0.0 && lon == 0.0) {
+    if (lat == 0.0 && lon == 0.0) {
         lat = MainActivity.latitude
         lon = MainActivity.longitude
     }
@@ -262,7 +302,11 @@ fun OsmMapView(addMemoryViewModel: AddMemoryViewModel, latitude: Double, longitu
                             if (p != null) {
                                 lat = p.latitude
                                 lon = p.longitude
-                                addMemoryViewModel.setMarker(this@apply, GeoPoint(lat, lon), context)
+                                addMemoryViewModel.setMarker(
+                                    this@apply,
+                                    GeoPoint(lat, lon),
+                                    context
+                                )
                             }
                             return true
                         }

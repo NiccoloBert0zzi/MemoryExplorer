@@ -67,13 +67,19 @@ class AddMemoryViewModel(
         navController: NavController
     ) {
         _isLoading.value = true
+
+        if(title.isEmpty() || description.isEmpty() || date.isEmpty()) {
+            _error.value = "Please fill in all the fields"
+            _isLoading.value = false
+            return
+        }
+
         val database = FirebaseDatabase.getInstance().getReference("memories")
         val id = database.push().key
 
         if (id != null) {
             val storageRef = Firebase.storage.getReference("Images/$email/memoriesImage/$id")
 
-            // Convert the Bitmap to a Uri
             val imageUri = bitmapToUri(image, navController)
 
             storageRef.putFile(imageUri!!)

@@ -179,7 +179,7 @@ fun RegisterScreen(
                 horizontalArrangement = Arrangement.Center
             ) {
                 ClickableText(
-                    text = AnnotatedString(stringResource(R.string.option_login)),
+                    AnnotatedString(stringResource(R.string.option_login)),
                     style = TextStyle(
                         color = MaterialTheme.colorScheme.tertiary,
                         fontWeight = FontWeight.Bold

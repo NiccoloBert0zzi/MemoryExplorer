@@ -1,6 +1,7 @@
 package com.example.memoryexplorer.ui.screens.memorydetails
 
 import android.content.Context
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -158,6 +159,7 @@ fun MemoryDetailsScreen(
         }
     }
 }
+
 @Composable
 fun OsmMapView(memoryDetailsViewModel: MemoryDetailsViewModel, memory: Memory, context: Context) {
     Box(
@@ -174,4 +176,3 @@ fun OsmMapView(memoryDetailsViewModel: MemoryDetailsViewModel, memory: Memory, c
         )
     }
 }
-

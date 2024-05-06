@@ -142,7 +142,7 @@ fun HomeScreen(
                             ) {
                                 locationsName.forEach { item ->
                                     DropdownMenuItem(
-                                        text = { Text(text = item) },
+                                        { Text(item) },
                                         onClick = {
                                             selectedText = item
                                             expanded = false

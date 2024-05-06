@@ -113,7 +113,7 @@ fun StatisticsScreen(
                                 onDismissRequest = { expanded = false }
                             ) {
                                 DropdownMenuItem(
-                                    text = { Text(text = navController.context.getString(R.string.world)) },
+                                    { Text(text = navController.context.getString(R.string.world)) },
                                     onClick = {
                                         selectedText =
                                             navController.context.getString(R.string.world)
@@ -126,7 +126,7 @@ fun StatisticsScreen(
                                 locationsName.forEach { item ->
                                     if (state && addedItems.add(item.first)) {
                                         DropdownMenuItem(
-                                            text = { Text(text = item.first) },
+                                            { Text(text = item.first) },
                                             onClick = {
                                                 selectedText = item.first
                                                 expanded = false
@@ -137,7 +137,7 @@ fun StatisticsScreen(
                                         )
                                     } else if (!state && addedItems.add(item.second.first) && item.first == selectedState) {
                                         DropdownMenuItem(
-                                            text = { Text(text = item.second.first) },
+                                            { Text(text = item.second.first) },
                                             onClick = {
                                                 selectedText = item.second.first
                                                 expanded = false

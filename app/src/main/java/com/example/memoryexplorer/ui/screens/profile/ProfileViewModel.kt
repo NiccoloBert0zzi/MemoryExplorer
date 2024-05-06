@@ -33,7 +33,7 @@ class ProfileViewModel(
     private val _favourites = MutableStateFlow<List<Memory>>(emptyList())
     val favourites: StateFlow<List<Memory>> = _favourites
 
-    private val _isLoading = MutableStateFlow(false)
+    private val _isLoading = MutableStateFlow(true)
     val isLoading: StateFlow<Boolean> = _isLoading
 
     private val _error = MutableStateFlow<String?>(null)
