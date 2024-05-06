@@ -54,7 +54,7 @@ fun StatisticsScreen(
     var selectedState = navController.context.getString(R.string.world)
     var state = true
 
-    statisticsViewModel.pieData.value = statisticsViewModel.generatePieData(selectedState)
+    statisticsViewModel.updatePieData(selectedState)
 
     Scaffold(
         modifier = Modifier.fillMaxSize()
@@ -119,10 +119,7 @@ fun StatisticsScreen(
                                             navController.context.getString(R.string.world)
                                         expanded = false
                                         state = true
-                                        statisticsViewModel.pieData.value =
-                                            statisticsViewModel.generatePieData(
-                                                navController.context.getString(R.string.world)
-                                            )
+                                        statisticsViewModel.updatePieData(navController.context.getString(R.string.world))
                                     }
                                 )
                                 val addedItems = mutableSetOf<String>()
@@ -135,10 +132,7 @@ fun StatisticsScreen(
                                                 expanded = false
                                                 state = false
                                                 selectedState = item.first
-                                                statisticsViewModel.pieData.value =
-                                                    statisticsViewModel.generatePieData(
-                                                        selectedState
-                                                    )
+                                                statisticsViewModel.updatePieData(selectedState)
                                             }
                                         )
                                     } else if (!state && addedItems.add(item.second.first) && item.first == selectedState) {
@@ -147,8 +141,7 @@ fun StatisticsScreen(
                                             onClick = {
                                                 selectedText = item.second.first
                                                 expanded = false
-                                                statisticsViewModel.pieData.value =
-                                                    statisticsViewModel.generatePieData(selectedText)
+                                                statisticsViewModel.updatePieData(selectedText)
                                             }
                                         )
                                     }

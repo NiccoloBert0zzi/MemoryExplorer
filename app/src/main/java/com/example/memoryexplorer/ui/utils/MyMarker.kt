@@ -1,4 +1,4 @@
-package com.example.memoryexplorer.ui.screens.memorydetails
+package com.example.memoryexplorer.ui.utils
 
 import android.content.Context
 import android.graphics.Bitmap

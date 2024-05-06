@@ -3,7 +3,7 @@ package com.example.memoryexplorer.ui.composables
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.Settings
-import androidx.compose.material.icons.outlined.SupervisedUserCircle
+import androidx.compose.material.icons.rounded.AccountCircle
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -12,7 +12,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.navigation.NavHostController
@@ -54,7 +53,7 @@ fun AppBar(
                     navController.navigate(MemoryExplorerRoute.Profile.route)
                 }) {
                     Icon(
-                        Icons.Outlined.SupervisedUserCircle,
+                        Icons.Rounded.AccountCircle,
                         contentDescription = "User account"
                     )
                 }

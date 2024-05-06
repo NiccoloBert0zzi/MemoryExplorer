@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.memoryexplorer.data.database.Favourite
 import com.example.memoryexplorer.data.database.Memory
 import com.example.memoryexplorer.data.repositories.FavouriteRepository
+import com.example.memoryexplorer.ui.utils.MyMarker
 import com.google.firebase.database.FirebaseDatabase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted

@@ -12,7 +12,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.example.memoryexplorer.data.database.Memory
 import com.example.memoryexplorer.data.repositories.LoginRepository
-import com.example.memoryexplorer.ui.screens.memorydetails.MyMarker
+import com.example.memoryexplorer.ui.utils.MyMarker
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage

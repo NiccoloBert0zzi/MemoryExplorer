@@ -77,7 +77,7 @@ class StatisticsViewModel(
         }
     }
 
-    fun generatePieData(selectedState: String): PieData {
+    private fun generatePieData(selectedState: String): PieData {
         _isLoading.value = true
 
         val filteredLocations = when {
@@ -123,6 +123,10 @@ class StatisticsViewModel(
 
         _isLoading.value = false
         return PieData(dataSet).apply { }
+    }
+
+    fun updatePieData(selectedState: String) {
+        pieData.value = generatePieData(selectedState)
     }
 
     fun clearError() {
