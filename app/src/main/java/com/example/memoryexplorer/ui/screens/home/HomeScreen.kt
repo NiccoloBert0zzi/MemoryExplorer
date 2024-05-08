@@ -124,7 +124,9 @@ fun HomeScreen(
                                     focusedContainerColor = MaterialTheme.colorScheme.secondary,
                                     unfocusedContainerColor = MaterialTheme.colorScheme.secondary,
                                 ),
+                                textStyle = MaterialTheme.typography.bodyMedium,
                                 value = selectedText,
+                                label = { Text(stringResource(R.string.select_location)) },
                                 onValueChange = { },
                                 readOnly = true,
                                 trailingIcon = {
@@ -265,13 +267,12 @@ fun NoMemoriesPlaceholder() {
         Text(
             stringResource(R.string.no_memories),
             style = MaterialTheme.typography.bodyLarge,
-            fontWeight = FontWeight.Bold,
             color = MaterialTheme.colorScheme.primary,
             modifier = Modifier.padding(bottom = 8.dp)
         )
         Text(
             stringResource(R.string.add_new_memory),
-            style = MaterialTheme.typography.bodyLarge,
+            style = MaterialTheme.typography.bodyMedium,
             textAlign = TextAlign.Center,
             modifier = Modifier.padding(16.dp)
         )

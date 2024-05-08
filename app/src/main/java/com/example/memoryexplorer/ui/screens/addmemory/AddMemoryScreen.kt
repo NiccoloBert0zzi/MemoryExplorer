@@ -10,7 +10,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -107,7 +106,9 @@ fun AddMemoryScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Row(
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 8.dp)
                 ) {
                     Text(
                         stringResource(R.string.add_memory_title),
@@ -120,14 +121,17 @@ fun AddMemoryScreen(
                     OutlinedTextField(
                         value = title,
                         onValueChange = { title = it },
+                        textStyle = MaterialTheme.typography.bodyMedium,
                         label = { Text(stringResource(R.string.memory_title)) },
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                         modifier = Modifier.fillMaxWidth()
                     )
                 }
-                Spacer(Modifier.size(20.dp))
+                Spacer(Modifier.size(24.dp))
                 Row(
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 8.dp)
                 ) {
                     Text(
                         stringResource(R.string.add_memory_image),
@@ -163,9 +167,11 @@ fun AddMemoryScreen(
                             }
                     )
                 }
-                Spacer(Modifier.size(20.dp))
+                Spacer(Modifier.size(24.dp))
                 Row(
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 8.dp)
                 ) {
                     Text(
                         stringResource(R.string.add_memory_description),
@@ -178,14 +184,17 @@ fun AddMemoryScreen(
                     OutlinedTextField(
                         value = description,
                         onValueChange = { description = it },
+                        textStyle = MaterialTheme.typography.bodyMedium,
                         label = { Text(stringResource(R.string.memory_description)) },
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                         modifier = Modifier.fillMaxWidth()
                     )
                 }
-                Spacer(Modifier.size(20.dp))
+                Spacer(Modifier.size(24.dp))
                 Row(
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 8.dp)
                 ) {
                     Text(
                         stringResource(R.string.add_memory_date),
@@ -198,12 +207,13 @@ fun AddMemoryScreen(
                     OutlinedTextField(
                         value = date,
                         onValueChange = { date = it },
+                        textStyle = MaterialTheme.typography.bodyMedium,
                         label = { Text(stringResource(R.string.memory_date)) },
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                         modifier = Modifier.fillMaxWidth()
                     )
                 }
-                Spacer(Modifier.size(20.dp))
+                Spacer(Modifier.size(24.dp))
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically
@@ -212,9 +222,12 @@ fun AddMemoryScreen(
                         checked = public,
                         onCheckedChange = { public = it }
                     )
-                    Text(stringResource(R.string.memory_public))
+                    Text(
+                        stringResource(R.string.memory_public),
+                        style = MaterialTheme.typography.bodyMedium,
+                    )
                 }
-                Spacer(Modifier.size(20.dp))
+                Spacer(Modifier.size(24.dp))
                 Row(
                     modifier = Modifier.fillMaxWidth()
                 ) {
@@ -223,9 +236,11 @@ fun AddMemoryScreen(
                         color = MaterialTheme.colorScheme.primary
                     )
                 }
-                Spacer(Modifier.size(20.dp))
+                Spacer(Modifier.size(24.dp))
                 Row(
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(200.dp)
                 ) {
                     OsmMapView(
                         addMemoryViewModel,
@@ -265,10 +280,13 @@ fun AddMemoryScreen(
                 },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(50.dp),
+                    .height(46.dp),
                 enabled = !isLoading
             ) {
-                Text(stringResource(R.string.add_memory))
+                Text(
+                    stringResource(R.string.add_memory),
+                    style = MaterialTheme.typography.bodyLarge
+                )
             }
         }
     }
@@ -280,43 +298,32 @@ fun AddMemoryScreen(
 
 @Composable
 fun OsmMapView(addMemoryViewModel: AddMemoryViewModel, latitude: Double, longitude: Double) {
-    //set center to current location
-    var lat = latitude
-    var lon = longitude
-    if (lat == 0.0 && lon == 0.0) {
-        lat = MainActivity.latitude
-        lon = MainActivity.longitude
-    }
+    var lat = if (latitude == 0.0) MainActivity.latitude else latitude
+    var lon = if (longitude == 0.0) MainActivity.longitude else longitude
     val currentLocation = GeoPoint(lat, lon)
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(200.dp)
-    ) {
-        AndroidView(
-            factory = { context ->
-                MapView(context).apply {
-                    addMemoryViewModel.loadMap(this, currentLocation, context)
-                    this.overlayManager.add(MapEventsOverlay(object : MapEventsReceiver {
-                        override fun singleTapConfirmedHelper(p: GeoPoint?): Boolean {
-                            if (p != null) {
-                                lat = p.latitude
-                                lon = p.longitude
-                                addMemoryViewModel.setMarker(
-                                    this@apply,
-                                    GeoPoint(lat, lon),
-                                    context
-                                )
-                            }
-                            return true
+    AndroidView(
+        factory = { context ->
+            MapView(context).apply {
+                addMemoryViewModel.loadMap(this, currentLocation, context)
+                this.overlayManager.add(MapEventsOverlay(object : MapEventsReceiver {
+                    override fun singleTapConfirmedHelper(p: GeoPoint?): Boolean {
+                        if (p != null) {
+                            lat = p.latitude
+                            lon = p.longitude
+                            addMemoryViewModel.setMarker(
+                                this@apply,
+                                GeoPoint(lat, lon),
+                                context
+                            )
                         }
+                        return true
+                    }
 
-                        override fun longPressHelper(p: GeoPoint?): Boolean {
-                            return false
-                        }
-                    }))
-                }
+                    override fun longPressHelper(p: GeoPoint?): Boolean {
+                        return false
+                    }
+                }))
             }
-        )
-    }
+        }
+    )
 }

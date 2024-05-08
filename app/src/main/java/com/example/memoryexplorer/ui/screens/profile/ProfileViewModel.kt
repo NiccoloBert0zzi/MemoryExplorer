@@ -1,6 +1,5 @@
 package com.example.memoryexplorer.ui.screens.profile
 
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.memoryexplorer.data.database.Favourite

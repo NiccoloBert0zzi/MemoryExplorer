@@ -28,6 +28,7 @@ import java.util.Locale
 
 data class FavouritesState(val favourites: List<Favourite>)
 
+@Suppress("DEPRECATION")
 class MemoryDetailsViewModel(
     private val favouriteRepository: FavouriteRepository
 ) : ViewModel() {
@@ -90,7 +91,7 @@ class MemoryDetailsViewModel(
         val lat = latitude.toDouble()
         val lon = longitude.toDouble()
         val currentLocation = GeoPoint(lat, lon)
-        val mapController: IMapController = mapView.controller
+        val mapController = mapView.controller
         mapController.setZoom(7.0)
         mapController.setCenter(currentLocation)
         val startMarker = Marker(mapView)
@@ -99,7 +100,7 @@ class MemoryDetailsViewModel(
             startMarker.title = setLocation(lat, lon, context)!!.countryName
             startMarker.snippet = setLocation(lat, lon, context)!!.locality
         }
-        startMarker.setPosition(currentLocation)
+        startMarker.position = currentLocation
         startMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
         mapView.overlays.add(startMarker)
     }

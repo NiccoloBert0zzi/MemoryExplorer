@@ -77,7 +77,7 @@ fun ProfileScreen(
                     Text(stringResource(R.string.statistics))
                 }
             }
-            Spacer(Modifier.size(16.dp))
+            Spacer(Modifier.size(10.dp))
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -110,7 +110,8 @@ fun ProfileScreen(
                     onClick = {
                         profileViewModel.setIsMemory(true)
                         profileViewModel.getMemories()
-                    }
+                    },
+                    style = MaterialTheme.typography.bodyMedium
                 )
                 ClickableText(
                     AnnotatedString(
@@ -126,7 +127,8 @@ fun ProfileScreen(
                     onClick = {
                         profileViewModel.setIsMemory(false)
                         profileViewModel.getFavourites()
-                    }
+                    },
+                    style = MaterialTheme.typography.bodyMedium
                 )
             }
             Spacer(Modifier.size(16.dp))
@@ -225,7 +227,7 @@ fun MemoryItem(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            memory.title?.let { Text(it) }
+            memory.title?.let { Text(it, style = MaterialTheme.typography.bodyLarge) }
         }
         Row(
             modifier = Modifier
@@ -234,7 +236,7 @@ fun MemoryItem(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            memory.date?.let { Text(it) }
+            memory.date?.let { Text(it, style = MaterialTheme.typography.bodySmall) }
         }
         Spacer(Modifier.size(10.dp))
     }
@@ -258,7 +260,6 @@ fun NoMemoriesPlaceholder() {
         Text(
             stringResource(R.string.no_memories),
             style = MaterialTheme.typography.bodyLarge,
-            fontWeight = FontWeight.Bold,
             color = MaterialTheme.colorScheme.primary,
             modifier = Modifier.padding(bottom = 8.dp)
         )

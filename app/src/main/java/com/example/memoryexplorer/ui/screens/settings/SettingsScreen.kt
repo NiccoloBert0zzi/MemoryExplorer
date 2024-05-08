@@ -1,9 +1,6 @@
-@file:Suppress("DEPRECATION")
-
 package com.example.memoryexplorer.ui.screens.settings
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -11,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.material3.Button
@@ -31,11 +27,12 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.example.memoryexplorer.MainActivity
 import com.example.memoryexplorer.R
 import com.example.memoryexplorer.data.models.Theme
+import java.text.Collator
 import java.util.Locale
 
 @SuppressLint("StateFlowValueCalledInComposition", "DiscouragedApi")
@@ -45,15 +42,17 @@ fun SettingsScreen(
     settingsViewModel: SettingsViewModel
 ) {
     val themeState by settingsViewModel.state.collectAsState()
-
-    val language = R.string::class.java.fields
+    val systemLanguage = Locale(Locale.getDefault().language)
+        .getDisplayLanguage(Locale(Locale.getDefault().language))
+    val languages = R.string::class.java.fields
         .filter { it.name.startsWith("language_") }
-        .mapNotNull { it.getInt(it) }
-        .map { navController.context.getString(it) }
-        .toTypedArray()
-
-    val context = LocalContext.current
-    val resources = context.resources
+        .map {
+            Pair(
+                first = LocalContext.current.getString(it.getInt(it)),
+                second = it.name.removePrefix("language_")
+            )
+        }
+        .sortedWith(compareBy(Collator.getInstance(Locale("it", "IT"))) { it.first })
 
     Scaffold(
         modifier = Modifier.fillMaxSize()
@@ -67,21 +66,24 @@ fun SettingsScreen(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 16.dp),
+                    .padding(vertical = 4.dp),
             ) {
-                Text(stringResource(R.string.select_theme))
+                Text(
+                    stringResource(R.string.select_theme),
+                    style = MaterialTheme.typography.bodyMedium,
+                )
             }
             Theme.entries.forEach { theme ->
                 Row(
                     Modifier
                         .fillMaxWidth()
-                        .height(56.dp)
+                        .height(40.dp)
+                        .padding(horizontal = 8.dp)
                         .selectable(
                             selected = (theme == themeState.theme),
                             onClick = { settingsViewModel.changeTheme(theme) },
                             role = Role.RadioButton
-                        )
-                        .padding(horizontal = 16.dp),
+                        ),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     RadioButton(selected = (theme == themeState.theme), onClick = null)
@@ -93,7 +95,7 @@ fun SettingsScreen(
                                 Theme.Dark -> R.string.theme_dark
                             }
                         ),
-                        style = MaterialTheme.typography.bodyLarge,
+                        style = MaterialTheme.typography.bodyMedium,
                         modifier = Modifier.padding(start = 16.dp)
                     )
                 }
@@ -103,60 +105,52 @@ fun SettingsScreen(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 16.dp)
+                    .padding(top = 16.dp)
             ) {
-                Text(stringResource(R.string.select_language))
+                Text(
+                    stringResource(R.string.available_languages),
+                    style = MaterialTheme.typography.bodyMedium,
+                )
             }
-            language.forEach { item ->
+            languages.forEach { item ->
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(bottom = 16.dp),
+                        .padding(vertical = 8.dp),
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Button(
-                        onClick = {
-                            // Change the locale of your app to English
-                            val locale = Locale("en")
-                            Locale.setDefault(locale)
-                            val config = resources.configuration
-                            config.setLocale(locale)
-                            resources.updateConfiguration(config, resources.displayMetrics)
-
-                            // Restart the app
-                            val intent = Intent(context, MainActivity::class.java)
-                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                            context.startActivity(intent)
-                        },
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Icon(
-                            painter = painterResource(
-                                id = navController.context.resources.getIdentifier(
-                                    "flag_${item.lowercase()}",
-                                    "drawable",
-                                    navController.context.packageName
-                                )
-                            ),
-                            contentDescription = "Flag icon",
-                            modifier = Modifier
-                                .width(75.dp)
-                                .height(38.dp),
-                            tint = Color.Unspecified
-                        )
-                        Text(item)
-                    }
+                    Icon(
+                        painter = painterResource(
+                            id = navController.context.resources.getIdentifier(
+                                "flag_${item.second}",
+                                "drawable",
+                                navController.context.packageName
+                            )
+                        ),
+                        contentDescription = "Flag icon",
+                        modifier = Modifier
+                            .width(68.dp)
+                            .height(34.dp),
+                        tint = Color.Unspecified
+                    )
+                    Text(
+                        item.first,
+                        style = MaterialTheme.typography.bodyMedium,
+                        fontWeight = if (item.first.lowercase() == systemLanguage) FontWeight.Bold else FontWeight.Normal,
+                    )
                 }
             }
-            Divider(color = Color.Gray, thickness = 1.dp)
+            Divider(color = Color.Gray, thickness = 1.dp, modifier = Modifier.padding(top = 12.dp))
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 16.dp)
+                    .padding(vertical = 20.dp)
             ) {
                 Button(
                     onClick = { settingsViewModel.onLogout(navController) },
-                    modifier = Modifier.fillMaxWidth().height(56.dp)
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(40.dp)
                 ) {
                     Text(stringResource(R.string.logout))
                 }

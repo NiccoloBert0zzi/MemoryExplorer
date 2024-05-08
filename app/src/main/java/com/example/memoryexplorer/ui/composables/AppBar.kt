@@ -31,6 +31,7 @@ fun AppBar(
     CenterAlignedTopAppBar(
         title = {
             Text(
+                // TODO mettere carattere Bold
                 title ?: routeTitle,
                 fontWeight = FontWeight.Light,
                 textAlign = TextAlign.Start,

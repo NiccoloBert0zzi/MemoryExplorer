@@ -1,12 +1,9 @@
 package com.example.memoryexplorer.ui.screens.memorydetails
 
-import android.content.Context
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -31,7 +28,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavHostController
@@ -101,7 +97,7 @@ fun MemoryDetailsScreen(
                         modifier = Modifier.fillMaxSize()
                     )
                 }
-                Spacer(Modifier.size(20.dp))
+                Spacer(Modifier.size(16.dp))
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
@@ -126,14 +122,14 @@ fun MemoryDetailsScreen(
                         }
                     )
                 }
-                Spacer(Modifier.size(20.dp))
+                Spacer(Modifier.size(10.dp))
                 Row(
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     memory.date?.let {
                         Text(
                             it,
-                            style = MaterialTheme.typography.labelSmall,
+                            style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.primary
                         )
                     }
@@ -144,35 +140,35 @@ fun MemoryDetailsScreen(
                     memory.description?.let {
                         Text(
                             it,
-                            style = MaterialTheme.typography.labelSmall,
+                            style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.primary
                         )
                     }
                 }
                 Spacer(Modifier.size(50.dp))
-                OsmMapView(memoryDetailsViewModel, memory, LocalContext.current)
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(200.dp)
+                ) {
+                    OsmMapView(memoryDetailsViewModel, memory)
+                }
             }
-            if (error != null) {
-                Toast.makeText(navController.context, error, Toast.LENGTH_LONG).show()
-                memoryDetailsViewModel.clearError()
-            }
+        }
+        if (error != null) {
+            Toast.makeText(navController.context, error, Toast.LENGTH_LONG).show()
+            memoryDetailsViewModel.clearError()
         }
     }
 }
 
 @Composable
-fun OsmMapView(memoryDetailsViewModel: MemoryDetailsViewModel, memory: Memory, context: Context) {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(200.dp)
-    ) {
-        AndroidView(
-            factory = { context ->
-                MapView(context).apply {
-                    memoryDetailsViewModel.openMap(memory.latitude!!, memory.longitude!!, this, context)
-                }
-            },
-        )
-    }
+fun OsmMapView(memoryDetailsViewModel: MemoryDetailsViewModel, memory: Memory) {
+    AndroidView(
+        factory = { context ->
+            MapView(context).apply {
+                memoryDetailsViewModel.openMap(memory.latitude!!, memory.longitude!!, this, context)
+            }
+        },
+    )
 }

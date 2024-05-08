@@ -85,7 +85,7 @@ fun StatisticsScreen(
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(8.dp)
+                            .padding(top = 16.dp, start = 16.dp, end = 16.dp)
                     ) {
                         ExposedDropdownMenuBox(
                             expanded = expanded,
@@ -98,7 +98,9 @@ fun StatisticsScreen(
                                     focusedContainerColor = MaterialTheme.colorScheme.secondary,
                                     unfocusedContainerColor = MaterialTheme.colorScheme.secondary,
                                 ),
+                                textStyle = MaterialTheme.typography.bodyMedium,
                                 value = selectedText,
+                                label = { Text(stringResource(R.string.select_location)) },
                                 onValueChange = { },
                                 readOnly = true,
                                 trailingIcon = {
@@ -119,7 +121,11 @@ fun StatisticsScreen(
                                             navController.context.getString(R.string.world)
                                         expanded = false
                                         state = true
-                                        statisticsViewModel.updatePieData(navController.context.getString(R.string.world))
+                                        statisticsViewModel.updatePieData(
+                                            navController.context.getString(
+                                                R.string.world
+                                            )
+                                        )
                                     }
                                 )
                                 val addedItems = mutableSetOf<String>()

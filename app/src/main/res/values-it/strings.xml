@@ -29,14 +29,17 @@
     <string name="theme_light">Chiaro</string>
     <string name="theme_dark">Scuro</string>
     <string name="theme_system">Sistema</string>
-    <string name="select_language">Seleziona lingua:</string>
-    <string name="language_english">ING</string>
-    <string name="language_italian">ITA</string>
+    <string name="available_languages">Lingue disponibili:</string>
+    <string name="language_eng">Inglese</string>
+    <string name="language_ita">Italiano</string>
+    <string name="language_esp">Spagnolo</string>
+    <string name="language_fra">Francese</string>
 
     <!-- Home -->
     <string name="no_memories">Nessun ricordo ancora</string>
     <string name="add_new_memory">"Tocca il pulsante + per aggiungere un nuovo ricordo."</string>
     <string name="world">Mondo</string>
+    <string name="select_location">Seleziona posizione</string>
 
     <!-- Add memory -->
     <string name="add_memory_title">Aggiungi titolo:</string>

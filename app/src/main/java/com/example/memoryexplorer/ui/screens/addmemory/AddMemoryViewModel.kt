@@ -20,7 +20,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import org.osmdroid.api.IMapController
 import org.osmdroid.config.Configuration
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
@@ -32,6 +31,7 @@ import java.io.FileOutputStream
 import java.io.IOException
 import java.util.Locale
 
+@Suppress("DEPRECATION")
 class AddMemoryViewModel(
     private val loginRepository: LoginRepository
 ) : ViewModel() {
@@ -68,7 +68,7 @@ class AddMemoryViewModel(
     ) {
         _isLoading.value = true
 
-        if(title.isEmpty() || description.isEmpty() || date.isEmpty()) {
+        if (title.isEmpty() || description.isEmpty() || date.isEmpty()) {
             _error.value = "Please fill in all the fields"
             _isLoading.value = false
             return
@@ -151,7 +151,7 @@ class AddMemoryViewModel(
         mapView.setMultiTouchControls(true)
         mapView.zoomController.setVisibility(CustomZoomButtonsController.Visibility.SHOW_AND_FADEOUT)
         setMarker(mapView, currentLocation, context)
-        val mapController: IMapController = mapView.controller
+        val mapController = mapView.controller
         mapController.setZoom(7.0)
         mapController.setCenter(currentLocation)
     }

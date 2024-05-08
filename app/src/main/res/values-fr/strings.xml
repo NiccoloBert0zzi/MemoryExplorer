@@ -1,0 +1,67 @@
+<resources>
+    <!-- General -->
+    <string name="app_name">Memory Explorer</string>
+    <string name="login_page">Connexion</string>
+    <string name="register_page">Inscription</string>
+    <string name="memory_details_page">Détails de la mémoire</string>
+    <string name="add_memory_page">Ajouter une mémoire</string>
+    <string name="profile_page">Profil</string>
+    <string name="settings_page">Paramètres</string>
+    <string name="statistics_page">Statistiques</string>
+
+    <!-- Login/Register -->
+    <string name="remember_me">Se souvenir de moi</string>
+    <string name="email_request">Insérer l\'email:</string>
+    <string name="password_request">Insérer le mot de passe:</string>
+    <string name="email">Email</string>
+    <string name="username">Nom d\'utilisateur</string>
+    <string name="password">Mot de passe</string>
+    <string name="login">Connexion</string>
+    <string name="register">Inscription</string>
+    <string name="option_register">Vous n\'avez pas encore de compte? S\'inscrire</string>
+    <string name="option_login">Vous avez déjà un compte? Se connecter</string>
+    <string name="empty_fields">Les champs ne peuvent pas être vides</string>
+    <string name="password_length">Le mot de passe doit comporter au moins 6 caractères</string>
+
+    <!-- Settings -->
+    <string name="logout">Déconnexion</string>
+    <string name="select_theme">Sélectionnez le thème:</string>
+    <string name="theme_light">Clair</string>
+    <string name="theme_dark">Sombre</string>
+    <string name="theme_system">Système</string>
+    <string name="available_languages">Langues disponibles:</string>
+    <string name="language_eng">Anglais</string>
+    <string name="language_ita">Italien</string>
+    <string name="language_esp">Espagnol</string>
+    <string name="language_fra">Français</string>
+
+    <!-- Home -->
+    <string name="no_memories">Pas encore de mémoires</string>
+    <string name="add_new_memory">"Appuyez sur le bouton + pour ajouter une nouvelle mémoire."</string>
+    <string name="world">Monde</string>
+    <string name="select_location">Sélectionner un emplacement</string>
+
+    <!-- Add memory -->
+    <string name="add_memory_title">Ajouter un titre:</string>
+    <string name="memory_title">Titre</string>
+    <string name="add_memory_image">Ajouter une image:</string>
+    <string name="add_memory_description">Ajouter une description:</string>
+    <string name="memory_description">Description</string>
+    <string name="add_memory_date">Ajouter une date:</string>
+    <string name="memory_date">Date</string>
+    <string name="memory_public">Public</string>
+    <string name="add_memory_position">Ajouter une position:</string>
+    <string name="add_memory">Ajouter</string>
+
+    <!-- Profile -->
+    <string name="statistics">Statistiques</string>
+    <string name="memories">Mes mémoires</string>
+    <string name="favorite">Mes favoris</string>
+
+    <!--Notifications-->
+    <string name="near_at">Vous êtes près de %1$s</string>
+    <string name="come_back_to_visit">Revenez le visiter!</string>
+    <string name="you_are">Vous êtes</string>
+    <string name="from_the">" de "</string>
+
+</resources>
