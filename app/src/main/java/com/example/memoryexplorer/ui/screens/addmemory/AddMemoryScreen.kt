@@ -46,8 +46,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavHostController
-import com.example.memoryexplorer.MainActivity
 import com.example.memoryexplorer.R
+import com.example.memoryexplorer.ui.utils.LocationService
 import org.osmdroid.events.MapEventsReceiver
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
@@ -298,13 +298,16 @@ fun AddMemoryScreen(
 
 @Composable
 fun OsmMapView(addMemoryViewModel: AddMemoryViewModel, latitude: Double, longitude: Double) {
-    var lat = if (latitude == 0.0) MainActivity.latitude else latitude
-    var lon = if (longitude == 0.0) MainActivity.longitude else longitude
-    val currentLocation = GeoPoint(lat, lon)
+    val locationService = LocationService(LocalContext.current)
+    var lat = if (latitude == 0.0) locationService.coordinates?.latitude else latitude
+    var lon = if (longitude == 0.0) locationService.coordinates?.longitude else longitude
+    val currentLocation = lat?.let { lon?.let { it1 -> GeoPoint(it, it1) } }
     AndroidView(
         factory = { context ->
             MapView(context).apply {
-                addMemoryViewModel.loadMap(this, currentLocation, context)
+                if (currentLocation != null) {
+                    addMemoryViewModel.loadMap(this, currentLocation, context)
+                }
                 this.overlayManager.add(MapEventsOverlay(object : MapEventsReceiver {
                     override fun singleTapConfirmedHelper(p: GeoPoint?): Boolean {
                         if (p != null) {
@@ -312,7 +315,7 @@ fun OsmMapView(addMemoryViewModel: AddMemoryViewModel, latitude: Double, longitu
                             lon = p.longitude
                             addMemoryViewModel.setMarker(
                                 this@apply,
-                                GeoPoint(lat, lon),
+                                GeoPoint(lat!!, lon!!),
                                 context
                             )
                         }
