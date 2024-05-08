@@ -22,6 +22,8 @@
     <string name="option_login">Already have an account? Log In</string>
     <string name="empty_fields">Fields cannot be empty</string>
     <string name="password_length">Password must be at least 6 characters long</string>
+    <string name="password_visibility_off" translatable="false">Hide password</string>
+    <string name="password_visibility_on" translatable="false">Show password</string>
 
     <!-- Settings -->
     <string name="logout">Logout</string>
