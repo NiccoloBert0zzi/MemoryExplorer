@@ -121,8 +121,8 @@ fun HomeScreen(
                         ) {
                             TextField(
                                 colors = TextFieldDefaults.colors(
-                                    focusedContainerColor = MaterialTheme.colorScheme.secondary,
-                                    unfocusedContainerColor = MaterialTheme.colorScheme.secondary,
+                                    focusedContainerColor = MaterialTheme.colorScheme.background,
+                                    unfocusedContainerColor = MaterialTheme.colorScheme.background,
                                 ),
                                 textStyle = MaterialTheme.typography.bodyMedium,
                                 value = selectedText,
