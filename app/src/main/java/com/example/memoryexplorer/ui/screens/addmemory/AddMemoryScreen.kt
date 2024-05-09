@@ -1,12 +1,8 @@
 package com.example.memoryexplorer.ui.screens.addmemory
 
 import android.Manifest
-import android.content.pm.PackageManager
-import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.widget.Toast
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -38,16 +34,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.painter.BitmapPainter
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
-import androidx.core.content.ContextCompat
 import androidx.navigation.NavHostController
 import com.example.memoryexplorer.R
 import com.example.memoryexplorer.ui.utils.LocationService
+import com.example.memoryexplorer.ui.utils.rememberCameraLauncher
+import com.example.memoryexplorer.ui.utils.rememberPermission
 import org.osmdroid.events.MapEventsReceiver
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
@@ -71,14 +69,21 @@ fun AddMemoryScreen(
     val latitude by addMemoryViewModel.latitude.collectAsState()
     val longitude by addMemoryViewModel.longitude.collectAsState()
 
-    var bitmapState by rememberSaveable { mutableStateOf<Bitmap?>(null) }
-    val context = LocalContext.current
-    val cameraPermission = Manifest.permission.CAMERA
-    val takePictureLauncher =
-        rememberLauncherForActivityResult(ActivityResultContracts.TakePicturePreview()) { bitmap ->
-            if (bitmap != null) {
-                bitmapState = bitmap
-            }
+    val (cameraLauncher, bitmapState) = rememberCameraLauncher()
+    val cameraPermission = rememberPermission(Manifest.permission.CAMERA) { status ->
+        if (status.isGranted) {
+            cameraLauncher.captureImage()
+        } else {
+            Toast.makeText(navController.context, R.string.permission_denied, Toast.LENGTH_SHORT)
+                .show()
+        }
+    }
+
+    fun takePicture() =
+        if (cameraPermission.status.isGranted) {
+            cameraLauncher.captureImage()
+        } else {
+            cameraPermission.launchPermissionRequest()
         }
 
     Scaffold(
@@ -146,25 +151,11 @@ fun AddMemoryScreen(
                         painter = bitmapState?.let { BitmapPainter(it.asImageBitmap()) }
                             ?: painterResource(R.drawable.default_memory),
                         contentDescription = "Memory image",
+                        contentScale = ContentScale.Crop,
                         modifier = Modifier
-                            .clickable {
-                                when (PackageManager.PERMISSION_GRANTED) {
-                                    ContextCompat.checkSelfPermission(
-                                        context,
-                                        cameraPermission
-                                    ) -> {
-                                        takePictureLauncher.launch(null)
-                                    }
-
-                                    else -> {
-                                        Toast.makeText(
-                                            context,
-                                            "Camera permission is required to take pictures.",
-                                            Toast.LENGTH_SHORT
-                                        ).show()
-                                    }
-                                }
-                            }
+                            .fillMaxSize()
+                            .height(200.dp)
+                            .clickable { takePicture() }
                     )
                 }
                 Spacer(Modifier.size(24.dp))

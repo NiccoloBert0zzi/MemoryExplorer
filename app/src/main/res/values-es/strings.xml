@@ -22,6 +22,9 @@
     <string name="option_login">¿Ya tienes una cuenta? Inicia sesión</string>
     <string name="empty_fields">Los campos no pueden estar vacíos</string>
     <string name="password_length">La contraseña debe tener al menos 6 caracteres</string>
+    <string name="password_visibility_off">Ocultar contraseña</string>
+    <string name="password_visibility_on">Mostrar contraseña</string>
+    <string name="auth_failed">Error de autenticación</string>
 
     <!-- Settings -->
     <string name="logout">Cerrar sesión</string>
@@ -63,5 +66,11 @@
     <string name="come_back_to_visit">¡Vuelve a visitarlo!</string>
     <string name="you_are">Tú eres</string>
     <string name="from_the">" de "</string>
+
+    <!--Permissions-->
+    <string name="permission_denied">Permiso denegado</string>
+    <string name="permission_permanently_denied">Permiso denegado permanentemente</string>
+    <string name="permission_unknow">Estado de permiso desconocido</string>
+    <string name="gps_disabled">GPS desactivado</string>
 
 </resources>

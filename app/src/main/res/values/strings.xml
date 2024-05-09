@@ -22,8 +22,9 @@
     <string name="option_login">Already have an account? Log In</string>
     <string name="empty_fields">Fields cannot be empty</string>
     <string name="password_length">Password must be at least 6 characters long</string>
-    <string name="password_visibility_off" translatable="false">Hide password</string>
-    <string name="password_visibility_on" translatable="false">Show password</string>
+    <string name="password_visibility_off">Hide password</string>
+    <string name="password_visibility_on">Show password</string>
+    <string name="auth_failed">Authentication failed</string>
 
     <!-- Settings -->
     <string name="logout">Logout</string>
@@ -65,5 +66,11 @@
     <string name="come_back_to_visit">Come back to visit it!</string>
     <string name="you_are">You are</string>
     <string name="from_the">" from the "</string>
+
+    <!--Permission-->
+    <string name="permission_denied">Permission denied</string>
+    <string name="permission_permanently_denied">Permission permanently denied</string>
+    <string name="permission_unknow">Unknown permission status</string>
+    <string name="gps_disabled">GPS is disabled</string>
 
 </resources>

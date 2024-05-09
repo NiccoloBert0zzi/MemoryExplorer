@@ -22,6 +22,9 @@
     <string name="option_login">Vous avez déjà un compte? Se connecter</string>
     <string name="empty_fields">Les champs ne peuvent pas être vides</string>
     <string name="password_length">Le mot de passe doit comporter au moins 6 caractères</string>
+    <string name="password_visibility_off">Masquer le mot de passe</string>
+    <string name="password_visibility_on">Afficher le mot de passe</string>
+    <string name="auth_failed">Authentification échouée</string>
 
     <!-- Settings -->
     <string name="logout">Déconnexion</string>
@@ -63,5 +66,11 @@
     <string name="come_back_to_visit">Revenez le visiter!</string>
     <string name="you_are">Vous êtes</string>
     <string name="from_the">" de "</string>
+
+    <!--Permission-->
+    <string name="permission_denied">Permission refusée</string>
+    <string name="permission_permanently_denied">Permission refusée de manière permanente</string>
+    <string name="permission_unknow">Permission inconnue</string>
+    <string name="gps_disabled">Le GPS est désactivé</string>
 
 </resources>

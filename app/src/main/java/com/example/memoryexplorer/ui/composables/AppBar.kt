@@ -31,11 +31,10 @@ fun AppBar(
     CenterAlignedTopAppBar(
         title = {
             Text(
-                // TODO mettere carattere Bold
                 title ?: routeTitle,
-                fontWeight = FontWeight.Light,
+                fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.Start,
-                color = MaterialTheme.colorScheme.primary,
+                color = MaterialTheme.colorScheme.primary
             )
         },
         navigationIcon = {

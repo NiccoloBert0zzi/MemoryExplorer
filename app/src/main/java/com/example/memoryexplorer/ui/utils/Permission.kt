@@ -16,6 +16,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import com.example.memoryexplorer.MainActivity
+import com.example.memoryexplorer.R
 import com.example.memoryexplorer.data.models.PermissionStatus
 
 interface PermissionHandler {
@@ -67,7 +68,7 @@ fun CheckLocationPermission(mainActivity: MainActivity, locationService: Locatio
     }
 
     if (!isGPSEnabled) {
-        printError("GPS is disabled") // TODO error string
+        printError(R.string.gps_disabled.toString())
         locationService.openLocationSettings()
     }
 
@@ -79,17 +80,17 @@ fun CheckLocationPermission(mainActivity: MainActivity, locationService: Locatio
                 locationService.requestCurrentLocation()
 
             PermissionStatus.Denied -> {
-                printError("Permission denied") // TODO error string
+                printError(R.string.permission_denied.toString())
                 mainActivity.finish()
             }
 
             PermissionStatus.PermanentlyDenied -> {
-                printError("Permission permanently denied") // TODO error string
+                printError(R.string.permission_permanently_denied.toString())
                 mainActivity.finish()
             }
 
             PermissionStatus.Unknown -> {
-                printError("Unknown permission status") // TODO error string
+                printError(R.string.permission_unknow.toString())
                 mainActivity.finish()
             }
         }
@@ -98,40 +99,6 @@ fun CheckLocationPermission(mainActivity: MainActivity, locationService: Locatio
     LaunchedEffect(locationPermission.status) {
         if (!locationPermission.status.isGranted) {
             locationPermission.launchPermissionRequest()
-        }
-    }
-}
-
-// TODO CheckCameraPermission
-@Composable
-fun CheckCameraPermission() {
-    val context = LocalContext.current
-
-    fun printError(error: String) {
-        Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
-    }
-
-    val cameraPermission = rememberPermission(
-        Manifest.permission.CAMERA
-    ) { status ->
-        when (status) {
-            PermissionStatus.Granted ->
-                printError("Opening camera") // TODO error string
-
-            PermissionStatus.Denied ->
-                printError("Permission denied") // TODO error string
-
-            PermissionStatus.PermanentlyDenied ->
-                printError("Permission permanently denied") // TODO error string
-
-            PermissionStatus.Unknown ->
-                printError("Unknown permission status") // TODO error string
-        }
-    }
-
-    LaunchedEffect(cameraPermission.status) {
-        if (!cameraPermission.status.isGranted) {
-            cameraPermission.launchPermissionRequest()
         }
     }
 }

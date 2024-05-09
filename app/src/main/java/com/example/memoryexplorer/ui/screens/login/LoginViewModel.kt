@@ -7,6 +7,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
+import com.example.memoryexplorer.R
 import com.example.memoryexplorer.data.repositories.LoginRepository
 import com.example.memoryexplorer.ui.MemoryExplorerRoute
 import com.google.firebase.auth.FirebaseAuth
@@ -60,11 +61,7 @@ class LoginViewModel(
                         popUpTo(MemoryExplorerRoute.Login.route) { inclusive = true }
                     }
                 } else {
-                    Toast.makeText(
-                        navController.context,
-                        "Authentication failed.",
-                        Toast.LENGTH_LONG
-                    ).show()
+                    Toast.makeText(navController.context, R.string.auth_failed, Toast.LENGTH_LONG).show()
                 }
             }
     }
