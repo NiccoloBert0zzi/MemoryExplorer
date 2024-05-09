@@ -104,11 +104,7 @@ fun MemoryDetailsScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     memory.title?.let {
-                        Text(
-                            it,
-                            style = MaterialTheme.typography.bodyLarge,
-                            color = MaterialTheme.colorScheme.primary
-                        )
+                        Text(it, style = MaterialTheme.typography.bodyLarge)
                     }
                     Icon(
                         if (favourites.contains(memory.id?.let { Favourite(it) })) Icons.Default.Star else Icons.Default.StarBorder,
@@ -127,22 +123,14 @@ fun MemoryDetailsScreen(
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     memory.date?.let {
-                        Text(
-                            it,
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.primary
-                        )
+                        Text(it, style = MaterialTheme.typography.bodyMedium)
                     }
                 }
                 Row(
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     memory.description?.let {
-                        Text(
-                            it,
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.primary
-                        )
+                        Text(it, style = MaterialTheme.typography.bodyMedium)
                     }
                 }
                 Spacer(Modifier.size(50.dp))

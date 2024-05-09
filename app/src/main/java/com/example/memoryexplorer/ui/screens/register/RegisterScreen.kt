@@ -37,6 +37,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.layout.ContentScale
@@ -181,7 +182,7 @@ fun RegisterScreen(
                 ClickableText(
                     AnnotatedString(stringResource(R.string.option_login)),
                     style = TextStyle(
-                        color = MaterialTheme.colorScheme.tertiary,
+                        color = Color.Gray,
                         fontWeight = FontWeight.Bold
                     ),
                     onClick = {

@@ -18,24 +18,23 @@ import androidx.core.view.WindowCompat
 private val DarkColorScheme = darkColorScheme(
     primary = primary_d,
     secondary = secondary_d,
-    tertiary = tertiary_d,
+    tertiary = text_d,
     background = black,
-    )
+    surface = black,
+    onPrimary = white,
+    onBackground = white,
+    onSurface = white
+)
 
 private val LightColorScheme = lightColorScheme(
     primary = primary,
     secondary = secondary,
-    tertiary = tertiary,
+    tertiary = text_n,
     background = white,
-    /* Other default colors to override
-    background = Color(0xFFFFFBFE),
-    surface = Color(0xFFFFFBFE),
-    onPrimary = Color.White,
-    onSecondary = Color.White,
-    onTertiary = Color.White,
-    onBackground = Color(0xFF1C1B1F),
-    onSurface = Color(0xFF1C1B1F),
-    */
+    surface = white,
+    onPrimary = white,
+    onBackground = black,
+    onSurface = black
 )
 
 @Composable
@@ -58,8 +57,8 @@ fun MemoryExplorerTheme(
     if (!view.isInEditMode) {
         SideEffect {
             val window = (view.context as Activity).window
-            window.statusBarColor = colorScheme.primary.toArgb()
-            window.navigationBarColor = colorScheme.primary.toArgb()
+            window.statusBarColor = colorScheme.surface.toArgb()
+            window.navigationBarColor = black.toArgb()
             WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = !darkTheme
         }
     }

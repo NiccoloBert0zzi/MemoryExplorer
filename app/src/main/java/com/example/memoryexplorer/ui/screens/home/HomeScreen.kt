@@ -45,7 +45,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
@@ -223,7 +222,7 @@ fun MemoryItem(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            memory.title?.let { Text(it) }
+            memory.title?.let { Text(it, style = MaterialTheme.typography.bodyLarge) }
             Icon(
                 if (favourites.contains(memory.id?.let { Favourite(it) })) Icons.Default.Star else Icons.Default.StarBorder,
                 contentDescription = "Memory star icon",
@@ -243,7 +242,7 @@ fun MemoryItem(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            memory.date?.let { Text(it) }
+            memory.date?.let { Text(it, style = MaterialTheme.typography.bodySmall) }
         }
         Spacer(Modifier.size(10.dp))
     }

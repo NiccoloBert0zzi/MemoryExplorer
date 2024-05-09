@@ -29,8 +29,9 @@ import com.example.memoryexplorer.ui.MemoryExplorerRoute
 import android.widget.Toast
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Image
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.sp
 
 @Composable
 fun ProfileScreen(
@@ -86,10 +87,11 @@ fun ProfileScreen(
             ) {
                 Text(
                     email?.split("@")?.get(0) ?: stringResource(R.string.username),
-                    textAlign = TextAlign.Left
+                    textAlign = TextAlign.Left,
+                    fontSize = 20.sp,
                 )
             }
-            Spacer(Modifier.size(16.dp))
+            Spacer(Modifier.size(10.dp))
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -111,7 +113,11 @@ fun ProfileScreen(
                         profileViewModel.setIsMemory(true)
                         profileViewModel.getMemories()
                     },
-                    style = MaterialTheme.typography.bodyMedium
+                    style = TextStyle(
+                        color = MaterialTheme.colorScheme.tertiary,
+                        fontStyle = MaterialTheme.typography.bodyMedium.fontStyle,
+                        fontSize = 16.sp
+                    ),
                 )
                 ClickableText(
                     AnnotatedString(
@@ -128,7 +134,11 @@ fun ProfileScreen(
                         profileViewModel.setIsMemory(false)
                         profileViewModel.getFavourites()
                     },
-                    style = MaterialTheme.typography.bodyMedium
+                    style = TextStyle(
+                        color = MaterialTheme.colorScheme.tertiary,
+                        fontStyle = MaterialTheme.typography.bodyMedium.fontStyle,
+                        fontSize = 16.sp
+                    ),
                 )
             }
             Spacer(Modifier.size(16.dp))
