@@ -1,6 +1,7 @@
 package com.example.memoryexplorer.ui.screens.settings
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -43,7 +44,7 @@ fun SettingsScreen(
 ) {
     val themeState by settingsViewModel.state.collectAsState()
     val systemLanguage = Locale(Locale.getDefault().language)
-        .getDisplayLanguage(Locale(Locale.getDefault().language))
+        .getDisplayLanguage(Locale(Locale.getDefault().language)).lowercase()
     val languages = R.string::class.java.fields
         .filter { it.name.startsWith("language_") }
         .map {
@@ -137,6 +138,10 @@ fun SettingsScreen(
                         item.first,
                         style = MaterialTheme.typography.bodyMedium,
                         fontWeight = if (item.first.lowercase() == systemLanguage) FontWeight.Bold else FontWeight.Normal,
+                    )
+                    Log.d(
+                        "SettingsScreen",
+                        "item.first: ${item.first}, systemLanguage: $systemLanguage"
                     )
                 }
             }
