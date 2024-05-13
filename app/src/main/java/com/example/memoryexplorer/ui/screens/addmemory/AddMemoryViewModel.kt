@@ -10,8 +10,10 @@ import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
+import com.example.memoryexplorer.R
 import com.example.memoryexplorer.data.database.Memory
 import com.example.memoryexplorer.data.repositories.LoginRepository
+import com.example.memoryexplorer.getLocationService
 import com.example.memoryexplorer.ui.utils.MyMarker
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.ktx.Firebase
@@ -53,6 +55,10 @@ class AddMemoryViewModel(
     init {
         viewModelScope.launch {
             email = loginRepository.email.first()
+            getLocationService().coordinates?.let {
+                _latitude.value = it.latitude
+                _longitude.value = it.longitude
+            }
         }
     }
 
@@ -69,7 +75,7 @@ class AddMemoryViewModel(
         _isLoading.value = true
 
         if (title.isEmpty() || description.isEmpty() || date.isEmpty()) {
-            _error.value = "Please fill in all the fields"
+            _error.value = R.string.field_error.toString()
             _isLoading.value = false
             return
         }

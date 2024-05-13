@@ -1,5 +1,6 @@
 package com.example.memoryexplorer
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
@@ -94,4 +95,8 @@ class MainActivity : FragmentActivity() {
         locationService.resumeLocationRequest()
     }
 
+}
+
+fun getLocationService(): LocationService {
+    return locationService
 }

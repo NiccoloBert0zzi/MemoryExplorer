@@ -56,6 +56,7 @@
     <string name="memory_public">Public</string>
     <string name="add_memory_position">Ajouter une position:</string>
     <string name="add_memory">Ajouter</string>
+    <string name="field_error">Veuillez remplir tous les champs</string>
 
     <!-- Profile -->
     <string name="statistics">Statistiques</string>
