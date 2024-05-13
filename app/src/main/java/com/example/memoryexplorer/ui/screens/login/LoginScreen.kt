@@ -1,6 +1,10 @@
 package com.example.memoryexplorer.ui.screens.login
 
+import android.os.Build
+import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -38,6 +42,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
@@ -48,9 +53,13 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
+import androidx.fragment.app.FragmentActivity
 import androidx.navigation.NavHostController
 import com.example.memoryexplorer.R
+import com.example.memoryexplorer.ui.utils.BiometricAuthStatus
+import com.example.memoryexplorer.ui.utils.BiometricAuthenticator
 
+@RequiresApi(Build.VERSION_CODES.R)
 @Composable
 fun LoginScreen(
     navController: NavHostController,
@@ -63,6 +72,8 @@ fun LoginScreen(
     val passwordFocusRequester = remember { FocusRequester() }
     var passwordVisibility by remember { mutableStateOf(false) }
 
+    val biometricAuthenticator = BiometricAuthenticator(LocalContext.current)
+    val activity = LocalContext.current as FragmentActivity
     Scaffold(
         modifier = Modifier.fillMaxSize()
     ) { contentPadding ->
@@ -183,13 +194,47 @@ fun LoginScreen(
             }
             Spacer(Modifier.size(20.dp))
             Row(
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Button(
                     onClick = { loginViewModel.onLogin(email, password, remember, navController) },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.weight(1f)
                 ) {
                     Text(stringResource(R.string.login))
+                }
+                if (biometricAuthenticator.isBiometricAvailable() == BiometricAuthStatus.READY) {
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_baseline_fingerprint_24),
+                        contentDescription = "Fingerprint icon",
+                        modifier = Modifier
+                            .size(48.dp)
+                            .align(Alignment.CenterVertically)
+                            .clickable {
+                                biometricAuthenticator.promptBiometricAuthentication(
+                                    title = activity.getString(R.string.login),
+                                    subtitle = activity.getString(R.string.use_your_fingerprint_or_face_id_to_login),
+                                    fragmentActivity = activity,
+                                    onSuccess = {
+                                        loginViewModel.checkEmailAndPassword(activity, navController)
+                                    },
+                                    onFailed = {
+                                        Toast
+                                            .makeText(
+                                                activity,
+                                                activity.getString(R.string.biometric_authentication_failed),
+                                                Toast.LENGTH_LONG
+                                            )
+                                            .show()
+                                    },
+                                    onError = { _, message ->
+                                        Toast
+                                            .makeText(activity, message, Toast.LENGTH_LONG)
+                                            .show()
+                                    }
+                                )
+                            }
+                    )
                 }
             }
         }

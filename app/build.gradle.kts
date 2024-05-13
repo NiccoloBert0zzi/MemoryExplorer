@@ -91,4 +91,6 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-test-manifest")
     //mappa
     implementation ("org.osmdroid:osmdroid-android:6.1.14")
+    //biometric
+    implementation ("androidx.biometric:biometric-ktx:1.2.0-alpha05")
 }

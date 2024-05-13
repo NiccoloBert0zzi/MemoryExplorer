@@ -25,6 +25,7 @@
     <string name="password_visibility_off">Nascondi password</string>
     <string name="password_visibility_on">Mostra password</string>
     <string name="auth_failed">Autenticazione fallita</string>
+    <string name="must_load_with_account">Devi prima accedere con un account</string>
 
     <!-- Settings -->
     <string name="logout">Esci</string>
@@ -72,5 +73,12 @@
     <string name="permission_permanently_denied">Permesso negato in modo permanente</string>
     <string name="permission_unknow">Permesso sconosciuto</string>
     <string name="gps_disabled">Il GPS è disattivato</string>
+
+    <!-- Biometric authentication -->
+    <string name="biometric_authentication_is_not_available">Biometric authentication is not available</string>
+    <string name="biometric_authentication_is_temporarily_not_available">Biometric authentication is temporarily not available</string>
+    <string name="you_should_add_a_fingerprint_or_a_face_id_first">You should add a fingerprint or a face id first</string>
+    <string name="use_your_fingerprint_or_face_id_to_login">Use your fingerprint or face ID to login</string>
+    <string name="biometric_authentication_failed">Biometric authentication failed. Please try again.</string>
 
 </resources>

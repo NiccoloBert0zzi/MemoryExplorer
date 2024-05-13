@@ -13,6 +13,7 @@ import androidx.navigation.NavHostController
 import com.example.memoryexplorer.R
 import com.example.memoryexplorer.data.repositories.LoginRepository
 import com.example.memoryexplorer.ui.MemoryExplorerRoute
+import com.example.memoryexplorer.ui.screens.login.LoginState
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -38,6 +39,11 @@ class RegisterViewModel(
     private fun setEmail(value: String) {
         state = RegisterState(value, state.password, state.remember)
         viewModelScope.launch { repository.setEmail(value) }
+    }
+
+    private fun setPassword(value: String) {
+        state = RegisterState(state.email, value, state.remember)
+        viewModelScope.launch { repository.setPassword(value) }
     }
 
     private fun setRemember(value: Boolean) {
@@ -88,6 +94,7 @@ class RegisterViewModel(
                         }
                         .addOnCompleteListener {
                             setEmail(email)
+                            setPassword(password)
                             setRemember(remember)
                             navController.navigate(MemoryExplorerRoute.Home.route) {
                                 popUpTo(MemoryExplorerRoute.Login.route) { inclusive = true }

@@ -1,7 +1,6 @@
 package com.example.memoryexplorer
 
 import android.os.Bundle
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -19,6 +18,7 @@ import com.example.memoryexplorer.ui.MemoryExplorerRoute
 import com.example.memoryexplorer.ui.composables.AppBar
 import com.example.memoryexplorer.ui.theme.MemoryExplorerTheme
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import com.example.memoryexplorer.data.models.Theme
@@ -32,7 +32,7 @@ import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.androidx.compose.koinViewModel
 
-class MainActivity : ComponentActivity() {
+class MainActivity : FragmentActivity() {
     private lateinit var locationService: LocationService
     private lateinit var notificationsService: NotificationsService
     private val loginRepository: LoginRepository by inject()
