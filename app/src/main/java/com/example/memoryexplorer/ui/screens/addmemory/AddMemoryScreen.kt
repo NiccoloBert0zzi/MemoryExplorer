@@ -227,7 +227,7 @@ fun AddMemoryScreen(
                         color = MaterialTheme.colorScheme.primary
                     )
                 }
-                Spacer(Modifier.size(24.dp))
+                Spacer(Modifier.size(70.dp))
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()

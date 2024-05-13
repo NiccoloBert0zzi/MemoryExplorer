@@ -1,5 +1,6 @@
 package com.example.memoryexplorer
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -32,8 +33,10 @@ import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.androidx.compose.koinViewModel
 
+@SuppressLint("StaticFieldLeak")
+private lateinit var locationService: LocationService
+
 class MainActivity : ComponentActivity() {
-    private lateinit var locationService: LocationService
     private lateinit var notificationsService: NotificationsService
     private val loginRepository: LoginRepository by inject()
 
@@ -94,4 +97,8 @@ class MainActivity : ComponentActivity() {
         locationService.resumeLocationRequest()
     }
 
+}
+
+fun getLocationService(): LocationService {
+    return locationService
 }
