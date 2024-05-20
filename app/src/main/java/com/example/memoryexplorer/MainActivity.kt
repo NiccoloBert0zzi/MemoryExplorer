@@ -33,8 +33,10 @@ import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.androidx.compose.koinViewModel
 
+@SuppressLint("StaticFieldLeak")
+private lateinit var locationService: LocationService
+
 class MainActivity : FragmentActivity() {
-    private lateinit var locationService: LocationService
     private lateinit var notificationsService: NotificationsService
     private val loginRepository: LoginRepository by inject()
 
