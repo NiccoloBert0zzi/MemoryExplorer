@@ -184,9 +184,13 @@ class AddMemoryViewModel(
 
     private fun setLocation(lat: Double, lon: Double, context: Context): Address? {
         val gcd = Geocoder(context, Locale.getDefault())
-        val addresses: List<Address>? = gcd.getFromLocation(lat, lon, 1)
-        assert(addresses != null)
-        return if (addresses!!.isNotEmpty()) {
+        var addresses: List<Address>? = null
+        try {
+            addresses = gcd.getFromLocation(lat, lon, 1)
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+        return if (!addresses.isNullOrEmpty()) {
             addresses[0]
         } else null
     }
