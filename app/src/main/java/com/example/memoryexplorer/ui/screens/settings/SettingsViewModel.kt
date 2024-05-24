@@ -1,5 +1,8 @@
 package com.example.memoryexplorer.ui.screens.settings
 
+import android.app.LocaleManager
+import android.content.Context
+import android.os.Build
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
@@ -12,6 +15,9 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import android.os.LocaleList
+import androidx.annotation.RequiresApi
+
 
 data class ThemeState(val theme: Theme)
 
@@ -28,6 +34,18 @@ class SettingsViewModel(
 
     fun changeTheme(theme: Theme) = viewModelScope.launch {
         themeRepository.setTheme(theme)
+    }
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    fun changeLanguage(language: String, context: Context) = viewModelScope.launch {
+        context.getSystemService(LocaleManager::class.java).applicationLocales =
+            LocaleList.forLanguageTags(
+                when (language) {
+                    "ita" -> "it"
+                    "eng" -> "en"
+                    "esp" -> "es"
+                    else -> "fr"
+                }
+            )
     }
 
     fun onLogout(navController: NavHostController) {

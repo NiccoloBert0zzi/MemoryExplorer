@@ -1,7 +1,10 @@
 package com.example.memoryexplorer.ui.screens.settings
 
 import android.annotation.SuppressLint
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -36,6 +39,7 @@ import com.example.memoryexplorer.data.models.Theme
 import java.text.Collator
 import java.util.Locale
 
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @SuppressLint("StateFlowValueCalledInComposition", "DiscouragedApi")
 @Composable
 fun SettingsScreen(
@@ -113,11 +117,13 @@ fun SettingsScreen(
                     style = MaterialTheme.typography.bodyMedium,
                 )
             }
+            val context = LocalContext.current
             languages.forEach { item ->
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(vertical = 8.dp),
+                        .padding(vertical = 8.dp)
+                        .clickable { settingsViewModel.changeLanguage(item.second, context) },
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Icon(
