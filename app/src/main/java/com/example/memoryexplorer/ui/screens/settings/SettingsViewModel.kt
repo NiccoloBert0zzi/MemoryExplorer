@@ -16,7 +16,6 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import android.os.LocaleList
-import androidx.annotation.RequiresApi
 
 
 data class ThemeState(val theme: Theme)
@@ -35,17 +34,18 @@ class SettingsViewModel(
     fun changeTheme(theme: Theme) = viewModelScope.launch {
         themeRepository.setTheme(theme)
     }
-    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     fun changeLanguage(language: String, context: Context) = viewModelScope.launch {
-        context.getSystemService(LocaleManager::class.java).applicationLocales =
-            LocaleList.forLanguageTags(
-                when (language) {
-                    "ita" -> "it"
-                    "eng" -> "en"
-                    "esp" -> "es"
-                    else -> "fr"
-                }
-            )
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            context.getSystemService(LocaleManager::class.java).applicationLocales =
+                LocaleList.forLanguageTags(
+                    when (language) {
+                        "ita" -> "it"
+                        "eng" -> "en"
+                        "esp" -> "es"
+                        else -> "fr"
+                    }
+                )
+        }
     }
 
     fun onLogout(navController: NavHostController) {

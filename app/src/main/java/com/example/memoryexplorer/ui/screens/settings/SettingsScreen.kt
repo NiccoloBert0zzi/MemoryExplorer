@@ -1,9 +1,7 @@
 package com.example.memoryexplorer.ui.screens.settings
 
 import android.annotation.SuppressLint
-import android.os.Build
 import android.util.Log
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -39,7 +37,6 @@ import com.example.memoryexplorer.data.models.Theme
 import java.text.Collator
 import java.util.Locale
 
-@RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @SuppressLint("StateFlowValueCalledInComposition", "DiscouragedApi")
 @Composable
 fun SettingsScreen(
