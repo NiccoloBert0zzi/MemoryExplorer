@@ -34,15 +34,16 @@ class SettingsViewModel(
     fun changeTheme(theme: Theme) = viewModelScope.launch {
         themeRepository.setTheme(theme)
     }
+
     fun changeLanguage(language: String, context: Context) = viewModelScope.launch {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             context.getSystemService(LocaleManager::class.java).applicationLocales =
                 LocaleList.forLanguageTags(
                     when (language) {
                         "ita" -> "it"
-                        "eng" -> "en"
+                        "fra" -> "fr"
                         "esp" -> "es"
-                        else -> "fr"
+                        else -> "en"
                     }
                 )
         }

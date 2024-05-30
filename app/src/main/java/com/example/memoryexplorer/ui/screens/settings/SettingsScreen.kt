@@ -1,7 +1,7 @@
 package com.example.memoryexplorer.ui.screens.settings
 
 import android.annotation.SuppressLint
-import android.util.Log
+import android.os.Build
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -120,7 +120,13 @@ fun SettingsScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(vertical = 8.dp)
-                        .clickable { settingsViewModel.changeLanguage(item.second, context) },
+                        .let { modifier ->
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                                modifier.clickable { settingsViewModel.changeLanguage(item.second, context) }
+                            } else {
+                                modifier
+                            }
+                        },
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Icon(
@@ -141,10 +147,6 @@ fun SettingsScreen(
                         item.first,
                         style = MaterialTheme.typography.bodyMedium,
                         fontWeight = if (item.first.lowercase() == systemLanguage) FontWeight.Bold else FontWeight.Normal,
-                    )
-                    Log.d(
-                        "SettingsScreen",
-                        "item.first: ${item.first}, systemLanguage: $systemLanguage"
                     )
                 }
             }

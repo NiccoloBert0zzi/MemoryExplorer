@@ -7,7 +7,6 @@ import android.graphics.Color
 import android.location.Location
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.example.memoryexplorer.R
 import com.example.memoryexplorer.data.database.Memory
