@@ -1,6 +1,7 @@
 package com.example.memoryexplorer.ui.utils
 
 import android.Manifest
+import android.app.NotificationManager
 import android.content.Context
 import android.location.LocationManager
 import android.widget.Toast
@@ -64,11 +65,11 @@ fun CheckLocationPermission(mainActivity: MainActivity, locationService: Locatio
     val isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
 
     fun printError(error: String) {
-        Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, error, Toast.LENGTH_LONG).show()
     }
 
     if (!isGPSEnabled) {
-        printError(R.string.gps_disabled.toString())
+        printError(context.getString(R.string.gps_disabled))
         locationService.openLocationSettings()
     }
 
@@ -80,17 +81,17 @@ fun CheckLocationPermission(mainActivity: MainActivity, locationService: Locatio
                 locationService.requestCurrentLocation()
 
             PermissionStatus.Denied -> {
-                printError(R.string.permission_denied.toString())
+                printError(context.getString(R.string.permission_denied))
                 mainActivity.finish()
             }
 
             PermissionStatus.PermanentlyDenied -> {
-                printError(R.string.permission_permanently_denied.toString())
+                printError(context.getString(R.string.permission_permanently_denied))
                 mainActivity.finish()
             }
 
             PermissionStatus.Unknown -> {
-                printError(R.string.permission_unknow.toString())
+                printError(context.getString(R.string.permission_unknow))
                 mainActivity.finish()
             }
         }
@@ -100,5 +101,20 @@ fun CheckLocationPermission(mainActivity: MainActivity, locationService: Locatio
         if (!locationPermission.status.isGranted) {
             locationPermission.launchPermissionRequest()
         }
+    }
+}
+
+@Composable
+fun CheckNotificationPermission() {
+    val context = LocalContext.current
+    val notificationManager = context.getSystemService(NotificationManager::class.java)
+    val areNotificationsEnabled = notificationManager.areNotificationsEnabled()
+
+    fun printError(error: String) {
+        Toast.makeText(context, error, Toast.LENGTH_LONG).show()
+    }
+
+    if (!areNotificationsEnabled) {
+        printError(context.getString(R.string.notifications_disabled))
     }
 }

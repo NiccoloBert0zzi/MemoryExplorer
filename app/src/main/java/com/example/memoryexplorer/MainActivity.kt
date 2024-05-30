@@ -1,8 +1,10 @@
 package com.example.memoryexplorer
 
 import android.annotation.SuppressLint
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.compose.setContent
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
@@ -26,6 +28,7 @@ import com.example.memoryexplorer.data.models.Theme
 import com.example.memoryexplorer.data.repositories.LoginRepository
 import com.example.memoryexplorer.ui.screens.settings.SettingsViewModel
 import com.example.memoryexplorer.ui.utils.CheckLocationPermission
+import com.example.memoryexplorer.ui.utils.CheckNotificationPermission
 import com.example.memoryexplorer.ui.utils.LocationService
 import com.example.memoryexplorer.ui.utils.NotificationsService
 import kotlinx.coroutines.flow.first
@@ -40,6 +43,7 @@ class MainActivity : FragmentActivity() {
     private lateinit var notificationsService: NotificationsService
     private val loginRepository: LoginRepository by inject()
 
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         locationService = LocationService(this)
@@ -66,6 +70,7 @@ class MainActivity : FragmentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     CheckLocationPermission(this, locationService)
+                    CheckNotificationPermission()
                     val backStackEntry by navController.currentBackStackEntryAsState()
                     val currentRoute by remember {
                         derivedStateOf {

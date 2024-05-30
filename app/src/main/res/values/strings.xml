@@ -74,6 +74,7 @@
     <string name="permission_permanently_denied">Permission permanently denied</string>
     <string name="permission_unknow">Unknown permission status</string>
     <string name="gps_disabled">GPS is disabled</string>
+    <string name="notifications_disabled">Notifications disabled</string>
 
     <!-- Biometric authentication -->
     <string name="biometric_authentication_is_not_available">Biometric authentication is not available</string>

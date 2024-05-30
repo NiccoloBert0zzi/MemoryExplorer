@@ -74,7 +74,7 @@ fun AddMemoryScreen(
         if (status.isGranted) {
             cameraLauncher.captureImage()
         } else {
-            Toast.makeText(navController.context, R.string.permission_denied, Toast.LENGTH_SHORT)
+            Toast.makeText(navController.context, R.string.permission_denied, Toast.LENGTH_LONG)
                 .show()
         }
     }
