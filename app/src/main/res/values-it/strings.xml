@@ -8,6 +8,8 @@
     <string name="profile_page">Profilo</string>
     <string name="settings_page">Impostazioni</string>
     <string name="statistics_page">Statistiche</string>
+    <string name="cancel">Annulla</string>
+    <string name="confirm">Conferma</string>
 
     <!-- Login/Register -->
     <string name="remember_me">Ricordami</string>

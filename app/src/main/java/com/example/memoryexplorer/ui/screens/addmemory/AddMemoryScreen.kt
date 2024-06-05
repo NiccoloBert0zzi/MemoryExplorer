@@ -20,18 +20,26 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.DatePicker
+import androidx.compose.material3.DatePickerDialog
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.layout.ContentScale
@@ -50,9 +58,13 @@ import org.osmdroid.events.MapEventsReceiver
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.MapEventsOverlay
+import java.time.Instant
 import java.time.LocalDate
+import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import java.util.Locale
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddMemoryScreen(
     navController: NavHostController,
@@ -64,7 +76,8 @@ fun AddMemoryScreen(
     var title by rememberSaveable { mutableStateOf("") }
     var description by rememberSaveable { mutableStateOf("") }
     var date by rememberSaveable { mutableStateOf("") }
-    date = LocalDate.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"))
+    date = LocalDate.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy", Locale.getDefault()))
+    var isDatePickerShowing by remember { mutableStateOf(false) }
     var public by rememberSaveable { mutableStateOf(false) }
     val latitude by addMemoryViewModel.latitude.collectAsState()
     val longitude by addMemoryViewModel.longitude.collectAsState()
@@ -74,8 +87,7 @@ fun AddMemoryScreen(
         if (status.isGranted) {
             cameraLauncher.captureImage()
         } else {
-            Toast.makeText(navController.context, R.string.permission_denied, Toast.LENGTH_LONG)
-                .show()
+            Toast.makeText(navController.context, R.string.permission_denied, Toast.LENGTH_LONG).show()
         }
     }
 
@@ -126,6 +138,7 @@ fun AddMemoryScreen(
                     OutlinedTextField(
                         value = title,
                         onValueChange = { title = it },
+                        singleLine = true,
                         textStyle = MaterialTheme.typography.bodyMedium,
                         label = { Text(stringResource(R.string.memory_title)) },
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
@@ -196,13 +209,66 @@ fun AddMemoryScreen(
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     OutlinedTextField(
-                        value = date,
-                        onValueChange = { date = it },
-                        textStyle = MaterialTheme.typography.bodyMedium,
-                        label = { Text(stringResource(R.string.memory_date)) },
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-                        modifier = Modifier.fillMaxWidth()
+                        value = date.format(
+                            DateTimeFormatter.ofPattern(
+                                "dd-MM-yyyy",
+                                Locale.getDefault()
+                            )
+                        ),
+                        onValueChange = { },
+                        keyboardOptions = KeyboardOptions(),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .onFocusChanged { focusState ->
+                                if (focusState.isFocused) {
+                                    isDatePickerShowing = true
+                                }
+                            },
                     )
+
+                    if (isDatePickerShowing) {
+                        val datePickerState = rememberDatePickerState()
+                        val confirmEnabled = remember {
+                            derivedStateOf { datePickerState.selectedDateMillis != null }
+                        }
+
+                        DatePickerDialog(
+                            confirmButton = {
+                                TextButton(
+                                    onClick = {
+                                        date =
+                                            Instant.ofEpochMilli(datePickerState.selectedDateMillis!!)
+                                                .atZone(ZoneId.systemDefault())
+                                                .toLocalDate()
+                                                .format(
+                                                    DateTimeFormatter.ofPattern(
+                                                        "dd-MM-yyyy",
+                                                        Locale.getDefault()
+                                                    )
+                                                )
+                                        isDatePickerShowing = false
+                                    },
+                                    enabled = confirmEnabled.value
+                                ) {
+                                    Text(stringResource(R.string.confirm))
+                                }
+                            },
+                            dismissButton = {
+                                TextButton(
+                                    onClick = {
+                                        isDatePickerShowing = false
+                                    }
+                                ) {
+                                    Text(stringResource(R.string.cancel))
+                                }
+                            },
+                            onDismissRequest = {
+                                isDatePickerShowing = false
+                            }
+                        ) {
+                            DatePicker(datePickerState)
+                        }
+                    }
                 }
                 Spacer(Modifier.size(24.dp))
                 Row(

@@ -69,7 +69,7 @@ class BiometricAuthenticator(
         promptInfo = BiometricPrompt.PromptInfo.Builder()
             .setTitle(title)
             .setSubtitle(subtitle)
-            .setNegativeButtonText("Cancel")
+            .setNegativeButtonText(context.getString(R.string.cancel))
             .build()
         biometricPrompt.authenticate(promptInfo)
     }
