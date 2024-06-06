@@ -64,6 +64,8 @@
     <string name="statistics">Estadísticas</string>
     <string name="memories">Mis memorias</string>
     <string name="favorite">Mis favoritos</string>
+    <string name="delete">Cancelar</string>
+    <string name="delete_succ">Memoria eliminada exitosamente</string>
 
     <!--Notifications-->
     <string name="near_at">Estás cerca de %1$s</string>

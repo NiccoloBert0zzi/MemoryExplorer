@@ -64,6 +64,8 @@
     <string name="statistics">Statistics</string>
     <string name="memories">My memories</string>
     <string name="favorite">My favorite</string>
+    <string name="delete">Delete</string>
+    <string name="delete_succ">Memory deleted successfully</string>
 
     <!--Notifications-->
     <string name="near_at">You are neat at %1$s</string>

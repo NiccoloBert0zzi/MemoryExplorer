@@ -6,10 +6,13 @@ import android.location.Address
 import android.location.Geocoder
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavHostController
+import com.example.memoryexplorer.R
 import com.example.memoryexplorer.data.database.Favourite
 import com.example.memoryexplorer.data.database.Memory
 import com.example.memoryexplorer.data.repositories.FavouriteRepository
 import com.example.memoryexplorer.data.repositories.LoginRepository
+import com.example.memoryexplorer.ui.MemoryExplorerRoute
 import com.example.memoryexplorer.ui.utils.MyMarker
 import com.google.firebase.database.FirebaseDatabase
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -125,11 +128,14 @@ class MemoryDetailsViewModel(
         } else null
     }
 
-    fun deleteMemory(memoryId: String) {
+    fun deleteMemory(navController: NavHostController, memoryId: String) {
         viewModelScope.launch {
             val database = FirebaseDatabase.getInstance().getReference("memories")
             database.child(memoryId).removeValue().addOnSuccessListener {
-                _error.value = "Memory deleted successfully"
+                _error.value = navController.context.getString(R.string.delete_succ)
+                navController.navigate(MemoryExplorerRoute.Home.route) {
+                    popUpTo(MemoryExplorerRoute.Profile.route) { inclusive = true }
+                }
             }.addOnFailureListener {
                 _error.value = it.localizedMessage
             }

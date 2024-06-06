@@ -43,7 +43,7 @@ val appModule = module {
     viewModel { ProfileViewModel(get(), get()) }
     viewModel { LoginViewModel(get()) }
     viewModel { RegisterViewModel(get()) }
-    viewModel { MemoryDetailsViewModel(get()) }
+    viewModel { MemoryDetailsViewModel(get(), get()) }
     viewModel { AddMemoryViewModel(get()) }
     viewModel { SettingsViewModel(get(), get(), get()) }
     viewModel { StatisticsViewModel(get(), get()) }

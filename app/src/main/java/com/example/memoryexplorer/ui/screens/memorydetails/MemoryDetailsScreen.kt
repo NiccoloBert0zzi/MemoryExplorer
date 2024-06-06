@@ -30,10 +30,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
+import com.example.memoryexplorer.R
 import com.example.memoryexplorer.data.database.Favourite
 import com.example.memoryexplorer.data.database.Memory
 import com.example.memoryexplorer.ui.MemoryExplorerRoute
@@ -144,17 +146,22 @@ fun MemoryDetailsScreen(
                 ) {
                     OsmMapView(memoryDetailsViewModel, memory)
                 }
-                Spacer(Modifier.size(50.dp))
+                Spacer(Modifier.size(60.dp))
                 if(email == memory.creator) {
                     Button(
                         onClick = {
                             if (memoryId != null) {
-                                memoryDetailsViewModel.deleteMemory(memoryId)
+                                memoryDetailsViewModel.deleteMemory(navController, memoryId)
                             }
                         },
-                        modifier = Modifier.align(Alignment.CenterHorizontally)
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(46.dp)
                     ) {
-                        Text("Delete", color = Color.White)
+                        Text(
+                            stringResource(R.string.delete),
+                            style = MaterialTheme.typography.bodyLarge
+                        )
                     }
                 }
             }
