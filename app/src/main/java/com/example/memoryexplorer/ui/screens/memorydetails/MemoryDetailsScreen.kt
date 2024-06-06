@@ -17,6 +17,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.filled.StarBorder
+import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -27,6 +28,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -52,6 +54,7 @@ fun MemoryDetailsScreen(
     val error by memoryDetailsViewModel.error.collectAsState()
     val favouritesState by memoryDetailsViewModel.state.collectAsState()
     val favourites = favouritesState.favourites
+    val email by memoryDetailsViewModel.email.collectAsState()
 
     Scaffold(
         topBar = {
@@ -140,6 +143,19 @@ fun MemoryDetailsScreen(
                         .height(200.dp)
                 ) {
                     OsmMapView(memoryDetailsViewModel, memory)
+                }
+                Spacer(Modifier.size(50.dp))
+                if(email == memory.creator) {
+                    Button(
+                        onClick = {
+                            if (memoryId != null) {
+                                memoryDetailsViewModel.deleteMemory(memoryId)
+                            }
+                        },
+                        modifier = Modifier.align(Alignment.CenterHorizontally)
+                    ) {
+                        Text("Delete", color = Color.White)
+                    }
                 }
             }
         }

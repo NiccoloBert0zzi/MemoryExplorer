@@ -9,15 +9,16 @@ import androidx.lifecycle.viewModelScope
 import com.example.memoryexplorer.data.database.Favourite
 import com.example.memoryexplorer.data.database.Memory
 import com.example.memoryexplorer.data.repositories.FavouriteRepository
+import com.example.memoryexplorer.data.repositories.LoginRepository
 import com.example.memoryexplorer.ui.utils.MyMarker
 import com.google.firebase.database.FirebaseDatabase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import org.osmdroid.api.IMapController
 import org.osmdroid.config.Configuration
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
@@ -30,10 +31,14 @@ data class FavouritesState(val favourites: List<Favourite>)
 
 @Suppress("DEPRECATION")
 class MemoryDetailsViewModel(
-    private val favouriteRepository: FavouriteRepository
+    private val favouriteRepository: FavouriteRepository,
+    loginRepository: LoginRepository
 ) : ViewModel() {
     private val _memory = MutableStateFlow<Memory?>(null)
     val memory: StateFlow<Memory?> = _memory
+
+    private val _email = MutableStateFlow<String?>(null)
+    val email: StateFlow<String?> = _email
 
     private val _isLoading = MutableStateFlow(true)
     val isLoading: StateFlow<Boolean> = _isLoading
@@ -46,6 +51,12 @@ class MemoryDetailsViewModel(
         started = SharingStarted.WhileSubscribed(),
         initialValue = FavouritesState(emptyList())
     )
+
+    init {
+        viewModelScope.launch {
+            _email.value = loginRepository.email.first()
+        }
+    }
 
     fun getMemoryById(id: String) {
         viewModelScope.launch {
@@ -112,6 +123,17 @@ class MemoryDetailsViewModel(
         return if (addresses!!.isNotEmpty()) {
             addresses[0]
         } else null
+    }
+
+    fun deleteMemory(memoryId: String) {
+        viewModelScope.launch {
+            val database = FirebaseDatabase.getInstance().getReference("memories")
+            database.child(memoryId).removeValue().addOnSuccessListener {
+                _error.value = "Memory deleted successfully"
+            }.addOnFailureListener {
+                _error.value = it.localizedMessage
+            }
+        }
     }
 
 }
